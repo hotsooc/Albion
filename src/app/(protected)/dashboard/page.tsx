@@ -11,7 +11,7 @@ export default function DashboardPage() {
       <DragDropProvider>
         <div className='grid grid-cols-[2fr_4fr] gap-4'>
           {/* Thêm một div bọc để điều khiển vị trí cuộn */}
-          <div className='sticky top-4 h-[100vh]'>
+          <div className='sticky top-4 h-full'>
             <DragSourceContainer />
           </div>
           <DroppableTable />
