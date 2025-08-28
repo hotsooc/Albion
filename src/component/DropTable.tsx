@@ -106,12 +106,12 @@ export const DroppableTable = () => {
         {teamTitle}
       </div>
       {visibleTeams[teamKey] && (
-        <div className='grid grid-cols-5 gap-4'>
-          {renderColumn(teamKey, 'column_A', '')}
-          {renderColumn(teamKey, 'column_B', '')}
-          {renderColumn(teamKey, 'column_C', '')}
-          {renderColumn(teamKey, 'column_D', '')}
-          {renderColumn(teamKey, 'column_E', '')}
+        <div className='grid grid-cols-5 gap-4 text-black'>
+          {renderColumn(teamKey, 'column_A', 'Tank')}
+          {renderColumn(teamKey, 'column_B', 'Sub Tank')}
+          {renderColumn(teamKey, 'column_C', 'Flex (Cover)')}
+          {renderColumn(teamKey, 'column_D', 'DPS/Sub DPS')}
+          {renderColumn(teamKey, 'column_E', 'Heal')}
         </div>
       )}
     </div>
