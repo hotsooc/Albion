@@ -46,7 +46,7 @@ export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, o
             type="text"
             danger
             icon={<CloseOutlined />}
-            onClick={() => onDeleteItem(teamKey as any, columnKey as any, spotIndex)}
+            onClick={() => onDeleteItem(teamKey, columnKey , spotIndex)}
           />
         </div>
       ) : (

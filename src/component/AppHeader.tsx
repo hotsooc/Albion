@@ -17,8 +17,12 @@ const onLogout = async () => {
     if (!res.ok) throw new Error('Logout failed');
         message.success('Đã đăng xuất');
         router.replace('/login');
-    } catch (e: any) {
-        message.error(e.message || 'Có lỗi khi đăng xuất');
+    } catch (e) {
+        if (e instanceof Error) {
+            message.error(e.message || 'Có lỗi khi đăng xuất');
+        } else {
+            message.error('Có lỗi khi đăng xuất');
+        }
     }
 };
 

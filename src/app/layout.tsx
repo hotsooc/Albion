@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookiesStoreCorrect = cookies();
+  const cookiesStoreCorrect = await cookies();
   const token = cookiesStoreCorrect.get('token')?.value;
 
   return (

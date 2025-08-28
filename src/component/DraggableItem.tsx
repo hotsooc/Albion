@@ -19,6 +19,7 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({ item}) => {
       isDragging: !!monitor.isDragging(),
     }),
   }));
+  console.log('isDragging:', isDragging);
 
   return drag(
     <div className='flex justify-between items-center bg-[#f5f5f5] border p-2 cursor-move rounded-lg mb-1'>

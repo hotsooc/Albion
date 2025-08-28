@@ -29,8 +29,12 @@ export default function LoginPage() {
 
   const from = params.get('from');
     router.replace(from || '/dashboard');
-  } catch (e: any) {
-    message.error(e.message || 'Có lỗi xảy ra');
+  } catch (e) {
+    if (e instanceof Error) {
+      message.error(e.message || 'Có lỗi xảy ra');
+    } else {
+      message.error('Có lỗi xảy ra');
+    }
   } finally {
     setLoading(false);
   }

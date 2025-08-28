@@ -16,7 +16,7 @@ export const DragSourceContainer = () => {
   const [searchResults, setSearchResults] = useState<ItemType[]>([]);
   const [activeDataSet, setActiveDataSet] = useState<ItemType[] | null>(null);
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
   const value = e.target.value.toLowerCase();
   setInputValue(value);
   if (value === '') {
@@ -31,7 +31,7 @@ export const DragSourceContainer = () => {
   }
 };
 
-  const handleToggleDataSet = (dataSet: any) => {
+  const handleToggleDataSet = (dataSet: ItemType[]) => {
     if (activeDataSet === dataSet) {
       setSearchResults([]);
       setActiveDataSet(null);
