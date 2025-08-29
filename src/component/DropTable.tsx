@@ -2,12 +2,17 @@
 
 import { useState } from 'react';
 import { DropSpotComponent } from './DropSpot';
-import { allItemsData } from '@/store/data';
+import { allItemsData, ItemType } from '@/store/data';
+import { Modal } from 'antd';
+import Image from 'next/image';
 
 type DragItem = {
   id: string;
   name: string;
   detail: string;
+  image: string;
+  image2: string;
+  image3: string;
 };
 
 type DroppableSpot = DragItem | null;
@@ -27,20 +32,44 @@ type AllData = {
 };
 
 const Popup = ({ item, onClose }: { item: DragItem; onClose: () => void }) => {
+  console.log('iamge', item)
+
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
-      <div className='bg-white p-6 rounded-lg shadow-xl text-center'>
-        <h2 className='text-xl font-bold mb-4'>Thông tin chi tiết</h2>
-        <p className='text-lg'>Tên mục: <span className='font-semibold'>{item.name}</span></p>
-        <p className='text-lg'>Detail: <span className='font-semibold'>{item.detail}</span></p>
-        <button
-          onClick={onClose}
-          className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-        >
-          Đóng
-        </button>
-      </div>
-    </div>
+    <Modal open={!!item}
+        footer={null}
+        onCancel={onClose}
+        centered
+        width="max(1200px, 80vh)"
+        maskClosable={false}
+        zIndex={100}>
+          <div className='grid grid-cols-[2fr_4fr]'>
+            <div>
+              <h2 className='text-xl font-bold mb-4'>Thông tin chi tiết</h2>
+              <p className='text-lg'>Tên mục: <span className='font-semibold'>{item.name}</span></p>
+              <p className='text-lg'>Detail: <span className='font-semibold'>{item.detail}</span></p>
+              <button
+                onClick={onClose}
+                className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+              >
+                Đóng
+              </button>
+            </div>
+            <div className='flex flex-row gap-4'>
+              <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
+                <span>Hellgate 5v5 (2v2)</span>
+                <Image src={item.image} alt='' height={80} width={80} />
+              </div>
+              <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
+                <span>Corrupted dungeon</span>
+                <Image src={item.image2} alt='' height={80} width={80}/>
+              </div>
+              <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
+                <span>Open World</span>
+                <Image src={item.image3} alt='' height={80} width={80}/>
+              </div>
+            </div>
+          </div>
+    </Modal>
   );
 };
 
@@ -76,7 +105,7 @@ export const DroppableTable = () => {
         return prevData;
       }
 
-      const completeItem = allItemsData.find((item: any) => item.id === droppedItem.id);
+      const completeItem = allItemsData.find((item: ItemType) => item.id === droppedItem.id);
       
       if (!completeItem) {
         return prevData;

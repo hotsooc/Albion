@@ -7,6 +7,9 @@ type DragItem = {
   id: string;
   name: string;
   detail: string;
+  image: string;
+  image2: string;
+  image3: string;
 };
 
 type DropSpotProps<T, C> = {
