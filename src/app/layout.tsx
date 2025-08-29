@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <AntdProvider>
           <div className="min-h-screen flex flex-col">
             <AppHeader loggedIn={!!token} />
-            <main style={{ padding: 24 }}>{children}</main>
+            <main className='p-4 bg-gradient-to-r from-sky-200 to-green-200'>{children}</main>
             <Footer />
           </div>
         </AntdProvider>

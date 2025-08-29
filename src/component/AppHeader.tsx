@@ -1,15 +1,13 @@
 'use client';
 
-import { Button, Layout, Typography, message } from 'antd';
+import { Button, message } from 'antd';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-
-const { Header } = Layout;
-const { Title } = Typography;
+import { useRouter } from 'next/navigation';
+import clsx from 'clsx';
+import useScrollThreshold from './useIsScroll';
 
 export default function AppHeader({ loggedIn }: { loggedIn: boolean }) {
 const router = useRouter();
-const pathname = usePathname();
 
 const onLogout = async () => {
     try {
@@ -26,32 +24,23 @@ const onLogout = async () => {
     }
 };
 
-
 const goHome = () => {
-    if (loggedIn) router.push('/dashboard');
+    if (loggedIn) router.push('/');
     else router.push('/login');
 };
-
+const isScroll = useScrollThreshold(10)
 
 return (
-    <Header style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <Title level={4} style={{ color: '#fff', margin: 0, cursor: 'pointer' }} onClick={goHome}>
-            My AntD App
-        </Title>
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-            {loggedIn ? (
+    <section className={clsx("sticky flex flex-row justify-between items-center px-[80px] bg-gradient-to-r from-sky-200 to-green-200 z-10 w-full h-[50px] left-0 top-0 bg-[#FDF6EB] ", isScroll && "transition-all shadow-md")}>
+        <div className='text-xl text-shadow ml-[200px] font-bold text-center cursor-pointer' onClick={goHome}>
+            Albion - XHCN Guild
+        </div>
+        <div className='flex items-center gap-2 ml-auto'>
             <>
-            {pathname !== '/dashboard' && (
-                <Link href="/dashboard"><Button>Dashboard</Button></Link>
-            )}
+                <Link href="/teammate"><Button>Xếp Team</Button></Link>
                 <Button type="primary" onClick={onLogout}>Đăng xuất</Button>
             </>
-            ) : (
-            pathname !== '/login' && (
-            <Link href="/login"><Button type="primary">Đăng nhập</Button></Link>
-            )
-            )}
         </div>
-    </Header>
+    </section>
      );
     }

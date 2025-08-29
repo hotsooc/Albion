@@ -25,10 +25,10 @@ export default function LoginPage() {
     throw new Error(data?.message || 'Đăng nhập thất bại');
   }
   message.success('Đăng nhập thành công');
-  router.push('/my-antd-app/src/app/(protected)/dashboard')
+  router.push('/')
 
   const from = params.get('from');
-    router.replace(from || '/dashboard');
+    router.replace(from || '/teammate');
   } catch (e) {
     if (e instanceof Error) {
       message.error(e.message || 'Có lỗi xảy ra');
