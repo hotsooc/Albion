@@ -31,44 +31,50 @@ type AllData = {
   team_3: TeamData;
 };
 
-const Popup = ({ item, onClose }: { item: DragItem; onClose: () => void }) => {
-  console.log('iamge', item)
+const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }) => {
+  if (!item) {
+    return null;
+  }
 
   return (
-    <Modal open={!!item}
-        footer={null}
-        onCancel={onClose}
-        centered
-        width="max(1200px, 80vh)"
-        maskClosable={false}
-        zIndex={100}>
-          <div className='grid grid-cols-[2fr_4fr]'>
-            <div>
-              <h2 className='text-xl font-bold mb-4'>Thông tin chi tiết</h2>
-              <p className='text-lg'>Tên mục: <span className='font-semibold'>{item.name}</span></p>
-              <p className='text-lg'>Detail: <span className='font-semibold'>{item.detail}</span></p>
-              <button
-                onClick={onClose}
-                className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-              >
-                Đóng
-              </button>
+    <Modal
+      open={true} 
+      footer={null}
+      onCancel={onClose}
+      centered
+      width="max(1200px, 80vh)"
+      maskClosable={false}
+      zIndex={100}
+      destroyOnClose={true}
+      title="Thông tin chi tiết"
+    >
+      <div className='grid grid-cols-[2fr_4fr] gap-8'>
+        <div>
+          <h2 className='text-xl font-bold mb-4'>Thông tin chi tiết</h2>
+          <p className='text-lg'>Tên mục: <span className='font-semibold'>{item.name}</span></p>
+          <p className='text-lg'>Detail: <span className='font-semibold'>{item.detail}</span></p>
+        </div>
+        <div className='flex flex-row gap-4'>
+          {item.image && (
+            <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
+              <span>Hellgate 5v5 (2v2)</span>
+              <Image src={item.image} alt='' height={450} width={300} />
             </div>
-            <div className='flex flex-row gap-4'>
-              <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-                <span>Hellgate 5v5 (2v2)</span>
-                <Image src={item.image} alt='' height={80} width={80} />
-              </div>
-              <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-                <span>Corrupted dungeon</span>
-                <Image src={item.image2} alt='' height={80} width={80}/>
-              </div>
-              <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-                <span>Open World</span>
-                <Image src={item.image3} alt='' height={80} width={80}/>
-              </div>
+          )}
+          {item.image2 && (
+            <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
+              <span>Corrupted dungeon</span>
+              <Image src={item.image2} alt='' height={450} width={300} />
             </div>
-          </div>
+          )}
+          {item.image3 && (
+            <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
+              <span>Open World</span>
+              <Image src={item.image3} alt='' height={450} width={300} />
+            </div>
+          )}
+        </div>
+      </div>
     </Modal>
   );
 };
@@ -88,8 +94,10 @@ export const DroppableTable = () => {
 
   const [popupItem, setPopupItem] = useState<DragItem | null>(null);
 
-  const handleItemClick = (item: DragItem) => {
-    setPopupItem(item);
+  const handleItemClick = (item: DroppableSpot) => {
+    if (item) {
+      setPopupItem(item as DragItem);
+    }
   };
 
   const toggleTeamVisibility = (teamKey: keyof AllData) => {
@@ -106,17 +114,17 @@ export const DroppableTable = () => {
       }
 
       const completeItem = allItemsData.find((item: ItemType) => item.id === droppedItem.id);
-      
+
       if (!completeItem) {
         return prevData;
       }
 
       const newTeamData = { ...prevData[teamKey] };
       const newColumnData = [...newTeamData[columnKey]];
-      
+
       newColumnData[spotIndex] = completeItem;
-      
-      return { 
+
+      return {
         ...prevData,
         [teamKey]: {
           ...newTeamData,
@@ -189,7 +197,7 @@ export const DroppableTable = () => {
       {renderTeam('team_3', 'Team 3')}
       {popupItem && (
         <Popup item={popupItem} onClose={() => setPopupItem(null)} />
-      )} 
+      )}
     </div>
   );
 };
