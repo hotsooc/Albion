@@ -88,7 +88,7 @@ export const dataSet8: ItemType[] = [
   { id: '57', name: 'Battleaxe', detail: '', image: '', image2: '', image3: '' },
   { id: '58', name: 'Greataxe', detail: '', image: '', image2: '', image3: '' },
   { id: '59', name: 'Halberd', detail: '', image: '', image2: '', image3: '' },
-  { id: '60', name: 'Carrioncaller', detail: '', image: '', image2: '', image3: '' },
+  { id: '60', name: 'Carrioncaller', detail: '', image: '/carrion.png', image2: '/carrion.png', image3: '/carrion.png' },
   { id: '61', name: 'Infernal Scythe', detail: '', image: '', image2: '', image3: '' },
   { id: '62', name: 'Bear Paws', detail: '', image: '', image2: '', image3: '' },
   { id: '63', name: 'Realmbreaker', detail: '', image: '', image2: '', image3: '' },
