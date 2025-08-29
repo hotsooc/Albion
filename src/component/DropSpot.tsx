@@ -1,4 +1,3 @@
-// src/components/DropSpotComponent.tsx
 
 import { useDrop } from 'react-dnd';
 import { Button } from 'antd';
@@ -7,6 +6,7 @@ import { CloseOutlined } from '@ant-design/icons';
 type DragItem = {
   id: string;
   name: string;
+  detail: string;
 };
 
 type DropSpotProps<T, C> = {
@@ -16,9 +16,10 @@ type DropSpotProps<T, C> = {
   item: DragItem | null;
   onDropItem: (teamKey: T, columnKey: C, spotIndex: number, droppedItem: DragItem) => void;
   onDeleteItem: (teamKey: T, columnKey: C, spotIndex: number) => void;
+  onItemClick?: (item: DragItem) => void;
 };
 
-export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, onDropItem, onDeleteItem }: DropSpotProps<T, C>) => {
+export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, onDropItem, onDeleteItem, onItemClick }: DropSpotProps<T, C>) => {
   const [{ isOver }, drop] = useDrop<DragItem, void, { isOver: boolean }>(() => ({
     accept: 'INPUT_ITEM',
     drop: (droppedItem) => {
@@ -38,15 +39,25 @@ export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, o
     <div
       className='p-2 border border-solid rounded-lg'
       style={style}
-    >
+    > 
       {item ? (
-        <div className='flex justify-between items-center bg-[#edebeb] p-2 rounded-lg'>
+        <div
+          className='flex justify-between items-center bg-[#edebeb] p-2 rounded-lg cursor-pointer'
+          onClick={() => {
+            if (onItemClick) {
+              onItemClick(item);
+            }
+          }}
+        >
           <span>{item.name}</span>
           <Button
             type="text"
             danger
             icon={<CloseOutlined />}
-            onClick={() => onDeleteItem(teamKey, columnKey , spotIndex)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteItem(teamKey, columnKey , spotIndex);
+            }}
           />
         </div>
       ) : (
