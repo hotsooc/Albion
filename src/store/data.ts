@@ -52,25 +52,25 @@ export const dataSet4: ItemType[] = [
 ];
 
 export const dataSet5: ItemType[] = [
-  { id: '33', name: 'Prowling Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '34', name: 'Rootbound Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '35', name: 'Primal Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '36', name: 'Bloodmoon Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '37', name: 'Hellspawn Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '38', name: 'Earthrune Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '39', name: 'Lightcaller', detail: '', image: '', image2: '', image3: '' },
-  { id: '40', name: 'Cobra', detail: '', image: '', image2: '', image3: '' },
+  { id: '33', name: 'Prowling Staff', detail: 'Good for solo, team one shot', image: '', image2: '', image3: '' },
+  { id: '34', name: 'Rootbound Staff', detail: 'Good for role Cover', image: '/asset/Shapeshifter/Rootbound/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Rootbound/openworld.png' },
+  { id: '35', name: 'Primal Staff', detail: 'Good for role Sub Tanker', image: '/asset/Shapeshifter/Primal/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Primal/openworld.png' },
+  { id: '36', name: 'Bloodmoon Staff', detail: 'Good for role Cover/Flex', image: '/asset/Shapeshifter/Bloodmoon/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Bloodmoon/openworld.png' },
+  { id: '37', name: 'Hellspawn Staff', detail: 'Good for role DPS', image: '/asset/Shapeshifter/Hellspawn/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Hellspawn/openworld.png' },
+  { id: '38', name: 'Earthrune Staff', detail: 'Good for role Main Tanker', image: '/asset/Shapeshifter/Earthrune/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Earthrune/openworld.png' },
+  { id: '39', name: 'Lightcaller Staff', detail: 'Good for role DPS', image: '/asset/Shapeshifter/Lightcaller/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Lightcaller/openworld.png' },
+  { id: '40', name: 'Stillgaze Staff', detail: 'Good for role Cover', image: '/asset/Shapeshifter/Stillgaze/hellgate.png', image2: '', image3: '/asset/Shapeshifter/Stillgaze/openworld.png' },
 ];
 
 export const dataSet6: ItemType[] = [
-  { id: '41', name: 'Nature Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '42', name: 'Great Nature Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '43', name: 'Wild Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '44', name: 'Druidic Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '45', name: 'Blight Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '46', name: 'Rampant Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '47', name: 'Ironroot Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '48', name: 'Forgebark Staff', detail: '', image: '', image2: '', image3: '' },
+  { id: '41', name: 'Nature Staff', detail: 'Good for team 2-6. Top tier nature', image: '/asset/Nature/NatureStaff/hellgate.png', image2: '', image3: '/asset/Nature/NatureStaff/openworld.png' },
+  { id: '42', name: 'Great Nature Staff', detail: 'Only 2v2, duo with Bloodmoon, Hellspawn,...', image: '/asset/Nature/GreatNatureStaff/hellgate.png', image2: '', image3: '/asset/Nature/GreatNatureStaff/openworld.png' },
+  { id: '43', name: 'Wild Staff', detail: 'Not recommend', image: '', image2: '', image3: '' },
+  { id: '44', name: 'Druidic Staff', detail: 'Only farming, not recommend', image: '', image2: '', image3: '' },
+  { id: '45', name: 'Blight Staff', detail: 'Good for all team. Top tier nature', image: '/asset/Nature/BlightStaff/hellgate.png', image2: '', image3: '/asset/Nature/BlightStaff/openworld.png' },
+  { id: '46', name: 'Rampant Staff', detail: 'Only for ZvZ, not recommend', image: '', image2: '', image3: '' },
+  { id: '47', name: 'Ironroot Staff', detail: 'Same Great Nature, only for 2v2, duo with Bloodmoon, Hellspawn,...', image: '/asset/Nature/IronrootStaff/hellgate.png', image2: '', image3: '/asset/Nature/IronrootStaff/openworld.png' },
+  { id: '48', name: 'Forgebark Staff', detail: 'Good for team 2-4', image: '/asset/Nature/ForgebarkStaff/openworld.png', image2: '', image3: '/asset/Nature/ForgebarkStaff/openworld.png' },
 ];
 
 export const dataSet7: ItemType[] = [
@@ -140,14 +140,14 @@ export const dataSet12: ItemType[] = [
 ];
 
 export const dataSet13: ItemType[] = [
-  { id: '97', name: 'Holy Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '98', name: 'Great Holy Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '99', name: 'Divine Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '100', name: 'Lifetouch Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '101', name: 'Fallen Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '102', name: 'Redemption Staff', detail: '', image: '', image2: '', image3: '' },
-  { id: '103', name: 'Hallowfall', detail: '', image: '', image2: '', image3: '' },
-  { id: '104', name: 'Exalted Staff', detail: '', image: '', image2: '', image3: '' },
+  { id: '97', name: 'Holy Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '98', name: 'Great Holy Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '99', name: 'Divine Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '100', name: 'Lifetouch Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '101', name: 'Fallen Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '102', name: 'Redemption Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '103', name: 'Hallowfall', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
+  { id: '104', name: 'Exalted Staff', detail: 'Đáy xã hội', image: '', image2: '', image3: '' },
 ];
 
 export const dataSet14: ItemType[] = [
