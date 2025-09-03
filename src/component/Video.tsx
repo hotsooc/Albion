@@ -97,7 +97,7 @@ const VideoPage = () => {
                                   ) : (
                                     <Image
                                       alt={video.name}
-                                      src={video.thumbnail!!}
+                                      src={video.thumbnail!}
                                       width={240}
                                       height={140}
                                       className='object-cover'
