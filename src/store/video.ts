@@ -32,7 +32,7 @@ export const VideoAlbion: VideoType[] = [
     // },
     {
         name: 'Chết ngu part 3',
-        url: '/video/Albion/Chet_ngu_part_3.mp4',
+        url: '/video/Albion/Chet_ngu_part_31.mp4',
         thumbnail: 'URL_HINH_ANH_THU_NHO_3.jpg',
         description: 'Phần cuối cùng trong chuỗi video với những pha xử lý bất ngờ.'
     }
