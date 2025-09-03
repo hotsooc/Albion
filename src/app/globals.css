@@ -38,10 +38,11 @@ body {
 }
 
 .video-list-scrollable {
-  overflow-x: hidden; 
-  overflow-y: hidden; 
+  overflow-x: auto; 
   padding-bottom: 20px; 
   white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .video-list-scrollable::-webkit-scrollbar {
@@ -60,4 +61,23 @@ body {
 .video-card-col {
   display: inline-block;
   padding: 8px !important;
+}
+
+.video-responsive-scroll {
+  padding: 1rem; 
+  min-width: 640px; 
+  overflow-x: auto; 
+  overflow-y: hidden; 
+}
+
+.video-responsive-scroll .video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Tỷ lệ 16:9 */
+}
+
+.video-responsive-scroll .video-wrapper .react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
