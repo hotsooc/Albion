@@ -36,3 +36,28 @@ body {
   color: #000000;
   text-shadow: 0 0 2px #ffd700, 0 0 4px #ffd700, 0 0 6px #ffd700; 
 }
+
+.video-list-scrollable {
+  overflow-x: auto; 
+  overflow-y: hidden; 
+  padding-bottom: 20px; 
+  white-space: nowrap;
+}
+
+.video-list-scrollable::-webkit-scrollbar {
+  height: 8px;
+}
+
+.video-list-scrollable::-webkit-scrollbar-thumb {
+  background-color: #d1d1d1;
+  border-radius: 4px;
+}
+
+.video-list-scrollable .ant-row {
+  flex-wrap: nowrap;
+}
+
+.video-card-col {
+  display: inline-block;
+  padding: 8px !important;
+}

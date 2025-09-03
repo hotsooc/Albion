@@ -4,6 +4,7 @@ import { Card } from 'antd';
 import { DragSourceContainer } from '@/component/DragTable';
 import DragDropProvider from '@/component/DndProvider';
 import { DroppableTable } from '@/component/DropTable';
+import VideoPage from '@/component/Video';
 
 export default function TeammatePage() {
   return (
@@ -16,6 +17,9 @@ export default function TeammatePage() {
           <DroppableTable />
         </div>
       </DragDropProvider>
+      <div className='flex mt-4'>
+        <VideoPage />
+      </div>
     </Card>
   );
 }

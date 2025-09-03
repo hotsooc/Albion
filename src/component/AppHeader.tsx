@@ -4,7 +4,7 @@ import { Button, message } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
-import useScrollThreshold from './useIsScroll';
+import useScrollThreshold from '../utils/useIsScroll';
 
 export default function AppHeader({ loggedIn }: { loggedIn: boolean }) {
 const router = useRouter();
