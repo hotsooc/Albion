@@ -17,7 +17,7 @@ export default function TeammatePage() {
           <DroppableTable />
         </div>
       </DragDropProvider>
-      <div className='flex mt-4'>
+      <div className='flex mt-4 sticky overflow-auto'>
         <VideoPage />
       </div>
     </Card>

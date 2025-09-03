@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import 'antd/dist/reset.css';
@@ -7,7 +6,7 @@ import AntdProvider from '@/component/AntdProvider';
 import AppHeader from '@/component/AppHeader';
 import { cookies } from 'next/headers';
 import Footer from '@/component/footer';
-import SplashCursor from '@/component/slashcursor';
+// import SplashCursor from '@/component/slashcursor';
 
 const inter = Inter({ subsets: ['latin'] });
 

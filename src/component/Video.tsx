@@ -3,6 +3,7 @@ import { Card, Modal, Row, Col, Typography, Spin } from 'antd';
 import ReactPlayer from 'react-player';
 import { NorAlbion, VideoType } from '@/store/video';
 import { getVideoThumbnail } from '@/utils/videoUltis';
+import Image from 'next/image';
 
 const { Meta } = Card;
 const { Title, Paragraph } = Typography;
@@ -38,7 +39,7 @@ const VideoPage = () => {
       loadThumbnails();
     }, []);
 
-    const showModal = (video: any) => {
+    const showModal = (video: VideoType) => {
         setSelectedVideo(video);
         setIsModalVisible(true);
     };
@@ -66,7 +67,7 @@ const VideoPage = () => {
                                       <Spin />
                                     </div>
                                   ) : (
-                                    <img 
+                                    <Image 
                                       alt={video.name} 
                                       src={video.thumbnail} 
                                       style={{ width: '100%', height: '140px', objectFit: 'cover' }}
