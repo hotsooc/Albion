@@ -69,8 +69,10 @@ const VideoPage = () => {
                                   ) : (
                                     <Image 
                                       alt={video.name} 
-                                      src={video.thumbnail} 
-                                      style={{ width: '100%', height: '140px', objectFit: 'cover' }}
+                                      src={video.thumbnail!} 
+                                      width={240} 
+                                      height={140}
+                                      className='object-cover'
                                     />
                                   )
                                 }
