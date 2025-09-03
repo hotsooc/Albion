@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Modal, Row, Col, Typography, Spin } from 'antd';
 import ReactPlayer from 'react-player';
-import { NorAlbion, VideoType } from '@/store/video';
+import { VideoAlbion, VideoType } from '@/store/video';
 import { getVideoThumbnail } from '@/utils/videoUltis';
 import Image from 'next/image';
 
@@ -16,27 +16,28 @@ type VideoWithThumbnailType = VideoType & {
 const VideoPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState<VideoType | null>(null);
-    const [videosWithThumbnails, setVideosWithThumbnails] = useState<VideoWithThumbnailType[]>(
-      NorAlbion.map(video => ({ ...video, isThumbnailLoading: true }))
-    );
+    const [videosWithThumbnails, setVideosWithThumbnails] = useState<VideoWithThumbnailType[]>([]);
 
     useEffect(() => {
-      const loadThumbnails = async () => {
-        const promises = videosWithThumbnails.map(async (video) => {
-          try {
-            const thumbnail = await getVideoThumbnail(video.url);
-            return { ...video, thumbnail: thumbnail, isThumbnailLoading: false };
-          } catch (error) {
-            console.error(`Không thể tạo thumbnail cho ${video.name}`, error);
-            return { ...video, thumbnail: 'URL_ANH_LOI_MAC_DINH.jpg', isThumbnailLoading: false };
-          }
-        });
+        const loadThumbnails = async () => {
+            const initialData = VideoAlbion.map(video => ({ ...video, isThumbnailLoading: true }));
+            setVideosWithThumbnails(initialData);
 
-        const results = await Promise.all(promises);
-        setVideosWithThumbnails(results);
-      };
+            const promises = initialData.map(async (video) => {
+                try {
+                    const thumbnail = await getVideoThumbnail(video.url);
+                    return { ...video, thumbnail: thumbnail, isThumbnailLoading: false };
+                } catch (error) {
+                    console.error(`Không thể tạo thumbnail cho ${video.name}`, error);
+                    return { ...video, thumbnail: '/placeholder.jpg', isThumbnailLoading: false };
+                }
+            });
 
-      loadThumbnails();
+            const results = await Promise.all(promises);
+            setVideosWithThumbnails(results);
+        };
+
+        loadThumbnails();
     }, []);
 
     const showModal = (video: VideoType) => {
@@ -61,21 +62,49 @@ const VideoPage = () => {
                                 hoverable
                                 style={{ width: 240 }}
                                 onClick={() => showModal(video)}
-                                cover={
-                                  video.isThumbnailLoading ? (
-                                    <div style={{ padding: '40px', textAlign: 'center' }}>
-                                      <Spin />
-                                    </div>
+                                // cover={
+                                //   video.isThumbnailLoading ? (
+                                //     <div style={{ padding: '40px', textAlign: 'center' }}>
+                                //       <Spin />
+                                //     </div>
+                                //   ) : (
+                                //     // eslint-disable-next-line @next/next/no-img-element
+                                //     <img 
+                                //       alt={video.name} 
+                                //       src={video.thumbnail!} 
+                                //       width={240} 
+                                //       height={140}
+                                //       className='object-cover'
+                                //     />
+                                //   )
+                                // }
+                              cover={
+                                video.isThumbnailLoading ? (
+                                  <div style={{ padding: '40px', textAlign: 'center' }}>
+                                    <Spin />
+                                  </div>
+                                ) : (
+                                  video.thumbnail?.startsWith('data:image') ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img
+                                      alt={video.name}
+                                      src={video.thumbnail}
+                                      width={240}
+                                      height={140}
+                                      className='object-cover'
+                                      style={{ width: '240px', height: '140px', objectFit: 'cover' }}
+                                    />
                                   ) : (
-                                    <Image 
-                                      alt={video.name} 
-                                      src={video.thumbnail!} 
-                                      width={240} 
+                                    <Image
+                                      alt={video.name}
+                                      src={video.thumbnail!!}
+                                      width={240}
                                       height={140}
                                       className='object-cover'
                                     />
                                   )
-                                }
+                                )
+                              }
                             >
                                 <Meta title={video.name} />
                             </Card>

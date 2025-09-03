@@ -8,11 +8,30 @@ export const getVideoThumbnail = (videoUrl: string): Promise<string> => {
     video.muted = true;
     video.preload = 'metadata'; 
 
-    const handleError = () => {
-      console.error(`Lỗi tải video hoặc tạo thumbnail cho ${videoUrl}:`);
-      reject(new Error(`Không thể tạo thumbnail cho video: ${videoUrl}`));
-      // resolve('URL_ANH_THU_NHO_MAC_DINH_NEU_LOI.jpg'); 
-    };
+const handleError: OnErrorEventHandler = (event, error) => {
+  if (event instanceof Event) {
+    const videoElement = (event.target as HTMLVideoElement);
+    if (videoElement && videoElement.error) {
+      console.error(
+        `Lỗi video #${videoElement.error.code}: ${videoElement.error.message}`,
+        `Lỗi cho URL: ${videoUrl}`
+      );
+    } else {
+      console.error(
+        `Lỗi tải video hoặc tạo thumbnail cho ${videoUrl}:`,
+        event
+      );
+    }
+  } else {
+    console.error(
+      `Lỗi tải video hoặc tạo thumbnail cho ${videoUrl}:`,
+      event || error
+    );
+  }
+  reject(new Error(`Không thể tạo thumbnail cho video: ${videoUrl}`));
+};
+
+video.onerror = handleError;
 
     video.onloadedmetadata = () => {
       video.currentTime = 0.1; 
@@ -20,7 +39,7 @@ export const getVideoThumbnail = (videoUrl: string): Promise<string> => {
 
     video.onseeked = () => { 
       if (video.videoWidth === 0 || video.videoHeight === 0) {
-        handleError();
+        handleError("Video dimensions are zero");
         return;
       }
 
@@ -34,7 +53,7 @@ export const getVideoThumbnail = (videoUrl: string): Promise<string> => {
         const thumbnail = canvas.toDataURL('image/jpeg', 0.8); 
         resolve(thumbnail);
       } else {
-        handleError();
+        handleError("Canvas context is null");
       }
     };
 

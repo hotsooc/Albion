@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { DropSpotComponent } from './DropSpot';
 import { allItemsData, ItemType } from '@/store/data';
 import { Modal } from 'antd';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 type DragItem = {
   id: string;
@@ -58,19 +58,22 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
           {item.image && (
             <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
               <span>Hellgate 5v5 (2v2)</span>
-              <Image src={item.image} alt='' height={450} width={300} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.image} alt='' height={450} width={300} />
             </div>
           )}
           {item.image2 && (
             <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
               <span>Corrupted dungeon</span>
-              <Image src={item.image2} alt='' height={450} width={300} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.image2} alt='' height={450} width={300} />
             </div>
           )}
           {item.image3 && (
             <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
               <span>Open World</span>
-              <Image src={item.image3} alt='' height={450} width={300} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.image3} alt='' height={450} width={300} />
             </div>
           )}
         </div>
