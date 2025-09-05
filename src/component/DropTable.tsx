@@ -94,12 +94,6 @@ export const DroppableTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [openTeam, setOpenTeam] = useState<keyof AllData | null>(null);
 
-  // const [visibleTeams, setVisibleTeams] = useState({
-  //   team_1: false,
-  //   team_2: false,
-  //   team_3: false,
-  // });
-
   const [popupItem, setPopupItem] = useState<DragItem | null>(null);
 
   const handleItemClick = (item: DroppableSpot) => {
@@ -108,12 +102,6 @@ export const DroppableTable = () => {
     }
   };
 
-  // const toggleTeamVisibility = (teamKey: keyof AllData) => {
-  //   setVisibleTeams(prevState => ({
-  //     ...prevState,
-  //     [teamKey]: !prevState[teamKey]
-  //   }));
-  // };
   const toggleTeamVisibility = (teamKey: keyof AllData) => {
         setOpenTeam(prevOpenTeam => prevOpenTeam === teamKey ? null : teamKey);
     };
@@ -160,6 +148,7 @@ export const DroppableTable = () => {
     });
   };
 
+// Lấy dữ liệu ban đầu khi component được tải
 useEffect(() => {
   const fetchAndInsertData = async () => {
     const { data: existingData, error: fetchError } = await supabase
@@ -189,25 +178,35 @@ useEffect(() => {
   fetchAndInsertData();
 }, []);
 
+
+// ** Đã sửa lại useEffect để lưu dữ liệu một cách an toàn hơn **
 useEffect(() => {
-  const updateData = async () => {
-    if (!isLoading) {
-      const { data, error } = await supabase
-        .from('teams_data')
-        .update({ data: allData })
-        .eq('id', 1); 
-      console.log(data)
-      if (error) {
-        console.error('Error saving data:', error);
-      }
-    };
-  
-    const timeoutId = setTimeout(() => {
-      updateData();
-    }, 500); 
-  
-    return () => clearTimeout(timeoutId);
+  // Tạo hàm lưu dữ liệu
+  const saveToSupabase = async () => {
+    console.log('Đang lưu dữ liệu...');
+    const { data, error } = await supabase
+      .from('teams_data')
+      .update({ data: allData })
+      .eq('id', 1);
+
+    if (error) {
+      console.error('Lỗi khi lưu dữ liệu:', error.message);
+      console.error('Chi tiết lỗi:', error);
+    } else {
+      console.log('Lưu dữ liệu thành công!', data);
     }
+  };
+
+  // Sử dụng debouncing để trì hoãn việc lưu 1 giây sau khi thao tác cuối cùng
+  const timeoutId = setTimeout(() => {
+    if (!isLoading) {
+      saveToSupabase();
+    }
+  }, 1000); // 1000ms = 1 giây
+
+  // Trả về hàm cleanup để hủy bỏ timeout nếu state thay đổi trước khi timeout kết thúc
+  return () => clearTimeout(timeoutId);
+
 }, [allData, isLoading]);
 
   const renderColumn = (teamKey: keyof AllData, columnKey: keyof TeamData, title: string, allData: AllData, handleDropItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number, droppedItem: DragItem) => void, handleDeleteItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number) => void, handleItemClick: (item: DroppableSpot) => void) => (
@@ -249,7 +248,7 @@ if (isLoading) {
     return <div className='p-8 text-center text-xl font-bold'>Đang tải dữ liệu...</div>;
   }
 
-  return (
+  return ( 
     <div className='flex flex-col gap-4 w-full'>
       <div className='flex flex-row gap-4 w-full justify-center overflow-auto'>
         <div onClick={() => toggleTeamVisibility('team_1')} className='text-center text-2xl font-bold cursor-pointer hover:text-blue-600 transition-colors border rounded-2xl p-2'>
