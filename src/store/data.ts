@@ -136,7 +136,7 @@ export const dataSet12: ItemType[] = [
   { id: '93', name: 'Brimstone Staff', detail: '', image: '', image2: '', image3: '' },
   { id: '94', name: 'Blazing Staff', detail: '', image: '', image2: '', image3: '' },
   { id: '95', name: 'Dawnsong', detail: '', image: '', image2: '', image3: '' },
-  // { id: '96', name: '', detail: '', image: '', image2: '', image3: '' },
+  { id: '96', name: 'Flamewalker Staff', detail: '', image: '', image2: '', image3: '' },
 ];
 
 export const dataSet13: ItemType[] = [
@@ -180,7 +180,7 @@ export const dataSet16: ItemType[] = [
   { id: '125', name: 'Cursed Skull', detail: '', image: '', image2: '', image3: '' },
   { id: '126', name: 'Damnation Staff', detail: '', image: '', image2: '', image3: '' },
   { id: '127', name: 'Shadowcaller', detail: '', image: '', image2: '', image3: '' },
-  // { id: '128', name: '', detail: '', image: '', image2: '', image3: '' },
+  { id: '128', name: 'Rotcaller Staff', detail: '', image: '', image2: '', image3: '' },
 ];
 
 // export const dataSet17: ItemType[] = [

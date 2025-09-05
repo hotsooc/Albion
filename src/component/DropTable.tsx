@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DropSpotComponent } from './DropSpot';
 import { allItemsData, ItemType } from '@/store/data';
 import { Modal } from 'antd';
+import { supabase } from '@/lib/supabaseClient';
 // import Image from 'next/image';
 
 type DragItem = {
@@ -82,12 +83,14 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
   );
 };
 
-export const DroppableTable = () => {
-  const [allData, setAllData] = useState<AllData>({
+const initialData: AllData = {
     team_1: { column_A: Array(5).fill(null), column_B: Array(5).fill(null), column_C: Array(5).fill(null), column_D: Array(5).fill(null), column_E: Array(5).fill(null) },
     team_2: { column_A: Array(5).fill(null), column_B: Array(5).fill(null), column_C: Array(5).fill(null), column_D: Array(5).fill(null), column_E: Array(5).fill(null) },
     team_3: { column_A: Array(5).fill(null), column_B: Array(5).fill(null), column_C: Array(5).fill(null), column_D: Array(5).fill(null), column_E: Array(5).fill(null) },
-  });
+}
+
+export const DroppableTable = () => {
+  const [allData, setAllData] = useState<AllData>(initialData);
 
   const [visibleTeams, setVisibleTeams] = useState({
     team_1: false,
@@ -151,6 +154,54 @@ export const DroppableTable = () => {
       };
     });
   };
+
+useEffect(() => {
+  const fetchAndInsertData = async () => {
+    const { data: existingData, error: fetchError } = await supabase
+      .from('teams_data')
+      .select('*')
+      .single();
+
+    if (fetchError && fetchError.code === 'PGRST116') {
+      const { data: insertData, error: insertError } = await supabase
+        .from('teams_data')
+        .insert([{ id: 1, data: initialData }])
+        .select('*')
+        .single();
+      if (insertError) {
+        console.error('Error inserting initial data:', insertError);
+      } else if (insertData) {
+        setAllData(insertData.data as AllData);
+      }
+    } else if (fetchError) {
+      console.error('Error fetching data:', fetchError);
+    } else if (existingData) {
+      setAllData(existingData.data as AllData);
+    }
+  };
+
+  fetchAndInsertData();
+}, []);
+
+useEffect(() => {
+  const updateData = async () => {
+    const { data, error } = await supabase
+      .from('teams_data')
+      .update({ data: allData })
+      .eq('id', 1); 
+    console.log(data)
+    if (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+
+  const timeoutId = setTimeout(() => {
+    updateData();
+  }, 500); 
+
+  return () => clearTimeout(timeoutId);
+
+}, [allData]);
 
   const renderColumn = (teamKey: keyof AllData, columnKey: keyof TeamData, title: string) => (
     <div className='flex flex-col bg-[#e6f7ff] p-4 rounded-lg gap-2 min-h-[200px]'>

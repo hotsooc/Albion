@@ -12,6 +12,7 @@
     "@ant-design/icons": "^6.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@supabase/supabase-js": "^2.57.0",
     "antd": "^5.27.1",
     "clsx": "^2.1.1",
     "dashjs": "^5.0.3",
