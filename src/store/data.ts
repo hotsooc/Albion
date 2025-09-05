@@ -91,27 +91,27 @@ export const dataSet8: ItemType[] = [
   { id: '60', name: 'Carrioncaller', detail: '', image: 'asset/Axe/Carrion/hellgate.png', image2: '', image3: '' },
   { id: '61', name: 'Infernal Scythe', detail: '', image: '', image2: '', image3: 'asset/Axe/InfernalScythe/openworld.png' },
   { id: '62', name: 'Bear Paws', detail: '', image: 'asset/Axe/BearPaws/hellgate.png', image2: '', image3: 'asset/Axe/BearPaws/openworld.png' },
-  { id: '63', name: 'Realmbreaker', detail: '', image: '', image2: '', image3: 'asset/Axe/Realmbreaker/openworld.png' },
+  { id: '63', name: 'Realmbreaker', detail: '', image: '', image2: '', image3: 'asset/Axe/RealmBreaker/openworld.png' },
   { id: '64', name: 'Crystal Reaper', detail: '', image: '', image2: '', image3: 'asset/Axe/CrystalReaper/openworld.png' },
 ];
 
 export const dataSet9: ItemType[] = [
-  { id: '65', name: 'Mace', detail: '', image: '', image2: '', image3: '' },
-  { id: '66', name: 'Heavy Mace', detail: '', image: '', image2: '', image3: '' },
+  { id: '65', name: 'Mace', detail: '', image: '', image2: '', image3: 'asset/Mace/Mace/openworld.png' },
+  { id: '66', name: 'Heavy Mace', detail: '', image: 'asset/Mace/HeavyMace/hellgate.png', image2: '', image3: 'asset/Mace/HeavyMace/openworld.png' },
   { id: '67', name: 'Morning Star', detail: '', image: '', image2: '', image3: '' },
   { id: '68', name: 'Bedrock Mace', detail: '', image: '', image2: '', image3: '' },
   { id: '69', name: 'Incubus Mace', detail: '', image: '', image2: '', image3: '' },
   { id: '70', name: 'Camlann Mace', detail: '', image: '', image2: '', image3: '' },
   { id: '71', name: 'Oathkeepers', detail: '', image: '', image2: '', image3: '' },
-  { id: '72', name: 'Dreadstorm Monarch', detail: '', image: '', image2: '', image3: '' },
+  { id: '72', name: 'Dreadstorm Monarch', detail: '', image: 'asset/Mace/DreadstormMonarch/hellgate.png', image2: '', image3: 'asset/Mace/DreadstormMonarch/openworld.png' },
 ];
 
 export const dataSet10: ItemType[] = [
   { id: '73', name: 'Hammer', detail: '', image: '', image2: '', image3: '' },
   { id: '74', name: 'Polehammer', detail: '', image: '', image2: '', image3: '' },
-  { id: '75', name: 'Great Hammer	', detail: '', image: '', image2: '', image3: '' },
-  { id: '76', name: 'Tombhammer', detail: '', image: '', image2: '', image3: '' },
-  { id: '77', name: 'Forge Hammers', detail: '', image: '', image2: '', image3: '' },
+  { id: '75', name: 'Great Hammer	', detail: '', image: 'asset/Hammer/GreatHammer/hellgate.png', image2: 'asset/Hammer/GreatHammer/corrupted.png', image3: 'asset/Hammer/GreatHammer/openworld.png' },
+  { id: '76', name: 'Tombhammer', detail: '', image: '', image2: '', image3: 'asset/Hammer/Tombhammer/openworld.png' },
+  { id: '77', name: 'Forge Hammers', detail: '', image: 'asset/Hammer/ForgeHammers/hellgate.png', image2: '', image3: '' },
   { id: '78', name: 'Grovekeeper', detail: '', image: '', image2: '', image3: '' },
   { id: '79', name: 'Hand of Justice', detail: '', image: '', image2: '', image3: '' },
   { id: '80', name: 'Truebolt Hammer ', detail: '', image: '', image2: '', image3: '' },
