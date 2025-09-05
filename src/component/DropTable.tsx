@@ -183,10 +183,10 @@ useEffect(() => {
     } else if (existingData) {
       setAllData(existingData.data as AllData);
     }
+    setIsLoading(false);
   };
 
   fetchAndInsertData();
-  setIsLoading(false);
 }, []);
 
 useEffect(() => {
@@ -208,7 +208,7 @@ useEffect(() => {
   
     return () => clearTimeout(timeoutId);
     }
-}, [allData]);
+}, [allData, isLoading]);
 
   const renderColumn = (teamKey: keyof AllData, columnKey: keyof TeamData, title: string, allData: AllData, handleDropItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number, droppedItem: DragItem) => void, handleDeleteItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number) => void, handleItemClick: (item: DroppableSpot) => void) => (
     <div className='flex flex-col bg-[#e6f7ff] p-4 rounded-lg gap-2 min-h-[200px]'>
