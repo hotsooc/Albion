@@ -91,12 +91,14 @@ const initialData: AllData = {
 
 export const DroppableTable = () => {
   const [allData, setAllData] = useState<AllData>(initialData);
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [openTeam, setOpenTeam] = useState<keyof AllData | null>(null);
 
-  const [visibleTeams, setVisibleTeams] = useState({
-    team_1: false,
-    team_2: false,
-    team_3: false,
-  });
+  // const [visibleTeams, setVisibleTeams] = useState({
+  //   team_1: false,
+  //   team_2: false,
+  //   team_3: false,
+  // });
 
   const [popupItem, setPopupItem] = useState<DragItem | null>(null);
 
@@ -106,12 +108,15 @@ export const DroppableTable = () => {
     }
   };
 
+  // const toggleTeamVisibility = (teamKey: keyof AllData) => {
+  //   setVisibleTeams(prevState => ({
+  //     ...prevState,
+  //     [teamKey]: !prevState[teamKey]
+  //   }));
+  // };
   const toggleTeamVisibility = (teamKey: keyof AllData) => {
-    setVisibleTeams(prevState => ({
-      ...prevState,
-      [teamKey]: !prevState[teamKey]
-    }));
-  };
+        setOpenTeam(prevOpenTeam => prevOpenTeam === teamKey ? null : teamKey);
+    };
 
   const handleDropItem = (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number, droppedItem: DragItem) => {
     setAllData((prevData) => {
@@ -181,29 +186,31 @@ useEffect(() => {
   };
 
   fetchAndInsertData();
+  setIsLoading(false);
 }, []);
 
 useEffect(() => {
   const updateData = async () => {
-    const { data, error } = await supabase
-      .from('teams_data')
-      .update({ data: allData })
-      .eq('id', 1); 
-    console.log(data)
-    if (error) {
-      console.error('Error saving data:', error);
+    if (!isLoading) {
+      const { data, error } = await supabase
+        .from('teams_data')
+        .update({ data: allData })
+        .eq('id', 1); 
+      console.log(data)
+      if (error) {
+        console.error('Error saving data:', error);
+      }
+    };
+  
+    const timeoutId = setTimeout(() => {
+      updateData();
+    }, 500); 
+  
+    return () => clearTimeout(timeoutId);
     }
-  };
-
-  const timeoutId = setTimeout(() => {
-    updateData();
-  }, 500); 
-
-  return () => clearTimeout(timeoutId);
-
 }, [allData]);
 
-  const renderColumn = (teamKey: keyof AllData, columnKey: keyof TeamData, title: string) => (
+  const renderColumn = (teamKey: keyof AllData, columnKey: keyof TeamData, title: string, allData: AllData, handleDropItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number, droppedItem: DragItem) => void, handleDeleteItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number) => void, handleItemClick: (item: DroppableSpot) => void) => (
     <div className='flex flex-col bg-[#e6f7ff] p-4 rounded-lg gap-2 min-h-[200px]'>
       <h3 className='text-center font-bold text-gray-700'>{title}</h3>
       <div className='flex flex-col gap-2'>
@@ -224,34 +231,48 @@ useEffect(() => {
     </div>
   );
 
-  const renderTeam = (teamKey: keyof AllData, teamTitle: string) => (
-    <div className='mb-8'>
-      <div
-        onClick={() => toggleTeamVisibility(teamKey)}
-        className='text-center text-2xl font-bold mb-4 cursor-pointer hover:text-blue-600 transition-colors'
-      >
-        {teamTitle}
-      </div>
-      {visibleTeams[teamKey] && (
-        <div className='grid grid-cols-5 gap-4 text-black'>
-          {renderColumn(teamKey, 'column_A', 'Tank')}
-          {renderColumn(teamKey, 'column_B', 'Sub Tank')}
-          {renderColumn(teamKey, 'column_C', 'Flex (Cover)')}
-          {renderColumn(teamKey, 'column_D', 'DPS/Sub DPS')}
-          {renderColumn(teamKey, 'column_E', 'Heal')}
-        </div>
-      )}
+  const TeamDetails = ({ teamKey, teamData, handleDropItem, handleDeleteItem, handleItemClick }: { teamKey: keyof AllData | null; teamData: AllData; handleDropItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number, droppedItem: DragItem) => void; handleDeleteItem: (teamKey: keyof AllData, columnKey: keyof TeamData, spotIndex: number) => void; handleItemClick: (item: DroppableSpot) => void; }) => {
+  if (!teamKey || !teamData) return null;
+
+  return (
+    <div className='grid grid-cols-5 gap-4 text-black'>
+      {renderColumn(teamKey, 'column_A', 'Tank', teamData, handleDropItem, handleDeleteItem, handleItemClick)}
+      {renderColumn(teamKey, 'column_B', 'Sub Tank', teamData, handleDropItem, handleDeleteItem, handleItemClick)}
+      {renderColumn(teamKey, 'column_C', 'Flex (Cover)', teamData, handleDropItem, handleDeleteItem, handleItemClick)}
+      {renderColumn(teamKey, 'column_D', 'DPS/Sub DPS', teamData, handleDropItem, handleDeleteItem, handleItemClick)}
+      {renderColumn(teamKey, 'column_E', 'Heal', teamData, handleDropItem, handleDeleteItem, handleItemClick)}
     </div>
   );
+};
+
+if (isLoading) {
+    return <div className='p-8 text-center text-xl font-bold'>Đang tải dữ liệu...</div>;
+  }
 
   return (
     <div className='flex flex-col gap-4 w-full'>
-      {renderTeam('team_1', 'Team 1')}
-      {renderTeam('team_2', 'Team 2')}
-      {renderTeam('team_3', 'Team 3')}
-      {popupItem && (
-        <Popup item={popupItem} onClose={() => setPopupItem(null)} />
-      )}
+      <div className='flex flex-row gap-4 w-full justify-center overflow-auto'>
+        <div onClick={() => toggleTeamVisibility('team_1')} className='text-center text-2xl font-bold cursor-pointer hover:text-blue-600 transition-colors border rounded-2xl p-2'>
+            Team Anti Heal
+        </div>
+        <div onClick={() => toggleTeamVisibility('team_2')} className='text-center text-2xl font-bold cursor-pointer hover:text-blue-600 transition-colors border rounded-2xl p-2'>
+            Team Balance
+        </div>
+        <div onClick={() => toggleTeamVisibility('team_3')} className='text-center text-2xl font-bold cursor-pointer hover:text-blue-600 transition-colors border rounded-2xl p-2'>
+            Team One Shot
+        </div>
+      </div>
+
+      <div className='mt-0'>
+        <TeamDetails
+          teamKey={openTeam}
+          teamData={allData}
+          handleDropItem={handleDropItem}
+          handleDeleteItem={handleDeleteItem}
+          handleItemClick={handleItemClick}
+        />
+      </div>
+      {popupItem && <Popup item={popupItem} onClose={() => setPopupItem(null)} />}
     </div>
-  );
+  );  
 };
