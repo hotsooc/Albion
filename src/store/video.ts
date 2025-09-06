@@ -16,9 +16,9 @@ export const VideoAlbion: VideoType[] = [
     {
         id: '1',
         name: 'Chết ngu part 1',
-        url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
+        url: 'https://www.youtube.com/watch?v=yRbkUhfdPF8',
         thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
-        description: 'Nor chết ngu'
+        description: 'Hí chết ngu'
     },
     {
         id: '2',
