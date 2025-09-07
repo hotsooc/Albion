@@ -5,8 +5,8 @@ import './globals.css';
 import AntdProvider from '@/component/AntdProvider';
 import AppHeader from '@/component/AppHeader';
 import { cookies } from 'next/headers';
-import Footer from '@/component/footer';
-// import SplashCursor from '@/component/slashcursor';
+import Sidebar from '@/component/Sidebar';
+// import Footer from '@/component/footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,11 +23,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="vi">
       <body className={inter.className}>
         <AntdProvider>
-          <div className="min-h-screen flex flex-col">
-            <AppHeader loggedIn={!!token} />
-            {/* <SplashCursor /> */}
-            <main className='p-4 bg-gradient-to-r from-sky-200 to-green-200'>{children}</main>
-            <Footer />
+          <div className="flex h-screen overflow-hidden bg-gradient-to-r from-sky-200 to-green-200">
+            <Sidebar />
+            <div className="flex flex-col flex-grow">
+              <AppHeader loggedIn={!!token} />
+              <main className='flex-grow p-4'>
+                {children}
+              </main>
+              {/* <Footer /> */}
+            </div>
           </div>
         </AntdProvider>
       </body>

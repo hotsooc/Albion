@@ -3,167 +3,114 @@
 import { useState } from 'react';
 import { Input, Button } from 'antd';
 import { DraggableItem } from './DraggableItem';
-import { dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
+import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
+import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
-
-const allData: ItemType[] = [...dataSet1, ...dataSet2, ...dataSet3, ...dataSet4, ...dataSet5, ...dataSet6, 
-  ...dataSet7, ...dataSet8, ...dataSet9, ...dataSet10,...dataSet11, ...dataSet12, ...dataSet13, ...dataSet14, 
-  ...dataSet15, ...dataSet16, ...dataSet18, ...dataSet19, ...dataSet20
-];
+const dataSets = {
+  Sword: dataSet7,
+  Axe: dataSet8,
+  Mace: dataSet9,
+  Hammer: dataSet10,
+  'War Gloves': dataSet11,
+  Crossbow: dataSet1,
+  Bow: dataSet1,
+  Dagger: dataSet2,
+  Spear: dataSet3,
+  'Quarterstaves': dataSet4,
+  'Shapeshifter Staves': dataSet5,
+  'Nature Staves': dataSet6,
+  'Fire Staves': dataSet12,
+  'Holy Staves': dataSet13,
+  'Arcane Staves': dataSet14,
+  'Frost Staves': dataSet15,
+  'Cursed Staves': dataSet16,
+  Shields: dataSet18,
+  Torches: dataSet19,
+  Tomes: dataSet20,
+};
 
 export const DragSourceContainer = () => {
   const [inputValue, setInputValue] = useState('');
-  const [searchResults, setSearchResults] = useState<ItemType[]>([]);
-  const [activeDataSet, setActiveDataSet] = useState<ItemType[] | null>(null);
+  const [searchResults, setSearchResults] = useState<ItemType[]>([]); 
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value.toLowerCase();
-  setInputValue(value);
-  if (value === '') {
-    setSearchResults([]);
-    setActiveDataSet(null);
-  } else {
-    const filteredData = allData.filter(item =>
+    const value = e.target.value.toLowerCase();
+    setInputValue(value);
+    setActiveButton(null);
+    const filteredData = allItemsData.filter(item =>
       item.name.toLowerCase().includes(value)
     );
     setSearchResults(filteredData);
-    setActiveDataSet(null);
-  }
-};
-
-  const handleToggleDataSet = (dataSet: ItemType[]) => {
-    if (activeDataSet === dataSet) {
-      setSearchResults([]);
-      setActiveDataSet(null);
-    } else {
-      setSearchResults(dataSet);
-      setActiveDataSet(dataSet);
-      setInputValue('');
-    }
   };
 
+  const handleToggleDataSet = (dataSet: ItemType[], label: string) => {
+    if (activeButton === label) {
+      setSearchResults([]);
+      setActiveButton(null);
+      setInputValue('');
+    } else {
+      setSearchResults(dataSet);
+      setActiveButton(label);
+      setInputValue(label);
+    }
+  };
+  
+  const handleClearSearch = () => {
+    setInputValue('');
+    setSearchResults([]); 
+    setActiveButton(null);
+  };
+
+  const buttonsToDisplay = activeButton ? [activeButton] : Object.keys(dataSets);
+  const showResults = inputValue || activeButton; 
+
   return (
-    <div className='flex flex-col'>
-      <Input
-        value={inputValue}
-        onChange={handleSearch}
-        placeholder="Tìm kiếm"
-        className='w-full'
-      />
-      <div className='grid grid-cols-2 gap-3 mt-3'>
-        <div className='flex flex-col gap-3 max-h-[300px] overflow-y-auto no-scrollbar'>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet1)} 
-          >
-            Bow
-          </Button>
-          
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet2)} 
-          >
-            Dagger
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet3)} 
-          >
-            Spear
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet4)} 
-          >
-            Quarterstaves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet5)} 
-          >
-            Shapeshifter Staves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet6)} 
-          >
-            Nature Staves	
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet7)} 
-          >
-            Swords
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet8)} 
-          >
-            Axes
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet9)} 
-          >
-            Maces
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet10)} 
-          >
-            Hammers
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet11)} 
-          >
-            War Gloves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet12)} 
-          >
-            Fire Staves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet13)} 
-          >
-            Holy Staves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet14)} 
-          >
-            Arcane Staves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet15)} 
-          >
-            Frost Staves
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet16)} 
-          >
-            Cursed Staves
-          </Button>
-          {/* <Button 
-            onClick={() => handleToggleDataSet(dataSet17)} 
-          >
-            
-          </Button> */}
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet18)} 
-          >
-            Shields
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet19)} 
-          >
-            Torches
-          </Button>
-          <Button 
-            onClick={() => handleToggleDataSet(dataSet20)} 
-          >
-            Tomes
-          </Button>
-        </div>
-        <div>
-          {searchResults.length > 0 && (
-            <div className='w-full sticky'>
-              {searchResults.map((item) => (
-                <DraggableItem key={item.id} item={item} />
-              ))}
-            </div>
-          )}
+    <div className='flex flex-col gap-4'>
+      <div className="flex items-center bg-white rounded-full w-full h-full overflow-hidden  shadow-sm px-4">
+        <SearchOutlined className="text-gray-400 text-lg mr-2" />
+        <Input
+          placeholder="Tìm kiếm..."
+          value={inputValue}
+          onChange={handleSearch}
+          className="!border-none !shadow-none bg-transparent flex-grow h-10 focus:ring-0"
+        />
+        {inputValue && (
+          <Button
+            type="text"
+            icon={<CloseCircleOutlined />}
+            onClick={handleClearSearch}
+            className="!text-gray-400"
+          />
+        )}
+      </div>
+
+      <div className='grid grid-cols-1 gap-3'>
+        <div className='flex flex-col gap-3 overflow-y-auto max-h-[600px] no-scrollbar'>
+          {buttonsToDisplay.map((label) => {
+            const data = dataSets[label as keyof typeof dataSets];
+            return (
+              <Button
+                key={label}
+                onClick={() => handleToggleDataSet(data, label)}
+                className={`!rounded-md !h-12 !text-lg !font-medium !bg-sky-200 !text-black !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
+              >
+                {label}
+              </Button>
+            );
+          })}
         </div>
       </div>
+
+      {showResults && searchResults.length > 0 && (
+        <div className='w-full overflow-y-auto max-h-[500px]'>
+          <div className='grid grid-row-1 sm:grid-row-2 md:grid-row-3 text-center gap-3'>
+            {searchResults.map((item) => (
+              <DraggableItem key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

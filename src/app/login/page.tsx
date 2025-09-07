@@ -25,10 +25,10 @@ export default function LoginPage() {
     throw new Error(data?.message || 'Đăng nhập thất bại');
   }
   message.success('Đăng nhập thành công');
-  router.push('/')
+  router.push('/home')
 
   const from = params.get('from');
-    router.replace(from || '/teammate');
+    router.replace(from || '/home');
   } catch (e) {
     if (e instanceof Error) {
       message.error(e.message || 'Có lỗi xảy ra');
