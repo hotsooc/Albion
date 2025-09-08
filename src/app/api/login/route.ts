@@ -1,30 +1,34 @@
-// import { NextResponse } from 'next/server';
+// file: src/app/api/logout/route.ts
 
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
-// export async function POST(req: Request) {
-//     const { email, password } = await req.json();
+// This is the function that handles POST requests to this API route
+export async function POST() {
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
+  // Sign out the user
+  const { error } = await supabase.auth.signOut();
 
-//     const OK = email === 'admin@gmail.com' && password === 'admin123';
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
+  return NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
+}
 
-//     if (!OK) {
-//         return NextResponse.json({ message: 'Sai tài khoản hoặc mật khẩu' }, { status: 401 });
-//     }
-
-
-//     const token = 'mock-token-abc123';
-//     const user = { name: 'Admin', email };
-
-
-//     const res = NextResponse.json({ user, token });
-//         res.cookies.set({
-//         name: 'token',
-//         value: token,
-//         httpOnly: false, 
-//         path: '/',
-//         maxAge: 60 * 60 * 24, 
-//         sameSite: 'lax',
-//     });
-//         return res;
+// You can also add a GET handler if you want to allow logout via a simple link
+// export async function GET() {
+//   const cookieStore = cookies();
+//   const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+//   
+//   const { error } = await supabase.auth.signOut();
+// 
+//   if (error) {
+//     return NextResponse.json({ error: error.message }, { status: 500 });
+//   }
+// 
+//   return NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
 // }

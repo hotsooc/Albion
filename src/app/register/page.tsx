@@ -19,6 +19,7 @@ export default function SignupPage() {
         email: values.email,
         password: values.password,
       });
+      console.log(data)
 
       if (error) {
         throw new Error(error.message);

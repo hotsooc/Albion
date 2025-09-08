@@ -6,6 +6,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { User } from '@supabase/supabase-js';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
@@ -13,7 +14,7 @@ interface ClientHeaderProps {
 
 const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -67,6 +68,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
             onClick={(e) => e.preventDefault()}
             className="flex items-center space-x-2 text-gray-700 hover:text-sky-700 cursor-pointer transition-colors duration-200 bg-[#97DDD9] py-1 px-4 rounded-md"
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/user_icon.png" width={30} height={30} alt="User" />
             <span className="text-[20px] font-medium">
               {user.user_metadata?.full_name || user.email}

@@ -8,14 +8,19 @@ import { supabase } from "../../../lib/supabase/client";
 
 const { Title, Paragraph, Link } = Typography;
 
+type LoginValues = {
+  username: string;
+  password: string;
+};
+
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: LoginValues) => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email: values.username, // Sử dụng 'username' như trong form
+      email: values.username, 
       password: values.password,
     });
 
@@ -39,6 +44,7 @@ export default function LoginPage() {
       <div className="col-span-3 flex items-center justify-center p-4 ">
         <Card className="max-w-md w-full p-8 shadow-2xl rounded-xl">
           <div className="flex flex-col items-center mb-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/XHCN_icon.png" alt="XHCN Logo" className="w-12 h-16 mb-4" /> 
             <Title level={2} className="text-center text-gray-800">
               Welcome to XHCN
@@ -89,7 +95,6 @@ export default function LoginPage() {
           </Form>
 
           <Divider plain>OR</Divider>
-
           <Button
             icon={<img src="/google_icon.png" alt="Google" className="w-5 h-5" />} 
             size="large"
@@ -100,7 +105,7 @@ export default function LoginPage() {
           </Button>
 
           <Paragraph className="text-center mt-4 text-gray-600">
-            Don't have account?{" "}
+            Don&apos;t have account?{" "}
             <Link href="#" className="text-blue-500 hover:underline">
               Sign Up
             </Link>

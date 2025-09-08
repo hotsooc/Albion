@@ -18,6 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const supabase = createClient();
   const { data: { session } } = await (await supabase).auth.getSession();
   // const loggedIn = !!session;
+  console.log(session)
 
   return (
     <html lang="vi">

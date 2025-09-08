@@ -1,25 +1,55 @@
 'use client';
 
-import { Card } from 'antd';
+import { useState } from 'react'; // Thêm useState
+// import { Card } from 'antd';
 import { DragSourceContainer } from '@/component/DragTable';
 import DragDropProvider from '@/component/DndProvider';
 import { DroppableTable } from '@/component/DropTable';
-// import VideoPage from '@/component/Video';
+import { TeamSelector } from '@/component/TeamSelector';
+
+const teamNames = ['Anti heal', 'Balance', 'One shot'];
+const teamKeys = ['team_1', 'team_2', 'team_3'];
 
 export default function TeammatePage() {
+  const [openTeamIndex, setOpenTeamIndex] = useState<number>(0);
+
+  const handleNextTeam = () => {
+    setOpenTeamIndex(prevIndex => (prevIndex + 1) % teamNames.length);
+  };
+
+  const handlePrevTeam = () => {
+    setOpenTeamIndex(prevIndex => (prevIndex - 1 + teamNames.length) % teamNames.length);
+  };
+
+  const handleToggleTeam = (index: number) => {
+    setOpenTeamIndex(index);
+  };
+
   return (
-    <Card>
+    <section className='mt-5 bg-gradient-to-r from-green-100 to-green-50 p-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] mx-4'>
       <DragDropProvider>
+        <div className='flex mb-4 p-4'>
+          <TeamSelector
+            teamNames={teamNames}
+            openTeamIndex={openTeamIndex}
+            handlePrevTeam={handlePrevTeam}
+            handleNextTeam={handleNextTeam}
+            handleToggleTeam={handleToggleTeam}
+          />
+        </div>
         <div className='grid grid-cols-[1fr_5fr] gap-4'>
           <div className='sticky top-4 h-full'>
             <DragSourceContainer />
           </div>
-          <DroppableTable />
+          <div className='flex flex-col gap-4'> 
+            <DroppableTable
+              teamNames={teamNames} 
+              teamKeys={teamKeys} 
+              openTeamIndex={openTeamIndex} 
+            />
+          </div>
         </div>
       </DragDropProvider>
-      {/* <div className='flex mt-4 sticky no-scrollbar overflow-auto w-full'>
-        <VideoPage />
-      </div> */}
-    </Card>
+    </section>
   );
 }
