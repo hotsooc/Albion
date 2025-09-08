@@ -1,11 +1,11 @@
-'use client'; 
+'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HomeOutlined, TeamOutlined, VideoCameraOutlined, BuildOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import Image from 'next/image'; 
 import { Baloo_2 } from 'next/font/google';
 import { usePathname } from 'next/navigation';
+import { supabase } from '../../lib/supabase/client';
 
 const balooFont = Baloo_2({
   subsets: ['vietnamese'],
@@ -14,6 +14,25 @@ const balooFont = Baloo_2({
 
 const Sidebar = () => {
   const pathname = usePathname(); 
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <section className="w-64 bg-white p-4 shadow-md flex flex-col items-center border-r h-[960px] border-gray-200 rounded-lg m-4">

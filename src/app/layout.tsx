@@ -4,9 +4,8 @@ import 'antd/dist/reset.css';
 import './globals.css';
 import AntdProvider from '@/component/AntdProvider';
 import AppHeader from '@/component/AppHeader';
-import { cookies } from 'next/headers';
 import Sidebar from '@/component/Sidebar';
-// import Footer from '@/component/footer';
+import { createClient } from '../../lib/supabase/server';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,8 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookiesStoreCorrect = await cookies();
-  const token = cookiesStoreCorrect.get('token')?.value;
+  const supabase = createClient();
+  const { data: { session } } = await (await supabase).auth.getSession();
+  // const loggedIn = !!session;
 
   return (
     <html lang="vi">
@@ -26,11 +26,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="flex h-screen overflow-hidden bg-gradient-to-r from-sky-200 to-green-200">
             <Sidebar />
             <div className="flex flex-col flex-grow">
-              <AppHeader loggedIn={!!token} />
-              <main className='flex-grow p-4'>
+              <AppHeader />
+              <main className='flex-grow'>
                 {children}
               </main>
-              {/* <Footer /> */}
             </div>
           </div>
         </AntdProvider>

@@ -1,34 +1,39 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+// lib/supabase/middleware.ts
+import { NextResponse, type NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { Database } from '../lib/database.types';
 
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
-export function middleware(req: NextRequest) {
-const { pathname } = req.nextUrl;
+  const supabase = createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options) {
+          response.cookies.set(name, value, options);
+        },
+        remove(name: string, options) {
+          response.cookies.set(name, '', { ...options, maxAge: 0 });
+        },
+      },
+    }
+  );
 
+  // refresh session nếu cần
+  await supabase.auth.getUser();
 
-const isPublic =
-pathname === '/login' ||
-pathname.startsWith('/_next') ||
-pathname.startsWith('/favicon') ||
-pathname.startsWith('/api/login');
-
-
-if (isPublic) return NextResponse.next();
-
-
-const token = req.cookies.get('token')?.value;
-if (!token) {
-const url = req.nextUrl.clone();
-url.pathname = '/login';
-url.searchParams.set('from', pathname);
-return NextResponse.redirect(url);
+  return response;
 }
-
-
-return NextResponse.next();
-}
-
 
 export const config = {
-matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };

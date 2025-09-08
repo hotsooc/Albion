@@ -1,62 +1,112 @@
-'use client';
+"use client";
 
-import { Button, Card, Form, Input, Typography, message } from 'antd';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button, Card, Form, Input, Typography, Divider } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { supabase } from "../../../lib/supabase/client";
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Link } = Typography;
 
 export default function LoginPage() {
-  const router = useRouter();
-  const params = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const onFinish = async (values: { email: string; password: string }) => {
-  setLoading(true);
-  try {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.username, // Sử dụng 'username' như trong form
+      password: values.password,
     });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data?.message || 'Đăng nhập thất bại');
-  }
-  message.success('Đăng nhập thành công');
-  router.push('/home')
 
-  const from = params.get('from');
-    router.replace(from || '/home');
-  } catch (e) {
-    if (e instanceof Error) {
-      message.error(e.message || 'Có lỗi xảy ra');
-    } else {
-      message.error('Có lỗi xảy ra');
-    }
-  } finally {
     setLoading(false);
-  }
+
+    if (error) {
+      return alert(error.message);
+    } else {
+      router.push("/home");
+    }
   };
 
   return (
-    <div className='flex items-center justify-center min-h-[70vh]'>
-      <Card className='max-w-[400px]'>
-        <Title level={3} className='text-center'>Đăng nhập</Title>
-          <Paragraph type="secondary" className='text-center'>
-            Demo tài khoản: <strong>admin@gmail.com</strong> / <strong>admin123</strong>
+    <div className="grid grid-cols-5 min-h-screen">
+      <div 
+        className="col-span-2 bg-cover bg-center h-full hidden md:flex" 
+        style={{ backgroundImage: "url('/albion.png')" }}
+      >
+      </div>
+
+      <div className="col-span-3 flex items-center justify-center p-4 ">
+        <Card className="max-w-md w-full p-8 shadow-2xl rounded-xl">
+          <div className="flex flex-col items-center mb-6">
+            <img src="/XHCN_icon.png" alt="XHCN Logo" className="w-12 h-16 mb-4" /> 
+            <Title level={2} className="text-center text-gray-800">
+              Welcome to XHCN
+            </Title>
+          </div>
+
+          <Form layout="vertical" onFinish={onFinish} requiredMark={false}>
+            <Form.Item
+              name="username"
+              rules={[{ required: true, message: "Please input your Username!" }]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                placeholder="Username"
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: "Please input your Password!" }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Password"
+                size="large"
+              />
+            </Form.Item>
+
+            <div className="text-right mb-4">
+              <Link href="#" className="text-blue-500 hover:underline">
+                Forgot Password?
+              </Link>
+            </div>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={loading}
+                size="large"
+                className="bg-blue-500 hover:bg-blue-600 border-none"
+              >
+                Log in
+              </Button>
+            </Form.Item>
+          </Form>
+
+          <Divider plain>OR</Divider>
+
+          <Button
+            icon={<img src="/google_icon.png" alt="Google" className="w-5 h-5" />} 
+            size="large"
+            block
+            className="flex items-center justify-center space-x-2"
+          >
+            <span>Continue with Google</span>
+          </Button>
+
+          <Paragraph className="text-center mt-4 text-gray-600">
+            Don't have account?{" "}
+            <Link href="#" className="text-blue-500 hover:underline">
+              Sign Up
+            </Link>
           </Paragraph>
-        <Form layout="vertical" onFinish={onFinish} requiredMark={false}>
-          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Nhập email' }, { type: 'email', message: 'Email không hợp lệ' }]}>
-            <Input prefix={<MailOutlined />} placeholder="you@example.com" autoComplete="email" />
-          </Form.Item>
-          <Form.Item name="password" label="Mật khẩu" rules={[{ required: true, message: 'Nhập mật khẩu' }]}>
-            <Input.Password prefix={<LockOutlined />} placeholder="••••••••" autoComplete="current-password" />
-          </Form.Item>
-          <Button type="primary" htmlType="submit" block loading={loading}>Đăng nhập</Button>
-        </Form>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

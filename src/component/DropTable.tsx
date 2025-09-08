@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { DropSpotComponent } from './DropSpot';
 import { allItemsData, ItemType } from '@/store/data';
 import { Modal } from 'antd';
-import { supabase } from '@/lib/supabaseClient';
 import { LeftOutlined, RightOutlined, PlusOutlined } from '@ant-design/icons';
+import { supabase } from '../../lib/supabase/client';
 
 type DragItem = {
   id: string;
