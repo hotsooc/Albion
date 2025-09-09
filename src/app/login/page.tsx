@@ -49,10 +49,11 @@ export default function LoginPage() {
   }, [router])
 
   const handleGoogleLogin = async () => {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-      redirectTo: 'https://albion-seven.vercel.app/home',
+      redirectTo: `${siteUrl}/home`,
     },
     });
     if (error) {
