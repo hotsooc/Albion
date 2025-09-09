@@ -89,28 +89,30 @@ export default function LoginPage() {
           </div>
 
           <Form layout="vertical" onFinish={onFinish} requiredMark={false} className="w-full">
+            <label className="block text-[#686868] text-[20px] font-medium mb-2">
+              User
+            </label>
             <Form.Item
               name="username"
               rules={[{ required: true, message: "Please input your Username!" }]}
             >
-              <label className="block text-[#686868] text-[20px] font-medium mb-2">
-                User
-              </label>
               <Input
+                prefix={<UserOutlined />}
                 placeholder="Username"
                 size="large"
                 className="rounded-[12px] h-[60px] text-lg border-none"
               />
             </Form.Item>
 
+            <label className="block text-[#686868] text-[20px] font-medium mb-2">
+              Password
+            </label>
             <Form.Item
               name="password"
               rules={[{ required: true, message: "Please input your Password!" }]}
             >
-              <label className="block text-[#686868] text-[20px] font-medium mb-2">
-                Password
-              </label>
               <Input.Password
+                prefix={<LockOutlined />}
                 placeholder="Password"
                 size="large"
                 className="rounded-[12px] h-[60px] text-lg border-none"

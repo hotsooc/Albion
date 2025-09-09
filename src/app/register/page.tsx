@@ -74,13 +74,13 @@ export default function SignupPage() {
           </div>
 
           <Form form={form} layout='vertical' onFinish={onFinish} requiredMark={false} className='w-full'>
+            <label className="block text-[#686868] text-[20px] font-medium mb-2">
+              Email
+            </label>
             <Form.Item
               name='email'
               rules={[{ required: true, message: 'Please input your Email!' }, { type: 'email', message: 'The input is not a valid E-mail!' }]}
             >
-              <label className="block text-[#686868] text-[20px] font-medium mb-2">
-                Email
-              </label>
               <Input
                 prefix={<MailOutlined />} 
                 placeholder='Email'
@@ -89,13 +89,13 @@ export default function SignupPage() {
               />
             </Form.Item>
 
+            <label className="block text-[#686868] text-[20px] font-medium mb-2">
+              Password
+            </label>
             <Form.Item
               name='password'
               rules={[{ required: true, message: 'Please input your Password!' }, { min: 6, message: 'Password must be at least 6 characters!' }]}
             >
-              <label className="block text-[#686868] text-[20px] font-medium mb-2">
-                Password
-              </label>
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder='Password'
@@ -104,6 +104,9 @@ export default function SignupPage() {
               />
             </Form.Item>
 
+            <label className="block text-[#686868] text-[20px] font-medium mb-2">
+              Confirm Password
+            </label>
             <Form.Item
               name='confirmPassword' 
               dependencies={['password']}
@@ -120,9 +123,6 @@ export default function SignupPage() {
                 }),
               ]}
             >
-              <label className="block text-[#686868] text-[20px] font-medium mb-2">
-                Confirm Password
-              </label>
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder='Confirm Password'
