@@ -93,9 +93,10 @@ export default function LoginPage() {
               name="username"
               rules={[{ required: true, message: "Please input your Username!" }]}
             >
-              <span className="text-[#686868] text-[20px] font-medium">User</span>
+              <label className="block text-[#686868] text-[20px] font-medium mb-2">
+                User
+              </label>
               <Input
-                prefix={<UserOutlined />}
                 placeholder="Username"
                 size="large"
                 className="rounded-[12px] h-[60px] text-lg border-none"
@@ -106,9 +107,10 @@ export default function LoginPage() {
               name="password"
               rules={[{ required: true, message: "Please input your Password!" }]}
             >
-              <span className="text-[#686868] text-[20px] font-medium">Password</span>
+              <label className="block text-[#686868] text-[20px] font-medium mb-2">
+                Password
+              </label>
               <Input.Password
-                prefix={<LockOutlined />}
                 placeholder="Password"
                 size="large"
                 className="rounded-[12px] h-[60px] text-lg border-none"

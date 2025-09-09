@@ -78,7 +78,9 @@ export default function SignupPage() {
               name='email'
               rules={[{ required: true, message: 'Please input your Email!' }, { type: 'email', message: 'The input is not a valid E-mail!' }]}
             >
-              <span className="text-[#686868] text-[20px] font-medium">Email</span>
+              <label className="block text-[#686868] text-[20px] font-medium mb-2">
+                Email
+              </label>
               <Input
                 prefix={<MailOutlined />} 
                 placeholder='Email'
@@ -91,7 +93,9 @@ export default function SignupPage() {
               name='password'
               rules={[{ required: true, message: 'Please input your Password!' }, { min: 6, message: 'Password must be at least 6 characters!' }]}
             >
-              <span className="text-[#686868] text-[20px] font-medium">Password</span>
+              <label className="block text-[#686868] text-[20px] font-medium mb-2">
+                Password
+              </label>
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder='Password'
@@ -116,7 +120,9 @@ export default function SignupPage() {
                 }),
               ]}
             >
-              <span className="text-[#686868] text-[20px] font-medium">Confirm Password</span>
+              <label className="block text-[#686868] text-[20px] font-medium mb-2">
+                Confirm Password
+              </label>
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder='Confirm Password'
