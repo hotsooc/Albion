@@ -53,7 +53,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-      redirectTo: `${siteUrl}/home`,
+      // redirectTo: `${siteUrl}/home`,
     },
     });
     if (error) {
