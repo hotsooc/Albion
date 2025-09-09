@@ -51,6 +51,9 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
+      options: {
+      redirectTo: 'https://albion-seven.vercel.app/home',
+    },
     });
     if (error) {
       alert(error.message);
