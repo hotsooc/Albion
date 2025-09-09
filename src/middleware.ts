@@ -1,4 +1,5 @@
-// lib/supabase/middleware.ts
+// file: middleware.ts
+
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { Database } from '../lib/database.types';
@@ -6,7 +7,7 @@ import { Database } from '../lib/database.types';
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
     request: {
-      headers: request.headers,
+      headers: request.headers, 
     },
   });
 
@@ -28,8 +29,18 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // refresh session nếu cần
-  await supabase.auth.getUser();
+  await supabase.auth.getSession();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const protectedRoutes = ['/home', '/teammate', '/build', '/video', '/account', '/setting']; 
+
+  if (!session && protectedRoutes.includes(request.nextUrl.pathname)) {
+    const absoluteURL = new URL('/login', request.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL);
+  }
 
   return response;
 }

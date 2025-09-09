@@ -12,7 +12,7 @@ const dataSets = {
   Mace: dataSet9,
   Hammer: dataSet10,
   'War Gloves': dataSet11,
-  Crossbow: dataSet1,
+  // Crossbow: dataSet1,
   Bow: dataSet1,
   Dagger: dataSet2,
   Spear: dataSet3,
@@ -86,7 +86,7 @@ export const DragSourceContainer = () => {
       </div>
 
       <div className='grid grid-cols-1 gap-3'>
-        <div className='flex flex-col gap-3 overflow-y-auto max-h-[600px] no-scrollbar'>
+        <div className='flex flex-col gap-3 overflow-y-auto max-h-[500px] no-scrollbar'>
           {buttonsToDisplay.map((label) => {
             const data = dataSets[label as keyof typeof dataSets];
             return (
