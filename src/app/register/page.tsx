@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Card, Form, Input, Typography, Divider } from 'antd';
+import { Button, Form, Input, Typography, Divider } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { supabase } from '../../../lib/supabase/client';
 import { Baloo_2 } from 'next/font/google';
@@ -33,6 +33,7 @@ export default function SignupPage() {
     email: values.email,
     password: values.password,
   });
+  console.log(data)
 
   setLoading(false);
 

@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import { Card, Modal, Row, Col, Typography, Spin, Input, Button, Form, Avatar } from "antd";
-import { Comment } from '@ant-design/compatible';
+import { Card, Modal, Row, Col, Spin, Input, Button, Form } from "antd";
 import ReactPlayer from "react-player";
-import { UploadOutlined, SearchOutlined, FilterOutlined, UserOutlined } from "@ant-design/icons";
+import { UploadOutlined, SearchOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { supabase } from "../../lib/supabase/client";
 import { VideoAlbion } from "@/store/video";
@@ -12,7 +11,6 @@ import { Baloo_2 } from "next/font/google";
 import CommentSection from "./Comment";
 
 const { Meta } = Card;
-const { Title, Paragraph } = Typography;
 
 const getYouTubeVideoId = (url: string | null) => {
   if (!url) return null;
@@ -49,7 +47,6 @@ const balooFont = Baloo_2({
 });
 
 const VideoPage = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoWithThumbnailType | null>(null);
   const [videosWithThumbnails, setVideosWithThumbnails] = useState<VideoWithThumbnailType[]>([]);
@@ -105,15 +102,15 @@ const VideoPage = () => {
     fetchVideos();
   }, [activeTab]);
 
-  const showModal = (video: VideoWithThumbnailType) => {
-    setSelectedVideo(video);
-    setIsModalVisible(true);
-  };
+  // const showModal = (video: VideoWithThumbnailType) => {
+  //   setSelectedVideo(video);
+  //   setIsModalVisible(true);
+  // };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedVideo(null);
-  };
+  // const handleCancel = () => {
+  //   setIsModalVisible(false);
+  //   setSelectedVideo(null);
+  // };
 
   const showUploadModal = () => {
     setIsUploadModalVisible(true);

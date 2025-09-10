@@ -144,7 +144,6 @@ export default function LoginPage() {
           </Form>
 
           <Divider plain className="text-[#686868]">OR</Divider>
-
           <Button
             icon={<img src="/google_icon.png" alt="Google" className="w-5 h-5" />}
             size="large"
