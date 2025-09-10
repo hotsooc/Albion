@@ -1,44 +1,37 @@
 export type VideoType = {
     id: string | number;
-    url: string;
+    url: string | null;
     name: string;
     thumbnail: string; 
     description: string; 
 }
 
-export const VideoAlbion: VideoType[] = [
-    // {
-    //     name: 'Chết ngu part 1',
-    //     url: '/video/Albion/Chet_ngu.mp4',
-    //     thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
-    //     description: 'Nor chết ngu'
-    // },
+export const VideoAlbion: { [key: string]: VideoType[] } = {
+  Highlight: [
     {
-        id: '1',
-        name: 'Chết ngu part 1',
-        url: 'https://www.youtube.com/watch?v=yRbkUhfdPF8',
-        thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
-        description: 'Hí chết ngu'
+      id: 1,
+      name: "Epic Guild Fight",
+      url: "https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be",
+      thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
+      description: "A huge battle between two guilds.",
     },
+  ],
+  "Funny Moment": [
     {
-        id: '2',
-        name: 'Chết ngu part 2',
-        url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
-        thumbnail: 'URL_HINH_ANH_THU_NHO_2.jpg',
-        description: 'Phần tiếp theo của chuỗi video về những khoảnh khắc đáng nhớ.'
+      id: 2,
+      name: "Ganking Gone Wrong",
+      url: "https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be",
+      thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
+      description: "My ganking attempt didn't go as planned.",
     },
+  ],
+  Record: [
     {
-        id: '3',
-        name: 'Chết ngu part 3',
-        url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
-        thumbnail: 'URL_HINH_ANH_THU_NHO_3.jpg',
-        description: 'Phần cuối cùng trong chuỗi video với những pha xử lý bất ngờ.'
+      id: 3,
+      name: "Solo Dungeon World Record",
+      url: "https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be",
+      thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
+      description: "Speedrunning a T6 dungeon.",
     },
-    {
-        id: '4',
-        name: 'Highlight',
-        url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
-        thumbnail: 'URL_HINH_ANH_THU_NHO_3.jpg',
-        description: 'Phần cuối cùng trong chuỗi video với những pha xử lý bất ngờ.'
-    }
-];
+  ],
+};

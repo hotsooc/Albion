@@ -51,7 +51,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   return (
     <header className="p-4 flex items-center justify-end bg-gradient-to-r from-sky-200 to-green-200">
       <div className="flex-grow flex justify-center">
-        <div className="flex items-center bg-white rounded-full w-96 border-none px-4 shadow-sm">
+        <div className="flex items-center bg-white rounded-full w-2/5 border-none px-4 shadow-sm">
           <Input
             placeholder="Tìm kiếm..."
             value={searchTerm}

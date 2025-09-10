@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function BuildPage() {
   return (
-    <div className='flex mt-4 sticky no-scrollbar overflow-auto w-full'>
+    <div className='my-4 flex flex-col min-h-screen w-full px-8'>
         <VideoPage />
     </div>
   )
