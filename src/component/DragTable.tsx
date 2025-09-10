@@ -68,7 +68,7 @@ export const DragSourceContainer = () => {
   return (
     <div className='flex flex-col gap-4'>
       <div className="flex items-center bg-white rounded-full w-full h-full overflow-hidden  shadow-sm px-4">
-        <SearchOutlined className="text-gray-400 text-lg mr-2" />
+        <SearchOutlined className="text-black text-lg mr-2" />
         <Input
           placeholder="Tìm kiếm..."
           value={inputValue}
@@ -80,14 +80,14 @@ export const DragSourceContainer = () => {
             type="text"
             icon={<CloseCircleOutlined />}
             onClick={handleClearSearch}
-            className="!text-gray-400"
+            className="!text-black"
           />
         )}
       </div>
 
       <div className='grid grid-cols-1 gap-3'>
         <div className='flex flex-col gap-3 overflow-y-auto max-h-[500px] no-scrollbar'>
-          {buttonsToDisplay.map((label) => {
+          {!inputValue && buttonsToDisplay.map((label) => {
             const data = dataSets[label as keyof typeof dataSets];
             return (
               <Button
@@ -104,7 +104,7 @@ export const DragSourceContainer = () => {
 
       {showResults && searchResults.length > 0 && (
         <div className='w-full overflow-y-auto max-h-[500px]'>
-          <div className='grid grid-row-1 sm:grid-row-2 md:grid-row-3 text-center gap-3'>
+          <div className='grid grid-row-1 sm:grid-row-2 md:grid-row-3 text-black text-center gap-3'>
             {searchResults.map((item) => (
               <DraggableItem key={item.id} item={item} />
             ))}
