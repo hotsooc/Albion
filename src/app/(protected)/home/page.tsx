@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function Home() {
   const [showFullImage, setShowFullImage] = useState(true);
-  const [imageSrc, setImageSrc] = useState('/Image_Guild.png');
+  const [imageSrc, setImageSrc] = useState('/Group_1.png');
   const [isAnimating, setIsAnimating] = useState(true); 
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function Home() {
           <img
             src={imageSrc}
             alt="Full-screen Guild Image"
-            className={`w-full h-full object-contain cursor-pointer ${isAnimating ? 'animate-zoom-out-clear' : 'animate-zoom-in-clear'}`}
+            className={`w-full h-full object-none cursor-pointer ${isAnimating ? 'animate-zoom-out-clear' : 'animate-zoom-in-clear'}`}
           />
         </div>
       )}
@@ -71,11 +71,11 @@ export default function Home() {
       <section className='flex flex-col justify-start items-center h-screen -pt-[10vh]'>
         <div
           className="transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer shadow-xl rounded-lg overflow-hidden"
-          onClick={() => handleImageClick('/Image_Guild.png')}
+          onClick={() => handleImageClick('/Group_1.png')}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/Image_Guild.png"
+            src="/Group_1.png"
             alt="Guild Image"
             className='max-w-full lg:max-w-[500vh] h-auto max-h-[90vh] object-contain rounded-lg'
           />
