@@ -6,6 +6,7 @@ import AntdProvider from '@/component/AntdProvider';
 import AppHeader from '@/component/AppHeader';
 import Sidebar from '@/component/Sidebar';
 import { createClient } from '../../lib/supabase/server';
+import { App } from 'antd';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,15 +25,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="vi">
       <body className={inter.className}>
         <AntdProvider>
-          <div className="flex h-screen overflow-hidden bg-gradient-to-r from-sky-200 to-green-200">
-            <Sidebar />
-            <div className="flex flex-col flex-grow">
-              <AppHeader />
-              <main className='flex-grow'>
-                {children}
-              </main>
+          <App>
+            <div className="flex h-screen overflow-hidden bg-gradient-to-r from-sky-200 to-green-200">
+              <Sidebar />
+              <div className="flex flex-col flex-grow">
+                <AppHeader />
+                <main className='flex-grow'>
+                    {children}
+                </main>
+              </div>
             </div>
-          </div>
+          </App>
         </AntdProvider>
       </body>
     </html>

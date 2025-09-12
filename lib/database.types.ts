@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          avatar: string | null
+          created_at: string | null
+          full_name: string
+          id: string
+        }
+        Insert: {
+          avatar?: string | null
+          created_at?: string | null
+          full_name?: string
+          id: string
+        }
+        Update: {
+          avatar?: string | null
+          created_at?: string | null
+          full_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
       teams_data: {
         Row: {
           data: Json | null
@@ -32,6 +53,7 @@ export type Database = {
       videos: {
         Row: {
           category: string | null
+          created_at: string | null
           description: string | null
           id: string
           name: string

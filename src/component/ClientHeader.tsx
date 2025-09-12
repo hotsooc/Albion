@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Dropdown, MenuProps, Input } from 'antd';
+import { Dropdown, MenuProps, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,7 @@ interface ClientHeaderProps {
 const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +32,37 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     return () => listener.subscription.unsubscribe();
   }, []);
 
+  // useEffect(() => {
+  // const getProfile = async () => {
+  //   const { data: { user } } = await supabase.auth.getUser();
+  //   setUser(user);
+
+  //   if (user) {
+  //     const { data, error } = await supabase
+  //       .from('profiles')
+  //       .select('full_name')
+  //       .eq('id', user.id)
+  //       .single();
+
+  //     if (data) {
+  //       setProfile(data);
+  //     } else {
+  //       console.error('Lỗi khi lấy hồ sơ:', error);
+  //     }
+  //   }
+  // };
+  // getProfile();
+
+//   const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+//     setUser(session?.user ?? null);
+//     if (session?.user) {
+//       getProfile();
+//     }
+//   });
+
+//   return () => listener.subscription.unsubscribe();
+// }, []);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -38,7 +70,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   };
 
   const menuItems: MenuProps['items'] = [
-    { key: 'profile', label: <Link href="/profile">Hồ sơ</Link> },
+    // { key: 'profile', label: <Link href="/profile">Hồ sơ</Link> },
     { key: 'logout', label: 'Đăng xuất' },
   ];
 
@@ -70,8 +102,11 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/user_icon.png" width={30} height={30} alt="User" />
-            <span className="text-[20px] font-medium">
+            {/* <span className="text-[20px] font-medium">
               {user.user_metadata?.full_name || user.email}
+            </span> */}
+            <span className="text-[20px] font-medium">
+              {profile?.full_name || user?.user_metadata?.full_name || user?.email}
             </span>
           </a>
         </Dropdown>

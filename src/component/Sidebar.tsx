@@ -49,7 +49,7 @@ const Sidebar = () => {
             <Link
               href="/home"
               className={`flex items-center p-3 gap-4 rounded-lg text-gray-700 hover:bg-[#8BDDFB] hover:text-black transition-colors duration-240 ${
-                pathname === '/home' ? 'bg-[#77BFFA] text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : ''
+                pathname === '/home' ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -61,7 +61,7 @@ const Sidebar = () => {
             <Link
               href="/teammate"
               className={`flex items-center p-3 gap-4 rounded-lg text-gray-700 hover:bg-[#8BDDFB] hover:text-black transition-colors duration-240 ${
-                pathname.startsWith('/teammate') ? 'bg-[#77BFFA] text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : ''
+                pathname.startsWith('/teammate') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -74,7 +74,7 @@ const Sidebar = () => {
             <Link
               href="/video"
               className={`flex items-center p-3 gap-4 rounded-lg text-gray-700 hover:bg-[#8BDDFB] hover:text-black transition-colors duration-240 ${
-                pathname.startsWith('/video') ? 'bg-[#77BFFA] text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : ''
+                pathname.startsWith('/video') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,7 +86,7 @@ const Sidebar = () => {
             <Link
               href="/build"
               className={`flex items-center p-3 gap-4 rounded-lg text-gray-700 hover:bg-[#8BDDFB] hover:text-black transition-colors duration-240 ${
-                pathname.startsWith('/build') ? 'bg-[#77BFFA] text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : ''
+                pathname.startsWith('/build') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -98,7 +98,7 @@ const Sidebar = () => {
             <Link
               href="/account"
               className={`flex items-center p-3 gap-4 rounded-lg text-gray-700 hover:bg-[#8BDDFB] hover:text-black transition-colors duration-240 ${
-                pathname.startsWith('/account') ? 'bg-[#77BFFA] text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : ''
+                pathname.startsWith('/account') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -110,7 +110,7 @@ const Sidebar = () => {
             <Link
               href="/setting"
               className={`flex items-center p-3 gap-4 rounded-lg text-gray-700 hover:bg-[#8BDDFB] hover:text-black transition-colors duration-240 ${
-                pathname.startsWith('/setting') ? 'bg-[#77BFFA] text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : ''
+                pathname.startsWith('/setting') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

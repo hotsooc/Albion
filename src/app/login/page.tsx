@@ -34,19 +34,53 @@ export default function LoginPage() {
     checkUser();
   }, [router]);
 
-  useEffect(() => {
-    const {data: authListener} = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log(event)
+  // useEffect(() => {
+  //   const {data: authListener} = supabase.auth.onAuthStateChange(
+  //     (event, session) => {
+  //       console.log(event)
+  //       if (session) {
+  //         router.push('/home')
+  //       }
+  //     }
+  //   )
+  //   return () => {
+  //     authListener.subscription.unsubscribe();
+  //   };
+  // }, [router])
+
+useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
         if (session) {
-          router.push('/home')
+          const user = session.user;
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('id', user.id)
+            .single();
+
+          if (error && error.code === 'PGRST116') {
+            const userName = user.user_metadata?.full_name || user.email;
+            
+            const { error: createError } = await supabase
+              .from('profiles')
+              .insert({ id: user.id, full_name: userName });
+            
+            if (createError) {
+              console.error('Lỗi khi tạo hồ sơ người dùng:', createError.message);
+            }
+          } else if (error) {
+            console.error('Lỗi khi lấy hồ sơ người dùng:', error.message);
+          }
+          
+          router.push('/home');
         }
       }
-    )
+    );
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [router])
+}, [router]);
 
   const handleGoogleLogin = async () => {
     // const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
