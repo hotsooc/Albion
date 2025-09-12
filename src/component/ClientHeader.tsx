@@ -18,13 +18,8 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const router = useRouter();
 
+  // useEffect để lắng nghe sự thay đổi trạng thái đăng nhập
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    getUser();
-
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
@@ -32,53 +27,49 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // useEffect(() => {
-  // const getProfile = async () => {
-  //   const { data: { user } } = await supabase.auth.getUser();
-  //   setUser(user);
+  // useEffect này sẽ chạy mỗi khi user thay đổi
+  useEffect(() => {
+    const getProfile = async () => {
+      // Nếu không có user, reset profile
+      if (!user) {
+        setProfile(null);
+        return;
+      }
+      
+      // Lấy full_name từ user_metadata
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+    
+      if (profileData) {
+        setProfile(profileData);
+      } else {
+        console.error('Lỗi khi lấy hồ sơ:', profileError);
+      }
+    };
 
-  //   if (user) {
-  //     const { data, error } = await supabase
-  //       .from('profiles')
-  //       .select('full_name')
-  //       .eq('id', user.id)
-  //       .single();
-
-  //     if (data) {
-  //       setProfile(data);
-  //     } else {
-  //       console.error('Lỗi khi lấy hồ sơ:', error);
-  //     }
-  //   }
-  // };
-  // getProfile();
-
-//   const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-//     setUser(session?.user ?? null);
-//     if (session?.user) {
-//       getProfile();
-//     }
-//   });
-
-//   return () => listener.subscription.unsubscribe();
-// }, []);
+    getProfile();
+  }, [user]); // Lắng nghe sự thay đổi của biến `user`
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    router.push('/login'); 
+    router.push('/login');
   };
 
   const menuItems: MenuProps['items'] = [
-    // { key: 'profile', label: <Link href="/profile">Hồ sơ</Link> },
+    { key: 'profile', label: <Link href="/profile">Hồ sơ</Link> },
     { key: 'logout', label: 'Đăng xuất' },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'logout') handleLogout();
+    if (key === 'profile') router.push('/profile'); // Sửa lại để đi đến trang profile
   };
 
-  if (!user) return null; 
+  if (!user) return null;
 
   return (
     <header className="p-4 flex items-center justify-end bg-gradient-to-r from-sky-200 to-green-200">
@@ -102,9 +93,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/user_icon.png" width={30} height={30} alt="User" />
-            {/* <span className="text-[20px] font-medium">
-              {user.user_metadata?.full_name || user.email}
-            </span> */}
             <span className="text-[20px] font-medium">
               {profile?.full_name || user?.user_metadata?.full_name || user?.email}
             </span>
