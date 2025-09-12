@@ -14,19 +14,43 @@ export type Database = {
   }
   public: {
     Tables: {
+      comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          user_id: string
+          user_name: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+          user_name?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+          user_name?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
-          full_name: string
+          full_name: string | null
           id: string
           role: string
         }
         Insert: {
-          full_name?: string
+          full_name?: string | null
           id: string
           role?: string
         }
         Update: {
-          full_name?: string
+          full_name?: string | null
           id?: string
           role?: string
         }

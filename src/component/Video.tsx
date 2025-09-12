@@ -102,16 +102,6 @@ const VideoPage = () => {
     fetchVideos();
   }, [activeTab]);
 
-  // const showModal = (video: VideoWithThumbnailType) => {
-  //   setSelectedVideo(video);
-  //   setIsModalVisible(true);
-  // };
-
-  // const handleCancel = () => {
-  //   setIsModalVisible(false);
-  //   setSelectedVideo(null);
-  // };
-
   const showUploadModal = () => {
     setIsUploadModalVisible(true);
   };
@@ -275,20 +265,7 @@ const VideoPage = () => {
               style={{ position: "absolute", top: 0, left: 0 }}
             />
           </div>
-          {/* <Comment
-            className="rounded-2xl p-4"
-            author={<a>Thewise: ai kêu m ngu</a>}
-            avatar={<Avatar icon={<UserOutlined />} />}
-            content={
-              <p>
-                Đây là nội dung của bình luận. Bạn có thể thay đổi nó.
-              </p>
-            }
-            datetime={
-              <span>1:00 PM 7/9/2025</span>
-            }
-          /> */}
-          <CommentSection />
+          <CommentSection videoId={selectedVideo.id}/>
         </div>
       )}
       <Modal

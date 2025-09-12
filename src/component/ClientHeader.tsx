@@ -18,7 +18,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const router = useRouter();
 
-  // useEffect để lắng nghe sự thay đổi trạng thái đăng nhập
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
@@ -27,16 +26,13 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // useEffect này sẽ chạy mỗi khi user thay đổi
   useEffect(() => {
     const getProfile = async () => {
-      // Nếu không có user, reset profile
       if (!user) {
         setProfile(null);
         return;
       }
       
-      // Lấy full_name từ user_metadata
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('full_name')
@@ -51,7 +47,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     };
 
     getProfile();
-  }, [user]); // Lắng nghe sự thay đổi của biến `user`
+  }, [user]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -66,7 +62,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'logout') handleLogout();
-    if (key === 'profile') router.push('/profile'); // Sửa lại để đi đến trang profile
+    if (key === 'profile') router.push('/account'); 
   };
 
   if (!user) return null;
@@ -85,7 +81,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           />
         </div>
       </div>
-      <div className="flex items-center ml-auto">
+      <div className="flex items-center ml-auto bg-[#97DDD9] rounded-xl ">
         <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow>
           <a
             onClick={(e) => e.preventDefault()}
@@ -93,7 +89,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/user_icon.png" width={30} height={30} alt="User" />
-            <span className="text-[20px] font-medium">
+            <span className="text-[20px] text-black font-medium">
               {profile?.full_name || user?.user_metadata?.full_name || user?.email}
             </span>
           </a>
