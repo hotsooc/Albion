@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function Home() {
   const [showFullImage, setShowFullImage] = useState(true);
-  const [imageSrc, setImageSrc] = useState('/Group_1.png');
+  const [imageSrc, setImageSrc] = useState('/Group123.png');
   const [isAnimating, setIsAnimating] = useState(true); 
 
   useEffect(() => {
@@ -63,21 +63,21 @@ export default function Home() {
           <img
             src={imageSrc}
             alt="Full-screen Guild Image"
-            className={`w-full h-full object-none cursor-pointer ${isAnimating ? 'animate-zoom-out-clear' : 'animate-zoom-in-clear'}`}
+            className={`w-screen h-screen object-none cursor-pointer ${isAnimating ? 'animate-zoom-out-clear' : 'animate-zoom-in-clear'}`}
           />
         </div>
       )}
 
-      <section className='flex flex-col justify-start items-center h-screen -pt-[10vh]'>
+      <section className='flex flex-col justify-start items-center w-full h-screen rounded-full'>
         <div
-          className="transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer shadow-xl rounded-lg overflow-hidden"
-          onClick={() => handleImageClick('/Group_1.png')}
+          className="transition-all mt-10 duration-300 ease-in-out transform hover:scale-105 cursor-pointer shadow-xl rounded-lg overflow-hidden"
+          onClick={() => handleImageClick('/Group123.png')}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/Group_1.png"
+            src="/Group123.png"
             alt="Guild Image"
-            className='max-w-full lg:max-w-[500vh] h-auto max-h-[90vh] object-contain rounded-lg'
+            className='max-w-screem max-h-[90vh] rounded-lg'
           />
         </div>
       </section>
