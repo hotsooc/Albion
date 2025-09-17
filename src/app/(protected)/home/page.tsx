@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function Home() {
   const [showFullImage, setShowFullImage] = useState(true);
-  const [imageSrc, setImageSrc] = useState('/Group123.png');
+  const [imageSrc, setImageSrc] = useState('/group123.png');
   const [isAnimating, setIsAnimating] = useState(true); 
 
   useEffect(() => {
@@ -71,11 +71,11 @@ export default function Home() {
       <section className='flex flex-col justify-start items-center w-full h-screen rounded-full'>
         <div
           className="transition-all mt-10 duration-300 ease-in-out transform hover:scale-105 cursor-pointer shadow-xl rounded-lg overflow-hidden"
-          onClick={() => handleImageClick('/Group123.png')}
+          onClick={() => handleImageClick('/group123.png')}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/Group123.png"
+            src="/group123.png"
             alt="Guild Image"
             className='max-w-screem max-h-[90vh] rounded-lg'
           />
