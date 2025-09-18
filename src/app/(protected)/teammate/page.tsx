@@ -1,17 +1,18 @@
 'use client';
 
-import { useState } from 'react'; // Thêm useState
-// import { Card } from 'antd';
+import { useState } from 'react';
 import { DragSourceContainer } from '@/component/DragTable';
 import DragDropProvider from '@/component/DndProvider';
 import { DroppableTable } from '@/component/DropTable';
 import { TeamSelector } from '@/component/TeamSelector';
+import { ButtonChangeColumn } from '@/component/ButtonChangeColumn';
 
 const teamNames = ['Anti heal', 'Balance', 'One shot'];
 const teamKeys = ['team_1', 'team_2', 'team_3'];
 
 export default function TeammatePage() {
   const [openTeamIndex, setOpenTeamIndex] = useState<number>(0);
+  const [columnCount, setColumnCount] = useState<number>(7);
 
   const handleNextTeam = () => {
     setOpenTeamIndex(prevIndex => (prevIndex + 1) % teamNames.length);
@@ -35,6 +36,8 @@ export default function TeammatePage() {
             handlePrevTeam={handlePrevTeam}
             handleNextTeam={handleNextTeam}
             handleToggleTeam={handleToggleTeam}
+            // setColumnCount={setColumnCount}
+            // columnCount={columnCount}
           />
         </div>
         <div className='grid grid-cols-[1fr_5fr] gap-4'>
@@ -45,9 +48,16 @@ export default function TeammatePage() {
             <DroppableTable
               teamNames={teamNames} 
               teamKeys={teamKeys} 
-              openTeamIndex={openTeamIndex} 
+              openTeamIndex={openTeamIndex}
+              columnCount={columnCount}
             />
           </div>
+        </div>
+        <div className='flex justify-end items-center mt-5'>
+          <ButtonChangeColumn
+            setColumnCount={setColumnCount}
+            columnCount={columnCount}
+          />
         </div>
       </DragDropProvider>
     </section>
