@@ -30,15 +30,15 @@ const dataSets = {
 
 export const DragSourceContainer = () => {
   const [inputValue, setInputValue] = useState('');
-  const [searchResults, setSearchResults] = useState<ItemType[]>([]); 
+  const [searchResults, setSearchResults] = useState<ItemType[]>([]);
   const [activeButton, setActiveButton] = useState<string | null>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toLowerCase();
+    const value = e.target.value;
     setInputValue(value);
     setActiveButton(null);
     const filteredData = allItemsData.filter(item =>
-      item.name.toLowerCase().includes(value)
+      item.name.toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredData);
   };
@@ -54,15 +54,15 @@ export const DragSourceContainer = () => {
       setInputValue(label);
     }
   };
-  
+
   const handleClearSearch = () => {
     setInputValue('');
-    setSearchResults([]); 
+    setSearchResults([]);
     setActiveButton(null);
   };
 
   const buttonsToDisplay = activeButton ? [activeButton] : Object.keys(dataSets);
-  const showResults = inputValue || activeButton; 
+  const showResults = inputValue || activeButton;
 
   return (
     <div className='flex flex-col gap-4'>
