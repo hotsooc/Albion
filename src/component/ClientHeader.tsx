@@ -24,7 +24,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const categories = [
     { name: 'Home', icon: <img src="/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
     { name: 'Team', icon: <img src="/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
-    { name: 'Videos', icon: <img src="/video_icon.png" alt="" width={24} height={24} />, path: '/video' },
+    { name: 'Videos', icon: <img src="/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
     { name: 'Builds', icon: <img src="/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
     { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/setting' },
     { name: 'Account', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/account' },
@@ -165,17 +165,15 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           open={isSearchDropdownVisible}
           onOpenChange={setIsSearchDropdownVisible}
         >
-          <div className="flex items-center bg-white rounded-full w-2/5 border-none px-4 shadow-sm cursor-pointer">
             <Input
               placeholder="Tìm kiếm..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onPressEnter={handleSearchSubmit}
               prefix={<SearchOutlined className="text-gray-400 text-lg" />}
-              className="!border-none bg-transparent flex-grow !shadow-xl h-10 px-4 focus:ring-0"
+              className="!border-none !shadow-xl !h-10 !px-4 focus:ring-0 !flex !items-center bg-white !rounded-full !w-2/5 !cursor-pointer"
               onClick={() => setIsSearchDropdownVisible(true)}
             />
-          </div>
         </Dropdown>
       </div>
       <div className="flex items-center ml-auto bg-[#97DDD9] rounded-xl ">

@@ -167,7 +167,7 @@ const Profile = () => {
                 disabled={loading}
                 className="space-y-8"
             >
-                <div>
+                <div className='mb-0'>
                     <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
                     <div className="flex !w-[1020px] space-x-4 gap-5">
                         <Form.Item

@@ -92,7 +92,7 @@ export const DragSourceContainer = () => {
               <Button
                 key={label}
                 onClick={() => handleToggleDataSet(data, label)}
-                className={`!rounded-md !h-12 !text-lg !font-medium !bg-sky-200 !text-black !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
+                className={`!rounded-md !h-12 !text-lg !font-medium !bg-sky-200 !text-blue !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
               >
                 {label}
               </Button>

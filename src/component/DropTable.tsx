@@ -319,8 +319,8 @@ export const DroppableTable = ({ teamKeys, openTeamIndex, columnCount }: Droppab
       case 2:
         return (
           <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-2 gap-4 text-black'>
-            {renderColumn(teamKey, 'column_A', 'Tank', currentTeamData)}
-            {renderColumn(teamKey, 'column_B', 'Sub Tank', currentTeamData)}
+            {renderColumn(teamKey, 'column_A', 'DPS', currentTeamData)}
+            {renderColumn(teamKey, 'column_B', 'Heal', currentTeamData)}
           </div>
         );
       default:

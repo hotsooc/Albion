@@ -77,7 +77,8 @@ body {
 .video-responsive-scroll .video-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* Tỷ lệ 16:9 */
+  /* padding-top: 56.25%; */
+  height: auto;
 }
 
 .video-responsive-scroll .video-wrapper .react-player {
@@ -87,11 +88,11 @@ body {
 }
 
 .ant-input-search .ant-input-search-button {
-  border-radius: 0 9999px 9999px 0 !important; /* Làm tròn nút search */
+  border-radius: 0 9999px 9999px 0 !important;
 }
 .ant-input-search .ant-input-group-addon {
   border-radius: 0 9999px 9999px 0 !important;
 }
 .ant-input-search .ant-input {
-  border-radius: 9999px 0 0 9999px !important; /* Làm tròn input */
+  border-radius: 9999px 0 0 9999px !important;
 }

@@ -22,7 +22,7 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({ item}) => {
   console.log('isDragging:', isDragging);
 
   return drag(
-    <div className='flex justify-between items-center bg-[#f5f5f5] border p-2 cursor-move rounded-lg mb-1'>
+    <div className='flex justify-between items-center bg-[#f5f5f5] border-[1px] border-gray-200 p-2 cursor-move rounded-lg mb-1'>
       <span>{item.name}</span>
     </div>
   );

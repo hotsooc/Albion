@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, Modal, Row, Col, Spin, Input, Button, Form } from "antd";
-import ReactPlayer from "react-player";
 import { UploadOutlined, SearchOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { supabase } from "../../lib/supabase/client";
 import { VideoAlbion } from "@/store/video";
 import { Baloo_2 } from "next/font/google";
-import CommentSection from "./Comment";
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const { Meta } = Card;
 
@@ -48,13 +48,20 @@ const balooFont = Baloo_2({
 
 const VideoPage = () => {
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState<VideoWithThumbnailType | null>(null);
   const [videosWithThumbnails, setVideosWithThumbnails] = useState<VideoWithThumbnailType[]>([]);
   const [activeTab, setActiveTab] = useState("Highlight");
   const [searchValue, setSearchValue] = useState("");
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"list" | "detail">("list");
+  const router = useRouter();
+  const searchParams = useSearchParams(); 
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl && tabs.includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -66,8 +73,8 @@ const VideoPage = () => {
 
       if (error || !data || data.length === 0) {
         console.error('Error fetching videos or no data, falling back to local data:', error);
-        const fallbackVideos = VideoAlbion[activeTab] || [];
-        const dataWithThumbnails: VideoWithThumbnailType[] = fallbackVideos.map((video) => {
+        const fallbackVideos = (VideoAlbion as any)[activeTab] || [];
+        const dataWithThumbnails: VideoWithThumbnailType[] = fallbackVideos.map((video: any) => {
           const videoId = getYouTubeVideoId(video.url);
           const thumbnail = getYouTubeThumbnail(videoId);
           return {
@@ -84,7 +91,6 @@ const VideoPage = () => {
         const dataWithThumbnails: VideoWithThumbnailType[] = data.map((video: SupabaseVideo) => {
           const videoId = getYouTubeVideoId(video.url);
           const thumbnail = getYouTubeThumbnail(videoId);
-
           return {
             id: video.id,
             name: video.name || 'Untitled',
@@ -102,10 +108,7 @@ const VideoPage = () => {
     fetchVideos();
   }, [activeTab]);
 
-  const showUploadModal = () => {
-    setIsUploadModalVisible(true);
-  };
-
+  const showUploadModal = () => setIsUploadModalVisible(true);
   const handleUploadCancel = () => {
     setIsUploadModalVisible(false);
     form.resetFields();
@@ -153,50 +156,20 @@ const VideoPage = () => {
 
   return (
     <div className="p-4 w-full h-full rounded-2xl bg-[#E4FFFE] shadow-xl border border-solid">
-      <div className="flex gap-2 mb-6">
-      {viewMode === "detail" && (
-        <>
-        <div className="!flex !justify-between w-1/4">
-          <Button onClick={() => setViewMode("list")} className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9] !rounded-xl">
-            <img src='/back_icon.png' alt="" width={20} height={20} />
-            <span className="text-black font bold text-[20px]">Back</span>
-          </Button>
-          <div></div>
-        </div>
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition ${
-                activeTab === tab ? "bg-[#77BFFA] text-black" : "bg-[#8BDDFB] text-black"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </>
-      )}
-      </div>
       <div className="flex justify-center gap-2 mb-6">
-      {viewMode === "list" && (
-        <>
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition ${
-                activeTab === tab ? "bg-[#77BFFA] text-black" : "bg-[#8BDDFB] text-black"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </>
-      )}
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition ${
+              activeTab === tab ? "bg-[#77BFFA] text-black" : "bg-[#8BDDFB] text-black"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
-
-    {viewMode === "list" && (
-      <>
+      
       <div className="flex justify-center mb-6">
         <Input
           prefix={<SearchOutlined />}
@@ -206,6 +179,7 @@ const VideoPage = () => {
           className="!border !border-gray-300 !shadow-xl bg-white !w-1/3 !h-10 px-4 !rounded-full focus:ring-2 focus:ring-blue-400"
         />
       </div>
+      
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <Spin size="large" />
@@ -216,10 +190,9 @@ const VideoPage = () => {
             <Col key={video.id} xs={24} sm={12} md={8} lg={6}>
               <Card
                 hoverable
-                className="w-full rounded-lg overflow-hidden"
+                className="w-full rounded-lg shadow-xl border border-black overflow-hidden"
                 onClick={() => {
-                  setSelectedVideo(video);
-                  setViewMode("detail");
+                  router.push(`/videos/${video.id}`);
                 }}
                 cover={
                   <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
@@ -228,7 +201,7 @@ const VideoPage = () => {
                       src={video.thumbnail}
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-lg"
+                      className="!rounded-xl p-1"
                     />
                   </div>
                 }
@@ -239,35 +212,19 @@ const VideoPage = () => {
           ))}
         </Row>
       )}
+
       <div className="flex gap-2 mt-4 justify-between">
-        {/* <Button icon={<FilterOutlined />} /> */}
         <div></div>
         <Button
           type="primary"
           icon={<UploadOutlined />}
-          className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9]"
+          className="!bg-[#97DDD9] !h-[46px] !text-[20px] !font-bold !text-black !hover:bg-[#97DDD9]"
           onClick={showUploadModal}
         >
           Upload
         </Button>
       </div>
-      </>
-      )}
 
-      {viewMode === "detail" && selectedVideo && (
-        <div className="grid grid-cols-[4fr_2fr] gap-4 p-4">
-          <div className="video-wrapper" style={{ position: "relative", paddingTop: "56.25%" }}>
-            <ReactPlayer
-              src={selectedVideo.url}
-              controls={true}
-              width="100%"
-              height="100%"
-              style={{ position: "absolute", top: 0, left: 0 }}
-            />
-          </div>
-          <CommentSection videoId={selectedVideo.id}/>
-        </div>
-      )}
       <Modal
         title="Upload Video"
         open={isUploadModalVisible}

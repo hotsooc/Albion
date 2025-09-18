@@ -1,52 +1,41 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, message } from 'antd';
+import { Avatar, Button, message, Input } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import 'moment/locale/vi';
 import { supabase } from '../../lib/supabase/client';
+import CommentItem from './CommentItem';
 
-moment.locale('vi');
-
-const CommentItem = ({ author, content, datetime }: any) => (
-  <div className="flex items-start space-x-3 mb-4">
-    <Avatar icon={<UserOutlined />} />
-    <div>
-      <div className="flex items-center space-x-2">
-        <span className="font-semibold text-gray-800">{author}</span>
-        <span className="text-xs text-gray-500">{moment(datetime).fromNow()}</span>
-      </div>
-      <p className="text-gray-700">{content}</p>
-    </div>
-  </div>
-);
+const { TextArea } = Input;
 
 const CommentSection = ({ videoId }: { videoId: string }) => {
     const [comments, setComments] = useState<any[]>([]);
     const [value, setValue] = useState('');
     const [user, setUser] = useState<any>(null);
     const [userName, setUserName] = useState<string>('Anonymous');
+    const [userRole, setUserRole] = useState<string>('user');
 
     useEffect(() => {
         const fetchData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
 
+            let role = 'user';
             if (user) {
                 const { data: profile } = await supabase
                     .from('profiles')
-                    .select('full_name')
+                    .select('full_name, role')
                     .eq('id', user.id)
                     .single();
                 setUserName(profile?.full_name || user.email || 'Anonymous');
+                role = profile?.role || 'user';
             }
+            setUserRole(role);
 
-            // Lọc bình luận theo videoId
             const { data, error } = await supabase
                 .from('comments')
                 .select('*')
-                .eq('video_id', videoId) // Thêm điều kiện lọc
+                .eq('video_id', videoId)
                 .order('created_at', { ascending: true });
 
             if (error) {
@@ -57,17 +46,16 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             }
         };
 
-        if (videoId) { // Chỉ fetch khi có videoId
-          fetchData();
+        if (videoId) { 
+            fetchData();
         }
-    }, [videoId]); // Thêm videoId vào dependency array
+    }, [videoId]);
 
     const handleSubmit = async () => {
         if (!value.trim()) {
             message.warning("Vui lòng nhập bình luận.");
             return;
         }
-
         if (!user) {
             message.error("Bạn cần đăng nhập để bình luận.");
             return;
@@ -77,7 +65,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             user_id: user.id,
             user_name: userName,
             content: value,
-            video_id: videoId, // Thêm videoId vào đối tượng bình luận mới
+            video_id: videoId,
         };
         
         const { data, error } = await supabase
@@ -95,43 +83,85 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
         }
     };
 
+    const handleDelete = async (commentId: string) => {
+        const { error } = await supabase
+            .from('comments')
+            .delete()
+            .eq('id', commentId);
+
+        if (error) {
+            message.error("Lỗi khi xóa bình luận.");
+        } else {
+            setComments(comments.filter(c => c.id !== commentId));
+            message.success("Bình luận đã được xóa.");
+        }
+    };
+
+    const handleEdit = async (commentId: string, oldContent: string) => {
+        const newContent = prompt("Nhập nội dung mới:", oldContent);
+        if (newContent && newContent.trim() !== '') {
+            const { error } = await supabase
+                .from('comments')
+                .update({ content: newContent })
+                .eq('id', commentId);
+
+            if (error) {
+                message.error("Lỗi khi cập nhật bình luận.");
+            } else {
+                setComments(comments.map(c => c.id === commentId ? { ...c, content: newContent } : c));
+                message.success("Bình luận đã được cập nhật.");
+            }
+        }
+    };
+
     return (
-      <div className="flex flex-col h-[500px] p-4 rounded-lg bg-white shadow-sm w-full max-w-2xl mx-auto">
-        <div className="flex-1 overflow-y-auto pr-2">
-          {comments.length > 0 ? (
-            comments.map((comment, index) => (
-              <CommentItem
-                key={comment.id || index}
-                author={comment.user_name || 'Anonymous'}
-                content={comment.content}
-                datetime={comment.created_at}
-              />
-            ))
-          ) : (
-            <p className="text-black italic">Chưa có bình luận nào</p>
-          )}
+        <div className="flex flex-col h-[500px] p-4 rounded-lg bg-white shadow-xl w-full max-w-2xl mx-auto">
+          <div className='flex gap-3 mb-4'>
+            <img src='/message 1.png' alt='' width={24} height={24} />
+            <span className='text-gray-400 text-[24px]'>Comment</span>
+          </div>
+            <div className="flex-1 overflow-y-auto pr-2">
+                {comments.length > 0 ? (
+                    comments.map((comment, index) => (
+                        <CommentItem
+                            key={comment.id || index}
+                            comment={comment}
+                            currentUser={user}
+                            userRole={userRole}
+                            onDelete={handleDelete}
+                            onEdit={handleEdit}
+                        />
+                    ))
+                ) : (
+                    <p className="text-black italic">Chưa có bình luận nào</p>
+                )}
+            </div>
+    
+            <div className="flex items-center mt-4 space-x-2 border-t gap-3 pt-3">
+                <Avatar icon={<UserOutlined />} className="flex-shrink-0"/>
+                <TextArea
+                    rows={1}
+                    className="flex-grow rounded-full !text-black px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder={user ? "Viết bình luận..." : "Đăng nhập để bình luận..."}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    onPressEnter={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSubmit();
+                        }
+                    }}
+                    disabled={!user}
+                />
+                <Button 
+                    type="primary" 
+                    onClick={handleSubmit}
+                    disabled={!user || value.trim().length === 0}
+                >
+                    Gửi
+                </Button>
+            </div>
         </div>
-  
-        <div className="flex items-center mt-4 space-x-2 border-t gap-3 pt-3">
-          <Avatar icon={<UserOutlined />} />
-          <input
-            type="text"
-            className="flex-grow border border-gray-300 rounded-full !text-black px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Viết bình luận..."
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-            disabled={!user}
-          />
-          <Button 
-            type="primary" 
-            onClick={handleSubmit}
-            disabled={!user || value.trim().length === 0}
-          >
-            Gửi
-          </Button>
-        </div>
-      </div>
     );
 };
 
