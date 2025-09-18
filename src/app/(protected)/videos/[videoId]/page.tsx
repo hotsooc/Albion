@@ -9,8 +9,13 @@ const getYouTubeVideoId = (url: string | null) => {
 };
 
 const fetchYouTubeMetadata = async (videoId: string) => {
+
+  const baseUrl =
+    process.env.VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_SITE_URL}`
+        : 'http://localhost:3000';
   const res = await fetch(
-    `http://localhost:3000/api/youtube-metadata?videoId=${videoId}`
+    `${baseUrl}/api/youtube-metadata?videoId=${videoId}`
   );
   if (!res.ok) {
     return { title: 'Không có tiêu đề', channel: 'Không rõ tác giả' };
