@@ -155,7 +155,7 @@ const VideoPage = () => {
   );
 
   return (
-    <div className="p-4 w-full h-full rounded-2xl bg-[#E4FFFE] shadow-xl border-none border-solid">
+    <div className="p-4 w-full h-full rounded-2xl bg-[#E4FFFE] shadow-xl border-none">
       <div className="flex justify-center gap-2 mb-6">
         {tabs.map((tab) => (
           <button
