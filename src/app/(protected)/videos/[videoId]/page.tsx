@@ -29,8 +29,13 @@ const fetchYouTubeMetadata = async (videoId: string) => {
     const data = await res.json();
     return data;
 };
+interface PageProps {
+  params: {
+    videoId: string;
+  };
+}
 
-export default function VideoDetailPage({ params }: { params: { videoId: string } }) {
+export default function VideoDetailPage({ params }: PageProps) {
     const [videoData, setVideoData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
