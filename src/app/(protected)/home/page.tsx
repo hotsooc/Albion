@@ -63,12 +63,12 @@ export default function Home() {
           <img
             src={imageSrc}
             alt="Full-screen Guild Image"
-            className={`w-screen h-screen object-none cursor-pointer ${isAnimating ? 'animate-zoom-out-clear' : 'animate-zoom-in-clear'}`}
+            className={`w-auto h-auto object-cover cursor-pointer ${isAnimating ? 'animate-zoom-out-clear' : 'animate-zoom-in-clear'}`}
           />
         </div>
       )}
 
-      <section className='flex flex-col justify-start items-center'>
+      <section className='flex flex-col justify-start items-center w-auto h-auto rounded-xl shadow-xl mt-10 mx-4'>
         <div
           className="transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer overflow-hidden "
           onClick={() => handleImageClick('/group123.png')}
@@ -77,8 +77,7 @@ export default function Home() {
           <img
             src="/group123.png"
             alt="Guild Image"
-            // className='max-w-screem max-h-[90vh] rounded-lg'
-            className='!w-auto !h-full rounded-xl bg-[#E4FFFE] shadow-xl mt-10 mx-4 py-8 px-12'
+            className='max-w-screem max-h-[90vh] rounded-lg'
           />
         </div>
       </section>
