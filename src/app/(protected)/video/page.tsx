@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function BuildPage() {
   return (
-    <div className='my-4 flex flex-col min-h-screen w-full px-8'>
+    <div className='my-4 flex flex-col min-h-screen w-full px-4'>
         <VideoPage />
     </div>
   )

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input, Button, Form, message, Modal } from 'antd';
 import { supabase } from '../../../../lib/supabase/client';
-import { LockOutlined, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { LockOutlined } from '@ant-design/icons';
 import { User } from '@supabase/supabase-js';
 
 const Profile = () => {
@@ -43,6 +43,34 @@ const Profile = () => {
         fetchUserData();
     }, [form]);
 
+    const updateProfile = async (fullName: string) => {
+        if (!user) {
+            message.error("Người dùng chưa được xác thực.");
+            return;
+        }
+
+        // Cập nhật bảng profiles
+        const { error: profileError } = await supabase
+            .from('profiles')
+            .update({ full_name: fullName })
+            .eq('id', user.id);
+
+        if (profileError) {
+            console.error("Lỗi khi cập nhật profiles:", profileError);
+            throw new Error(profileError.message);
+        }
+
+        // Cập nhật metadata của user trong auth.users
+        const { error: authError } = await supabase.auth.updateUser({
+            data: { full_name: fullName },
+        });
+
+        if (authError) {
+            console.error("Lỗi khi cập nhật auth.users:", authError);
+            throw new Error(authError.message);
+        }
+    };
+
     const onFinish = async (values: any) => {
         if (isDisabled) {
             message.error('Bạn không có quyền cập nhật hồ sơ này.');
@@ -51,16 +79,13 @@ const Profile = () => {
 
         setLoading(true);
         const fullName = `${values.firstName} ${values.lastName}`.trim();
-        const { error } = await supabase.auth.updateUser({
-            data: {
-                full_name: fullName,
-            },
-        });
-        setLoading(false);
-        if (error) {
-            message.error('Lỗi khi cập nhật hồ sơ: ' + error.message);
-        } else {
+        try {
+            await updateProfile(fullName);
             message.success('Cập nhật hồ sơ thành công!');
+        } catch (error: any) {
+            message.error('Lỗi khi cập nhật hồ sơ: ' + error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -93,41 +118,6 @@ const Profile = () => {
         });
     };
 
-    const handleChangeEmail = () => {
-        let newEmail = '';
-        modal.confirm({
-            title: 'Thay đổi Email',
-            content: (
-                <div>
-                    <p>Địa chỉ email hiện tại của bạn là: **{user?.email}**</p>
-                    <p>Vui lòng nhập địa chỉ email mới:</p>
-                    <Input onChange={(e) => (newEmail = e.target.value)} />
-                </div>
-            ),
-            onOk: async () => {
-                if (!newEmail || !/^\S+@\S+\.\S+$/.test(newEmail)) {
-                    message.error('Vui lòng nhập một địa chỉ email hợp lệ.');
-                    return Promise.reject();
-                }
-                
-                setLoading(true);
-                const { error } = await supabase.auth.updateUser({ email: newEmail });
-                setLoading(false);
-
-                if (error) {
-                    if (error.message.includes('email_address_invalid')) {
-                        message.error('Địa chỉ email này đã được sử dụng. Vui lòng thử một địa chỉ khác.');
-                    } else {
-                        message.error('Lỗi khi đổi email: ' + error.message);
-                    }
-                    return Promise.reject();
-                } else {
-                    message.success('Vui lòng kiểm tra email của bạn để xác minh địa chỉ email mới.');
-                }
-            },
-        });
-    };
-    
     const handleDeleteAccount = async () => {
         if (!user || !user.id) {
             message.error('Không tìm thấy người dùng.');
@@ -163,7 +153,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="bg-[#E4FFFE] p-8 rounded-xl shadow-xl max-w-screen mr-10">
+        <div className="bg-[#E4FFFE] p-8 rounded-xl shadow-xl max-w-screen ml-4 mr-10">
             {userRole === 'admin' && (
                 <div className="mb-8 p-6 bg-blue-100 border border-blue-400 rounded-lg">
                     <h3 className="text-xl font-bold text-blue-700">Admin Dashboard</h3>
@@ -178,7 +168,7 @@ const Profile = () => {
                 className="space-y-8"
             >
                 <div>
-                    <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2> 
+                    <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
                     <div className="flex !w-[1020px] space-x-4 gap-5">
                         <Form.Item
                             name="firstName"
@@ -186,8 +176,7 @@ const Profile = () => {
                             className="flex-1"
                             rules={[{ required: true, message: 'Please enter your first name!' }]}
                         >
-                            {/* Thuộc tính disabled được đặt trực tiếp trên Input */}
-                            <Input size="large" disabled={isDisabled} /> 
+                            <Input size="large" disabled={isDisabled} />
                         </Form.Item>
                         <Form.Item
                             name="lastName"
@@ -195,37 +184,35 @@ const Profile = () => {
                             className="flex-1"
                             rules={[{ required: true, message: 'Please enter your last name!' }]}
                         >
-                             {/* Thuộc tính disabled được đặt trực tiếp trên Input */}
                             <Input size="large" disabled={isDisabled} />
                         </Form.Item>
                     </div>
                 </div>
 
-                <div className="space-y-6"> 
+                <div className="space-y-6">
                     <h2 className="text-xl font-semibold text-gray-700">Account Security</h2>
                     <Form.Item label="Email" className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
                             <div className='w-[500px]'>
-                                <Input 
-                                    value={user?.email || ''} 
-                                    readOnly 
+                                <Input
+                                    value={user?.email || ''}
+                                    readOnly
                                     className="flex-1"
                                     size="large"
-                                    suffix={<LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />} 
+                                    suffix={<LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />}
                                 />
                             </div>
-                            <Button onClick={handleChangeEmail} className="ml-4 !bg-[#97DDD9] !border-none" size="large">Change email</Button>
                         </div>
                     </Form.Item>
-                    <Form.Item label="Password" className="mb-0"> 
+                    <Form.Item label="Password" className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
                             <div className='w-[500px]'>
-                                <Input.Password 
-                                    placeholder="••••••••" 
-                                    readOnly 
-                                    className="flex-1" 
-                                    size="large" 
-                                    iconRender={() => <LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />} 
+                                <Input.Password
+                                    placeholder="••••••••"
+                                    readOnly
+                                    className="flex-1"
+                                    size="large"
+                                    iconRender={() => <LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />}
                                 />
                             </div>
                             <Button onClick={handleChangePassword} className="ml-4 !bg-[#97DDD9] !border-none" size="large">Change Password</Button>
@@ -235,9 +222,9 @@ const Profile = () => {
 
                 <div className="space-y-6">
                     <h2 className="text-xl font-semibold text-gray-700">Support Access</h2>
-                    <div className="flex justify-between items-center bg-white p-5 rounded-md border border-red-400"> 
+                    <div className="flex justify-between items-center bg-white p-5 rounded-md border border-red-400">
                         <div className="space-y-1">
-                            <h3 className="text-red-500 font-bold text-lg">Delete my account</h3> 
+                            <h3 className="text-red-500 font-bold text-lg">Delete my account</h3>
                             <p className="text-sm text-gray-600">Permanently delete the account and remove access from all workspaces.</p>
                         </div>
                         <Button danger onClick={handleDeleteAccount} size="large">Delete Account</Button>
