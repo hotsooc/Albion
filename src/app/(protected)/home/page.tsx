@@ -68,16 +68,17 @@ export default function Home() {
         </div>
       )}
 
-      <section className='flex flex-col justify-start items-center w-full h-screen rounded-full'>
+      <section className='flex flex-col justify-start items-center'>
         <div
-          className="transition-all mt-10 duration-300 ease-in-out transform hover:scale-105 cursor-pointer shadow-xl rounded-lg overflow-hidden"
+          className="transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer overflow-hidden "
           onClick={() => handleImageClick('/group123.png')}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/group123.png"
             alt="Guild Image"
-            className='max-w-screem max-h-[90vh] rounded-lg'
+            // className='max-w-screem max-h-[90vh] rounded-lg'
+            className='!w-auto !h-full rounded-xl bg-[#E4FFFE] shadow-xl mt-10 mx-4 py-8 px-12'
           />
         </div>
       </section>

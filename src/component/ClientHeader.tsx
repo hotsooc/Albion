@@ -172,7 +172,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onPressEnter={handleSearchSubmit}
               prefix={<SearchOutlined className="text-gray-400 text-lg" />}
-              className="!border-none !shadow-none bg-transparent flex-grow h-10 px-4 focus:ring-0"
+              className="!border-none bg-transparent flex-grow !shadow-xl h-10 px-4 focus:ring-0"
               onClick={() => setIsSearchDropdownVisible(true)}
             />
           </div>
