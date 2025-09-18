@@ -8,7 +8,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { User } from '@supabase/supabase-js';
 
-const ClientHeader: React.FC = () => {
+interface ClientHeaderProps {
+  onSearch: (value: string) => void;
+}
+
+const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
@@ -80,7 +84,7 @@ const ClientHeader: React.FC = () => {
     if (searchTerm && !recentSearches.includes(searchTerm)) {
       setRecentSearches(prev => [searchTerm, ...prev].slice(0, 5));
     }
-    console.log("Thực hiện tìm kiếm với từ khóa:", searchTerm);
+    onSearch(searchTerm); 
     setIsSearchDropdownVisible(false);
   };
   
@@ -114,7 +118,7 @@ const ClientHeader: React.FC = () => {
                 }}
                 onClick={() => {
                   setSearchTerm(tag);
-                  console.log("Thực hiện tìm kiếm với từ khóa:", tag);
+                  onSearch(tag);
                   setIsSearchDropdownVisible(false);
                 }}
                 className="!bg-gray-200 !text-gray-700 !rounded-md !px-3 !py-1 !cursor-pointer hover:!bg-gray-300"
@@ -175,7 +179,7 @@ const ClientHeader: React.FC = () => {
         </Dropdown>
       </div>
       <div className="flex items-center ml-auto bg-[#97DDD9] rounded-xl ">
-        <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow className='!flex !justify-end'>
+        <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow>
           <a
             onClick={(e) => e.preventDefault()}
             className="flex items-center space-x-2 text-gray-700 hover:text-sky-700 cursor-pointer transition-colors duration-200 bg-[#97DDD9] py-1 px-4 rounded-md"
