@@ -9,16 +9,11 @@ const getYouTubeVideoId = (url: string | null) => {
 };
 
 const fetchYouTubeMetadata = async (videoId: string) => {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL
-        ? `https://${process.env.NEXT_PUBLIC_SITE_URL}`
-        : 'http://localhost:3000';
-  const res = await fetch(
-    `${baseUrl}/api/youtube-metadata?videoId=${videoId}`
-  );
+  const res = await fetch(`${baseUrl}/api/youtube-metadata?videoId=${videoId}`);
+  
   if (!res.ok) {
-    return { title: 'Không có tiêu đề', channel: 'Không rõ tác giả' };
   }
   return res.json();
 };
