@@ -60,12 +60,15 @@ const VideoPage = () => {
     const tabFromUrl = searchParams.get('tab');
     if (tabFromUrl && tabs.includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
+    } else {
+      setActiveTab("Highlight");
     }
   }, [searchParams]);
 
   useEffect(() => {
     const fetchVideos = async () => {
       setLoading(true);
+      console.log('Fetching videos for tab:', activeTab);
       const { data, error } = await supabase
         .from('videos')
         .select('*')
@@ -160,7 +163,10 @@ const VideoPage = () => {
         {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              setActiveTab(tab);
+              router.push(`/videos/?tab=${tab}`)
+              }}
             className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition ${
               activeTab === tab ? "bg-[#77BFFA] text-black" : "bg-[#8BDDFB] text-black"
             }`}

@@ -21,7 +21,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
         <section className="bg-[#E4FFFE] w-auto h-[90%] p-4 shadow-xl rounded-xl mx-4 ">
             <div>
                 <div className="flex gap-2 mb-6">
-                    <Button onClick={() => router.back()} className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9] !rounded-xl !mr-80">
+                    <Button onClick={() => router.push('/videos')} className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9] !rounded-xl !mr-80">
                         <img src='/back_icon.png' alt="" width={20} height={20} />
                         <span className="text-black font-bold text-[20px]">Back</span>
                     </Button>
@@ -29,7 +29,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                     {tabs.map((tab) => (
                         <button
                             key={tab}
-                            onClick={() => router.push(`/?tab=${tab}`)}
+                            onClick={() => router.push(`/videos/?tab=${tab}`)}
                             className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition bg-[#8BDDFB] hover:bg-[#77BFFA]`}
                         >
                             {tab}

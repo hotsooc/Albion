@@ -26,12 +26,6 @@ export const VideoAlbion: { [key: string]: VideoType[] } = {
     },
   ],
   Record: [
-    {
-      id: 3,
-      name: "Solo Dungeon World Record",
-      url: "https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be",
-      thumbnail: 'URL_HINH_ANH_THU_NHO_1.jpg',
-      description: "Speedrunning a T6 dungeon.",
-    },
+    
   ],
 };
