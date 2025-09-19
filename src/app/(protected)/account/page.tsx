@@ -255,7 +255,7 @@ const Profile = () => {
                 <div className='flex justify-between items-start mb-0'>
                     <div>
                         <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
-                        <div className="flex w-[700px] space-x-4 gap-5">
+                        <div className="flex w-[1020px] space-x-4 gap-5">
                             <Form.Item
                                 name="firstName"
                                 label="First Name"
