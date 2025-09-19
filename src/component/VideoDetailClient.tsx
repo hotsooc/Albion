@@ -46,8 +46,8 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                             height="100%"
                             className="!shadow-xl"
                         />
-                        <h1 className="text-black text-[30px] font-bold mt-4">{videoData.title}</h1>
-                        <h2 className="text-black text-[24px]">Author: {videoData.channel}</h2>
+                        <h1 className="text-black text-[32px] font-bold mt-4">{videoData.title}</h1>
+                        <h2 className="text-black text-[20px]">Author: {videoData.channel}</h2>
                     </div>
                     <div>
                         <CommentSection videoId={videoId} />

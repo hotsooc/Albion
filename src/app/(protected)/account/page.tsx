@@ -2,19 +2,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Input, Button, Form, message, Modal } from 'antd';
+import { Input, Button, Form, message, Modal, Avatar, Upload } from 'antd';
 import { supabase } from '../../../../lib/supabase/client';
-import { LockOutlined } from '@ant-design/icons';
+import { LockOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { User } from '@supabase/supabase-js';
 
+// Khai báo một kiểu dữ liệu mới cho Profile để TypeScript hiểu
+type ProfileData = {
+    full_name: string | null;
+    role: string | null;
+    avatar_url: string | null;
+};
+
 const Profile = () => {
-    const [loading, setLoading] = useState(false);
+    // Khai báo kiểu dữ liệu rõ ràng cho các state
+    const [loading, setLoading] = useState<boolean>(false);
     const [form] = Form.useForm();
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [userRole, setUserRole] = useState<string | null>(null);
     const [modal, contextHolder] = Modal.useModal();
     const isDisabled = userRole !== 'admin';
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -22,14 +31,16 @@ const Profile = () => {
             setUser(user);
 
             if (user) {
+                // Ép kiểu dữ liệu cho profile nhận được từ Supabase
                 const { data: profile, error } = await supabase
                     .from('profiles')
-                    .select('full_name, role')
+                    .select('full_name, role, avatar_url')
                     .eq('id', user.id)
-                    .single();
+                    .single() as { data: ProfileData, error: any };
 
                 if (profile) {
                     setUserRole(profile.role);
+                    setAvatarUrl(profile.avatar_url);
                     const full_name = profile.full_name || user.email || '';
                     const [firstName, ...lastNameParts] = full_name.split(' ');
                     const lastName = lastNameParts.join(' ');
@@ -42,6 +53,82 @@ const Profile = () => {
         };
         fetchUserData();
     }, [form]);
+    
+    const handleAvatarUpload = async (info: any) => {
+        if (!user) return message.error('Người dùng chưa được xác thực.');
+        setLoading(true);
+        const file = info.file.originFileObj;
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.id}.${fileExt}`;
+        const filePath = `avatars/${fileName}`;
+    
+        const { data, error: uploadError } = await supabase.storage
+            .from('avatars')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: true,
+            });
+    
+        if (uploadError) {
+            message.error(`Lỗi tải ảnh: ${uploadError.message}`);
+            setLoading(false);
+            return;
+        }
+    
+        // Lấy URL công khai
+        const publicUrl = supabase.storage.from('avatars').getPublicUrl(filePath).data?.publicUrl;
+    
+        if (publicUrl) {
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ avatar_url: publicUrl })
+                .eq('id', user.id);
+    
+            if (updateError) {
+                message.error(`Lỗi cập nhật hồ sơ: ${updateError.message}`);
+            } else {
+                setAvatarUrl(publicUrl);
+                message.success('Tải ảnh đại diện thành công!');
+            }
+        } else {
+            message.error('Không thể lấy URL ảnh công khai.');
+        }
+    
+        setLoading(false);
+    };
+
+    const handleRemoveAvatar = async () => {
+        if (!user) return message.error('Người dùng chưa được xác thực.');
+        setLoading(true);
+        
+        // Cần lấy file path từ URL để xóa
+        const avatarPath = (avatarUrl as String).split('public/avatars/')[1];
+    
+        const { error: deleteError } = await supabase.storage
+            .from('avatars')
+            .remove([avatarPath]);
+    
+        if (deleteError) {
+            message.error(`Lỗi xóa ảnh: ${deleteError.message}`);
+            setLoading(false);
+            return;
+        }
+    
+        // Xóa URL khỏi bảng profiles
+        const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ avatar_url: null })
+            .eq('id', user.id);
+    
+        if (updateError) {
+            message.error(`Lỗi cập nhật hồ sơ: ${updateError.message}`);
+        } else {
+            setAvatarUrl(null);
+            message.success('Đã xóa ảnh đại diện thành công!');
+        }
+    
+        setLoading(false);
+    };
 
     const updateProfile = async (fullName: string) => {
         if (!user) {
@@ -49,7 +136,6 @@ const Profile = () => {
             return;
         }
 
-        // Cập nhật bảng profiles
         const { error: profileError } = await supabase
             .from('profiles')
             .update({ full_name: fullName })
@@ -60,7 +146,6 @@ const Profile = () => {
             throw new Error(profileError.message);
         }
 
-        // Cập nhật metadata của user trong auth.users
         const { error: authError } = await supabase.auth.updateUser({
             data: { full_name: fullName },
         });
@@ -151,9 +236,9 @@ const Profile = () => {
             },
         });
     };
-
+    
     return (
-        <div className="bg-[#E4FFFE] p-8 rounded-xl shadow-xl max-w-screen ml-4 mr-10">
+        <div className="bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] p-8 rounded-xl shadow-xl max-w-screen ml-4 mr-10">
             {userRole === 'admin' && (
                 <div className="mb-8 p-6 bg-blue-100 border border-blue-400 rounded-lg">
                     <h3 className="text-xl font-bold text-blue-700">Admin Dashboard</h3>
@@ -167,25 +252,52 @@ const Profile = () => {
                 disabled={loading}
                 className="space-y-8"
             >
-                <div className='mb-0'>
-                    <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
-                    <div className="flex !w-[1020px] space-x-4 gap-5">
-                        <Form.Item
-                            name="firstName"
-                            label="First Name"
-                            className="flex-1"
-                            rules={[{ required: true, message: 'Please enter your first name!' }]}
-                        >
-                            <Input size="large" disabled={isDisabled} />
-                        </Form.Item>
-                        <Form.Item
-                            name="lastName"
-                            label="Last Name"
-                            className="flex-1"
-                            rules={[{ required: true, message: 'Please enter your last name!' }]}
-                        >
-                            <Input size="large" disabled={isDisabled} />
-                        </Form.Item>
+                <div className='flex justify-between items-start mb-0'>
+                    <div>
+                        <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
+                        <div className="flex w-[700px] space-x-4 gap-5">
+                            <Form.Item
+                                name="firstName"
+                                label="First Name"
+                                className="flex-1"
+                                rules={[{ required: true, message: 'Please enter your first name!' }]}
+                            >
+                                <Input size="large" disabled={isDisabled} />
+                            </Form.Item>
+                            <Form.Item
+                                name="lastName"
+                                label="Last Name"
+                                className="flex-1"
+                                rules={[{ required: true, message: 'Please enter your last name!' }]}
+                            >
+                                <Input size="large" disabled={isDisabled} />
+                            </Form.Item>
+                        </div>
+                    </div>
+                    <div className="flex flex-rows gap-4 items-center">
+                        <Avatar
+                            size={120}
+                            icon={<UserOutlined />}
+                            src={avatarUrl || null}
+                            className="bg-[#77BFFA] border-white border-2"
+                        />
+                        <div className="flex flex-col mt-4 gap-5">
+                            <Upload
+                                showUploadList={false}
+                                onChange={handleAvatarUpload}
+                            >
+                                <Button icon={<UploadOutlined />} className="!w-[200px] !border-none !bg-[#97DDD9] !h-[46px] !text-[18px] !font-bold !text-black !hover:bg-[#97DDD9]" size="large">Upload</Button>
+                            </Upload>
+                            <Button
+                                danger
+                                onClick={handleRemoveAvatar}
+                                size="large"
+                                disabled={!avatarUrl}
+                                className='!text-[18px] !w-[200px]'
+                            >
+                                Remove
+                            </Button>
+                        </div>
                     </div>
                 </div>
 

@@ -21,6 +21,7 @@ export type Database = {
           id: string
           user_id: string
           user_name: string | null
+          video_id: string | null
         }
         Insert: {
           content: string
@@ -28,6 +29,7 @@ export type Database = {
           id?: string
           user_id: string
           user_name?: string | null
+          video_id?: string | null
         }
         Update: {
           content?: string
@@ -35,21 +37,33 @@ export type Database = {
           id?: string
           user_id?: string
           user_name?: string | null
+          video_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "comments_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           full_name: string | null
           id: string
           role: string
         }
         Insert: {
+          avatar_url?: string | null
           full_name?: string | null
           id: string
           role?: string
         }
         Update: {
+          avatar_url?: string | null
           full_name?: string | null
           id?: string
           role?: string

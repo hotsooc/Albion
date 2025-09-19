@@ -115,10 +115,10 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
     };
 
     return (
-        <div className="flex flex-col h-[500px] p-4 rounded-lg bg-white shadow-xl w-full max-w-2xl mx-auto">
+        <div className="flex flex-col h-[600px] p-4 rounded-lg bg-white shadow-xl w-full max-w-2xl mx-auto">
           <div className='flex gap-3 mb-4'>
             <img src='/message 1.png' alt='' width={24} height={24} />
-            <span className='text-gray-400 text-[24px]'>Comment</span>
+            <span className='text-gray-400 text-[20px]'>Comment</span>
           </div>
             <div className="flex-1 overflow-y-auto pr-2">
                 {comments.length > 0 ? (
