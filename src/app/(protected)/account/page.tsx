@@ -54,53 +54,57 @@ const Profile = () => {
         fetchUserData();
     }, [form]);
     
-    const handleAvatarUpload = async (info: any) => {
-        if (!user) return message.error('Người dùng chưa được xác thực.');
-        setLoading(true);
-        const file = info.file.originFileObj;
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${user.id}.${fileExt}`;
-        const filePath = `avatars/${fileName}`;
-    
-        const { data, error: uploadError } = await supabase.storage
-            .from('avatars')
-            .upload(filePath, file, {
-                cacheControl: '3600',
-                upsert: true,
-            });
-    
-        if (uploadError) {
-            message.error(`Lỗi tải ảnh: ${uploadError.message}`);
-            setLoading(false);
-            return;
-        }
-    
-        const publicUrl = supabase.storage.from('avatars').getPublicUrl(filePath).data?.publicUrl;
-    
-        if (publicUrl) {
-            const { error: updateError } = await supabase
-                .from('profiles')
-                .update({ avatar_url: publicUrl })
-                .eq('id', user.id);
-    
-            if (updateError) {
-                message.error(`Lỗi cập nhật hồ sơ: ${updateError.message}`);
-            } else {
-                setAvatarUrl(publicUrl);
-                message.success('Tải ảnh đại diện thành công!');
-            }
-        } else {
-            message.error('Không thể lấy URL ảnh công khai.');
-        }
-    
-        setLoading(false);
-    };
+   const handleAvatarUpload = async (info: any) => {
+    if (!user) {
+        message.error('Người dùng chưa được xác thực.');
+        return;
+    }
 
+    const file = info.file.originFileObj;
+    
+
+    setLoading(true);
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+    const filePath = `avatars/${fileName}`; 
+
+    const { data, error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: true,
+        });
+
+    if (uploadError) {
+        message.error(`Lỗi tải ảnh: ${uploadError.message}`);
+        setLoading(false);
+        return;
+    }
+    
+    const publicUrl = supabase.storage.from('avatars').getPublicUrl(filePath).data?.publicUrl;
+
+    if (publicUrl) {
+        const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ avatar_url: publicUrl })
+            .eq('id', user.id);
+    
+        if (updateError) {
+            message.error(`Lỗi cập nhật hồ sơ: ${updateError.message}`);
+        } else {
+            setAvatarUrl(publicUrl);
+            message.success('Tải ảnh đại diện thành công!');
+        }
+    } else {
+        message.error('Không thể lấy URL ảnh công khai.');
+    }
+
+    setLoading(false);
+};
     const handleRemoveAvatar = async () => {
         if (!user) return message.error('Người dùng chưa được xác thực.');
         setLoading(true);
         
-        // Cần lấy file path từ URL để xóa
         const avatarPath = (avatarUrl as String).split('public/avatars/')[1];
     
         const { error: deleteError } = await supabase.storage
@@ -113,7 +117,6 @@ const Profile = () => {
             return;
         }
     
-        // Xóa URL khỏi bảng profiles
         const { error: updateError } = await supabase
             .from('profiles')
             .update({ avatar_url: null })
