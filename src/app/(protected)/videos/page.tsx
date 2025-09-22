@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import VideoPage from '@/component/Video';
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
@@ -43,11 +43,11 @@ export default function VideosPage() {
         initial="hidden"
         animate={isMounted ? "visible" : "hidden"}
         variants={contentSwirlVariants}
-        style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%' }}
+        style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        <div style={{ paddingLeft: '1rem', paddingRight: '2.5rem' }}>
+        <Suspense fallback={<div>Đang tải video...</div>}>
           <VideoPage />
-        </div>
+        </Suspense>
       </motion.div>
     </div>
   );
