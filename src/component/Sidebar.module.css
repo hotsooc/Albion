@@ -1,0 +1,28 @@
+/* .link-border-effect {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease-out; 
+}
+
+.link-border-effect::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background-color: #77BFFA;
+    transition: width 0.3s ease-in-out;
+}
+
+.link-border-effect:hover::after,
+.link-border-effect.active::after {
+    width: 100%;
+}
+
+.link-border-effect.active {
+    background-color: #77BFFA;
+    color: black;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+} */
