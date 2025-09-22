@@ -75,7 +75,6 @@ const Profile = () => {
             return;
         }
     
-        // Lấy URL công khai
         const publicUrl = supabase.storage.from('avatars').getPublicUrl(filePath).data?.publicUrl;
     
         if (publicUrl) {
@@ -238,7 +237,7 @@ const Profile = () => {
     };
     
     return (
-        <div className="bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] p-8 rounded-xl shadow-xl max-w-screen ml-4 mr-10">
+        <div className="bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] p-8 rounded-xl shadow-xl max-w-screen ml-1 mr-10">
             {userRole === 'admin' && (
                 <div className="mb-8 p-6 bg-blue-100 border border-blue-400 rounded-lg">
                     <h3 className="text-xl font-bold text-blue-700">Admin Dashboard</h3>

@@ -27,7 +27,7 @@ export default function TeammatePage() {
   };
 
   return (
-    <section className='mt-5 bg-[#E4FFFE] w-auto h-auto p-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] mx-4'>
+    <section className='mt-5 bg-[#E4FFFE] w-auto h-auto p-4 rounded-2xl ml-1 mr-10'>
       <DragDropProvider>
         <div className='flex mb-4 p-4'>
           <TeamSelector

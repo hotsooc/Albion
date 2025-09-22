@@ -25,7 +25,7 @@ export const TeamSelector = ({
         <div
           key={index}
           onClick={() => handleToggleTeam(index)}
-          className={`flex-1 text-center text-xl font-bold cursor-pointer transition-colors border-[1px] border-solid border-gray-200 rounded-full px-8 py-2 ${openTeamIndex === index ? 'bg-sky-500 text-white shadow-xl' : 'bg-white text-gray-700 hover:bg-sky-200'}`}
+          className={`flex-1 text-center text-xl font-bold cursor-pointer transition-colors border-[1px] border-solid border-gray-200 rounded-full px-8 py-2 ${openTeamIndex === index ? 'bg-sky-500 text-white' : 'bg-white text-gray-700 hover:bg-sky-200'}`}
         >
           {name}
         </div>
