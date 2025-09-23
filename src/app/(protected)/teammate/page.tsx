@@ -11,15 +11,14 @@ import { motion, Variants } from 'framer-motion';
 const teamNames = ['Anti heal', 'Balance', 'One shot'];
 const teamKeys = ['team_1', 'team_2', 'team_3'];
 
-// Hiệu ứng hiện ra chậm hơn
 const fadeInVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      duration: 2, // Tăng thời gian lên 2 giây
+      duration: 2, 
       ease: 'easeOut',
-      delay: 0.5, // Tăng độ trễ một chút để hiệu ứng bắt đầu sau khi trang tải
+      delay: 0.5, 
     },
   },
 };

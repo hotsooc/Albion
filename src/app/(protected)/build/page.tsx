@@ -1,127 +1,212 @@
-'use client';
+'use client'
 
-import BuildCard from '@/component/BuildCard';
-import Pagination from '@/component/Pagination';
-import Sidebar2 from '@/component/Sidebar2';
-import { allItemsData, navItems } from '@/store/data';
-import React, { useState, useMemo } from 'react';
+import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Input } from 'antd';
+import React, { useState } from 'react';
+import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
+import { Baloo_2 } from 'next/font/google';
 
-const getDataSetForCategory = (category: string) => {
-  const normalizedCategory = category.toLowerCase().replace(/\s/g, '');
-
-  if (normalizedCategory.includes('bow')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('bow'));
-  }
-  if (normalizedCategory.includes('dagger')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('dagger'));
-  }
-  if (normalizedCategory.includes('spear')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('spear'));
-  }
-  if (normalizedCategory.includes('quarterstaff')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('quarterstaff'));
-  }
-  if (normalizedCategory.includes('shapeshifter')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('staff') && item.id >= '33' && item.id <= '40');
-  }
-  if (normalizedCategory.includes('nature')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('nature'));
-  }
-  if (normalizedCategory.includes('sword')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('sword'));
-  }
-  if (normalizedCategory.includes('axe')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('axe'));
-  }
-  if (normalizedCategory.includes('mace')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('mace'));
-  }
-  if (normalizedCategory.includes('hammer')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('hammer'));
-  }
-  if (normalizedCategory.includes('glove')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('glove'));
-  }
-  if (normalizedCategory.includes('fire')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('fire'));
-  }
-  if (normalizedCategory.includes('holy')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('holy'));
-  }
-  if (normalizedCategory.includes('arcane')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('arcane'));
-  }
-  if (normalizedCategory.includes('frost')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('frost'));
-  }
-  if (normalizedCategory.includes('cursed')) {
-    return allItemsData.filter(item => item.name.toLowerCase().includes('cursed'));
-  }
-  
-  return [];
+const dataSets = {
+    Sword: dataSet7,
+    Axe: dataSet8,
+    Mace: dataSet9,
+    Hammer: dataSet10,
+    'War Gloves': dataSet11,
+    Bow: dataSet1,
+    Dagger: dataSet2,
+    Spear: dataSet3,
+    'Quarterstaves': dataSet4,
+    'Shapeshifter Staves': dataSet5,
+    'Nature Staves': dataSet6,
+    'Fire Staves': dataSet12,
+    'Holy Staves': dataSet13,
+    'Arcane Staves': dataSet14,
+    'Frost Staves': dataSet15,
+    'Cursed Staves': dataSet16,
+    Shields: dataSet18,
+    Torches: dataSet19,
+    Tomes: dataSet20,
 };
 
+const balooFont = Baloo_2({
+  subsets: ['vietnamese'],
+  weight: ['800'],
+});
 
 export default function BuildPage() {
-  const [activeCategory, setActiveCategory] = useState(navItems[0]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+    const [inputValue, setInputValue] = useState('');
+    const [searchResults, setSearchResults] = useState<ItemType[]>([]);
+    const [activeButton, setActiveButton] = useState<string | null>(null);
+    const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
 
-  const currentDataSet = useMemo(() => getDataSetForCategory(activeCategory), [activeCategory]);
-  const currentBuild = currentDataSet[currentIndex];
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        // setInputValue(value);
+        setActiveButton(null);
+        setSelectedItem(null);
+        const filteredData = allItemsData.filter(item =>
+            item.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setSearchResults(filteredData);
+    };
 
-  const handleSelectCategory = (category: string) => {
-    setActiveCategory(category);
-    setCurrentIndex(0); // Reset index when category changes
-  };
+    const handleToggleDataSet = (dataSet: ItemType[], label: string) => {
+        if (activeButton === label) {
+            setSearchResults([]);
+            setActiveButton(null);
+            setSelectedItem(null);
+        } else {
+            setSearchResults(dataSet);
+            setActiveButton(label);
+            setSelectedItem(dataSet[0] || null);
+        }
+    };
 
-  const handleNext = () => {
-    if (currentIndex < currentDataSet.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
+    const handleClearSearch = () => {
+        setInputValue('');
+        setSearchResults([]);
+        setActiveButton(null);
+        setSelectedItem(null);
+    };
 
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
+    const handleNext = () => {
+        if (!selectedItem || searchResults.length === 0) return;
+        const currentIndex = searchResults.findIndex(item => item.id === selectedItem.id);
+        const nextIndex = (currentIndex + 1) % searchResults.length;
+        setSelectedItem(searchResults[nextIndex]);
+    };
 
-  return (
-    <main className="flex flex-col items-center p-4 rounded-xl mx-10 shadow-xl min-h-auto bg-[#E4FFFE] ">
-      <h1 className="text-4xl font-bold mb-8">Builds Guide</h1>
-      <div className="flex flex-rows w-full justify-center">
-        <Sidebar2 activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
-        <div className="flex flex-col flex-wrap gap-8 justify-center flex-grow">
-          {currentBuild ? (
-            <>
-            <div className='grid grid-rows-[1fr_5fr] items-center p-4'>
-              <div className="flex flex-col items-center">
-                <div className="text-sm text-left w-full max-w-sm">
-                  <p className="mb-1.5"><strong>Name:</strong> {currentBuild.name || '............'}</p>
-                  <p className="mb-1.5"><strong>Detail:</strong> {currentBuild.detail || '............'}</p>
-                  <p><strong>Video POV:</strong> ............</p>
+    const handlePrev = () => {
+        if (!selectedItem || searchResults.length === 0) return;
+        const currentIndex = searchResults.findIndex(item => item.id === selectedItem.id);
+        const prevIndex = (currentIndex - 1 + searchResults.length) % searchResults.length;
+        setSelectedItem(searchResults[prevIndex]);
+    };
+
+    const buttonsToDisplay = activeButton ? [activeButton] : Object.keys(dataSets);
+    const showResults = inputValue || activeButton;
+
+    return (
+        <section className='grid grid-cols-[1fr_5fr] bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] h-auto p-4 rounded-xl shadow-xl gap-4 ml-1 mr-10'>
+            <div className='flex flex-col gap-4'>
+                <div className="flex items-center bg-white rounded-full w-full overflow-hidden shadow-sm px-4">
+                    <SearchOutlined className="text-black text-lg mr-2" />
+                    <Input
+                        placeholder="Tìm kiếm..."
+                        value={inputValue}
+                        onChange={handleSearch}
+                        className="!border-none !shadow-none bg-transparent flex-grow h-10 focus:ring-0"
+                    />
+                    {inputValue && (
+                        <Button
+                            type="text"
+                            icon={<CloseCircleOutlined />}
+                            onClick={handleClearSearch}
+                            className="!text-black"
+                        />
+                    )}
                 </div>
-              </div>
-              <div className="flex flex-rows gap-8 justify-center flex-wrap">
-                <BuildCard title="Hellgate 5v5" buildData={currentBuild} />
-                <BuildCard title="Hellgate 2v2" buildData={currentBuild} />
-                <BuildCard title="Openworld" buildData={currentBuild} />
-              </div>
+
+                <div className='grid grid-cols-1 gap-3'>
+                    <div className='flex flex-col gap-3 overflow-y-auto max-h-[470px] no-scrollbar'>
+                        {!inputValue && buttonsToDisplay.map((label) => {
+                            const data = dataSets[label as keyof typeof dataSets];
+                            return (
+                                <Button
+                                    key={label}
+                                    onClick={() => handleToggleDataSet(data, label)}
+                                    className={`!rounded-md custom-button !text-lg !font-medium !bg-sky-200 !text-blue !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
+                                >
+                                    {label}
+                                </Button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {showResults && searchResults.length > 0 && (
+                    <div className='w-full overflow-y-auto max-h-[500px]'>
+                        <div className='grid grid-cols-1 gap-3 text-black text-center'>
+                            {searchResults.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setSelectedItem(item)}
+                                    className="p-2 border rounded-md hover:bg-gray-200"
+                                >
+                                    {item.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
-            <div className=''>
-              <Pagination
-                onPrev={handlePrev}
-                onNext={handleNext}
-                isPrevDisabled={currentIndex === 0}
-                isNextDisabled={currentIndex === currentDataSet.length - 1}
-              />
+
+            <div className='flex flex-col gap-4 p-4 border-none rounded-lg bg-[#E4FFFE] shadow-xl'>
+                {selectedItem ? (
+                  <>
+                        <span className={`${balooFont.className} text-[30px] text-center`}>Build Guide</span>
+                        <div className='grid grid-cols-[1fr_5fr] gap-5'>
+                          <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
+                            <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ Detail ~ </h3>
+                            <p className={`${balooFont.className} text-xl text-black`}>Name: {selectedItem.name}</p>
+                            <p className={`${balooFont.className} text-xl text-black`}>Detail: {selectedItem.detail}</p>
+                            <p className={`${balooFont.className} text-xl text-black`}>POV: ...</p>
+                            <div className='flex justify-center mt-10'>
+                              {/* <img src="/XHCN_icon.png" alt="XHCN Logo" width={120} height={60} /> */}
+                              <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
+                            </div>
+                          </div>
+                          <div>
+                            <div className='flex flex-row justify-center gap-4'>
+                                {selectedItem.image && (
+                                  <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
+                                    <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5</span>
+                                    <img
+                                        src={selectedItem.image}
+                                        alt={`${selectedItem.name} image 1`}
+                                        className='w-100 h-100 object-contain !rounded-xl'
+                                    />
+                                  </div>
+                                )}
+                                {selectedItem.image2 && (
+                                  <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
+                                    <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5 (2v2)</span>
+                                    <img
+                                        src={selectedItem.image2}
+                                        alt={`${selectedItem.name} image 2`}
+                                        className='w-100 h-100 object-contain !rounded-xl'
+                                    />
+                                  </div>
+                                )}
+                                {selectedItem.image3 && (
+                                  <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
+                                    <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>OpenWorld</span>
+                                    <img
+                                        src={selectedItem.image3}
+                                        alt={`${selectedItem.name} image 3`}
+                                        className='w-100 h-100 object-contain !rounded-xl'
+                                    />
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                        </div>
+                      <div className='flex justify-between items-center'>
+                          <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handlePrev} disabled={searchResults.length <= 1}>
+                              <img src='/left-icon.png' alt='' width={20} height={20} />
+                          </Button>
+                          <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton} ~</span>
+                          <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handleNext} disabled={searchResults.length <= 1}>
+                              <img src='/right_icon.png' alt='' width={20} height={20} />
+                          </Button>
+                      </div>
+                    </>
+                ) : (
+                    <div className='flex justify-center items-center h-full'>
+                        <p className='text-gray-500 text-lg'>Vui lòng chọn một vật phẩm để xem chi tiết.</p>
+                    </div>
+                )}
             </div>
-            </>
-          ) : (
-            <p className="text-lg">Chọn một loại vũ khí để xem builds.</p>
-          )}
-        </div>
-      </div>
-    </main>
-  );
+        </section>
+    );
 }

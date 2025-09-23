@@ -96,3 +96,9 @@ body {
 .ant-input-search .ant-input {
   border-radius: 9999px 0 0 9999px !important;
 }
+
+.custom-button {
+  height: 48px;
+  padding-top: 0;
+  padding-bottom: 0;
+}

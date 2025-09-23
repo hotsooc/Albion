@@ -244,9 +244,3 @@ export const allItemsData: ItemType[] = [
   ...dataSet19,
   ...dataSet20,
 ];
-
-export const navItems = [
-  'Bow', 'Dagger', 'Spear', 'Quarterstaff', 'Shapeshifter', 'Nature Staff', 
-  'Sword', 'Axe', 'Mace', 'Hammer', 'War Gloves', 'Fire Staff', 'Holy Staff', 
-  'Arcane Staff', 'Frost Staff', 'Cursed Staff'
-];
