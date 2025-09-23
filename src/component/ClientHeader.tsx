@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Dropdown, MenuProps, Input, Button, Tag, Space } from 'antd';
-import { SearchOutlined, UserOutlined, TeamOutlined, VideoCameraOutlined, QuestionCircleOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { SearchOutlined, LogoutOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { User } from '@supabase/supabase-js';
+
+// Assuming you have a list of all items and a function to find them
+// import { allItemsData } from '@/store/data';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
@@ -17,7 +19,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const router = useRouter();
-
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
 
@@ -26,28 +27,14 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     { name: 'Team', icon: <img src="/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
     { name: 'Videos', icon: <img src="/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
     { name: 'Builds', icon: <img src="/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
-    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/setting' },
-    { name: 'Account', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/account' },
+    { name: 'About Us', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/setting' },
+    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/account' },
   ];
   
-  const [filteredCategories, setFilteredCategories] = useState(categories);
-
-  useEffect(() => {
-    if (searchTerm) {
-      const filtered = categories.filter(category => 
-        category.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredCategories(filtered);
-    } else {
-      setFilteredCategories(categories);
-    }
-  }, [searchTerm]);
-
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-
     return () => listener.subscription.unsubscribe();
   }, []);
 
@@ -70,7 +57,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
         console.error('Lỗi khi lấy hồ sơ:', profileError);
       }
     };
-
     getProfile();
   }, [user]);
 
@@ -81,15 +67,17 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   };
 
   const handleSearchSubmit = () => {
-    if (searchTerm && !recentSearches.includes(searchTerm)) {
-      setRecentSearches(prev => [searchTerm, ...prev].slice(0, 5));
+    if (searchTerm) {
+      setRecentSearches(prev => [searchTerm, ...prev.filter(t => t !== searchTerm)].slice(0, 5));
+      
+      router.push(`/build?q=${encodeURIComponent(searchTerm)}`);
+
+      onSearch(searchTerm); 
+      setIsSearchDropdownVisible(false);
     }
-    onSearch(searchTerm); 
-    setIsSearchDropdownVisible(false);
   };
   
   const menuItems: MenuProps['items'] = [
-    // { key: 'profile', label: <Link href="/profile">Hồ sơ</Link> },
     { key: 'logout', label: 'Log Out', icon: <img src='/logout.png' alt='' width={24} height={24} /> },
   ];
 
@@ -104,7 +92,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
 
   const searchDropdownContent = (
     <div className="bg-white p-4 rounded-lg shadow-lg min-w-[300px]">
-      {!searchTerm && recentSearches.length > 0 && (
+      {recentSearches.length > 0 && (
         <div className="mb-4">
           <h3 className="text-gray-500 text-sm font-semibold mb-2">Recent</h3>
           <Space size={[0, 8]} wrap>
@@ -119,6 +107,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
                 onClick={() => {
                   setSearchTerm(tag);
                   onSearch(tag);
+                  router.push(`/build?q=${encodeURIComponent(tag)}`);
                   setIsSearchDropdownVisible(false);
                 }}
                 className="!bg-gray-200 !text-gray-700 !rounded-md !px-3 !py-1 !cursor-pointer hover:!bg-gray-300"
@@ -133,20 +122,16 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
       <div>
         <h3 className="text-gray-500 text-sm font-semibold mb-2">Categories</h3>
         <div className="grid grid-cols-2 gap-3">
-          {filteredCategories.length > 0 ? (
-            filteredCategories.map(category => (
-              <Button 
-                key={category.name} 
-                icon={category.icon} 
-                onClick={() => handleCategoryClick(category.path)} 
-                className="!h-auto !py-3 !rounded-lg !text-base !flex !items-center !justify-start !gap-2 !bg-gray-100 hover:!bg-gray-200"
-              >
-                {category.name}
-              </Button>
-            ))
-          ) : (
-            <p className="text-gray-400 col-span-2 text-center">Không tìm thấy kết quả.</p>
-          )}
+          {categories.map(category => (
+            <Button 
+              key={category.name} 
+              icon={category.icon} 
+              onClick={() => handleCategoryClick(category.path)} 
+              className="!h-auto !py-3 !rounded-lg !text-base !flex !items-center !justify-start !gap-2 !bg-gray-100 hover:!bg-gray-200"
+            >
+              {category.name}
+            </Button>
+          ))}
         </div>
       </div>
     </div>
@@ -165,18 +150,18 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           open={isSearchDropdownVisible}
           onOpenChange={setIsSearchDropdownVisible}
         >
-            <Input
-              placeholder="Tìm kiếm..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onPressEnter={handleSearchSubmit}
-              prefix={<SearchOutlined className="text-gray-400 text-lg" />}
-              className="!border-none !shadow-xl !h-10 !px-4 focus:ring-0 !flex !items-center bg-white !rounded-full !w-2/5 !cursor-pointer"
-              onClick={() => setIsSearchDropdownVisible(true)}
-            />
+          <Input
+            placeholder="Tìm kiếm..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onPressEnter={handleSearchSubmit}
+            prefix={<SearchOutlined className="text-gray-400 text-lg" />}
+            className="!border-none !shadow-xl !h-10 !px-4 focus:ring-0 !flex !items-center bg-white !rounded-full !w-2/5 !cursor-pointer"
+            onClick={() => setIsSearchDropdownVisible(true)}
+          />
         </Dropdown>
       </div>
-      <div className="flex items-center ml-auto bg-[#97DDD9] rounded-xl ">
+      <div className="flex items-center ml-auto bg-[#97DDD9] rounded-xl">
         <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow>
           <a
             onClick={(e) => e.preventDefault()}

@@ -2,7 +2,8 @@
 
 import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation'; // Thêm import này
 import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
 import { Baloo_2 } from 'next/font/google';
 
@@ -29,19 +30,33 @@ const dataSets = {
 };
 
 const balooFont = Baloo_2({
-  subsets: ['vietnamese'],
-  weight: ['800'],
+    subsets: ['vietnamese'],
+    weight: ['800'],
 });
 
 export default function BuildPage() {
+    const searchParams = useSearchParams(); // Sử dụng hook để lấy tham số URL
     const [inputValue, setInputValue] = useState('');
     const [searchResults, setSearchResults] = useState<ItemType[]>([]);
     const [activeButton, setActiveButton] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
 
+    // Sử dụng useEffect để xử lý tham số tìm kiếm từ URL
+    useEffect(() => {
+        const query = searchParams.get('q');
+        if (query) {
+            setInputValue(query);
+            const filteredData = allItemsData.filter(item =>
+                item.name.toLowerCase().includes(query.toLowerCase())
+            );
+            setSearchResults(filteredData);
+            setSelectedItem(filteredData[0] || null);
+        }
+    }, [searchParams]);
+
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        // setInputValue(value);
+        setInputValue(value);
         setActiveButton(null);
         setSelectedItem(null);
         const filteredData = allItemsData.filter(item =>
@@ -81,6 +96,11 @@ export default function BuildPage() {
         const currentIndex = searchResults.findIndex(item => item.id === selectedItem.id);
         const prevIndex = (currentIndex - 1 + searchResults.length) % searchResults.length;
         setSelectedItem(searchResults[prevIndex]);
+    };
+    
+    // Hàm xử lý khi click vào một vật phẩm từ danh sách kết quả tìm kiếm
+    const handleItemClick = (item: ItemType) => {
+        setSelectedItem(item);
     };
 
     const buttonsToDisplay = activeButton ? [activeButton] : Object.keys(dataSets);
@@ -130,7 +150,7 @@ export default function BuildPage() {
                             {searchResults.map((item) => (
                                 <button
                                     key={item.id}
-                                    onClick={() => setSelectedItem(item)}
+                                    onClick={() => handleItemClick(item)}
                                     className="p-2 border rounded-md hover:bg-gray-200"
                                 >
                                     {item.name}
@@ -143,63 +163,62 @@ export default function BuildPage() {
 
             <div className='flex flex-col gap-4 p-4 border-none rounded-lg bg-[#E4FFFE] shadow-xl'>
                 {selectedItem ? (
-                  <>
+                    <>
                         <span className={`${balooFont.className} text-[30px] text-center`}>Build Guide</span>
                         <div className='grid grid-cols-[1fr_5fr] gap-5'>
-                          <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
-                            <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ Detail ~ </h3>
-                            <p className={`${balooFont.className} text-xl text-black`}>Name: {selectedItem.name}</p>
-                            <p className={`${balooFont.className} text-xl text-black`}>Detail: {selectedItem.detail}</p>
-                            <p className={`${balooFont.className} text-xl text-black`}>POV: ...</p>
-                            <div className='flex justify-center mt-10'>
-                              {/* <img src="/XHCN_icon.png" alt="XHCN Logo" width={120} height={60} /> */}
-                              <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
+                            <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
+                                <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ Detail ~ </h3>
+                                <p className={`${balooFont.className} text-xl text-black`}>Name: {selectedItem.name}</p>
+                                <p className={`${balooFont.className} text-xl text-black`}>Detail: {selectedItem.detail}</p>
+                                <p className={`${balooFont.className} text-xl text-black`}>POV: ...</p>
+                                <div className='flex justify-center mt-10'>
+                                    <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
+                                </div>
                             </div>
-                          </div>
-                          <div>
-                            <div className='flex flex-row justify-center gap-4'>
-                                {selectedItem.image && (
-                                  <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                    <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5</span>
-                                    <img
-                                        src={selectedItem.image}
-                                        alt={`${selectedItem.name} image 1`}
-                                        className='w-100 h-100 object-contain !rounded-xl'
-                                    />
-                                  </div>
-                                )}
-                                {selectedItem.image2 && (
-                                  <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                    <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5 (2v2)</span>
-                                    <img
-                                        src={selectedItem.image2}
-                                        alt={`${selectedItem.name} image 2`}
-                                        className='w-100 h-100 object-contain !rounded-xl'
-                                    />
-                                  </div>
-                                )}
-                                {selectedItem.image3 && (
-                                  <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                    <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>OpenWorld</span>
-                                    <img
-                                        src={selectedItem.image3}
-                                        alt={`${selectedItem.name} image 3`}
-                                        className='w-100 h-100 object-contain !rounded-xl'
-                                    />
-                                  </div>
-                                )}
+                            <div>
+                                <div className='flex flex-row justify-center gap-4'>
+                                    {selectedItem.image && (
+                                        <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5</span>
+                                            <img
+                                                src={selectedItem.image}
+                                                alt={`${selectedItem.name} image 1`}
+                                                className='w-100 h-100 object-contain !rounded-xl'
+                                            />
+                                        </div>
+                                    )}
+                                    {selectedItem.image2 && (
+                                        <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5 (2v2)</span>
+                                            <img
+                                                src={selectedItem.image2}
+                                                alt={`${selectedItem.name} image 2`}
+                                                className='w-100 h-100 object-contain !rounded-xl'
+                                            />
+                                        </div>
+                                    )}
+                                    {selectedItem.image3 && (
+                                        <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>OpenWorld</span>
+                                            <img
+                                                src={selectedItem.image3}
+                                                alt={`${selectedItem.name} image 3`}
+                                                className='w-100 h-100 object-contain !rounded-xl'
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      <div className='flex justify-between items-center'>
-                          <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handlePrev} disabled={searchResults.length <= 1}>
-                              <img src='/left-icon.png' alt='' width={20} height={20} />
-                          </Button>
-                          <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton} ~</span>
-                          <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handleNext} disabled={searchResults.length <= 1}>
-                              <img src='/right_icon.png' alt='' width={20} height={20} />
-                          </Button>
-                      </div>
+                        <div className='flex justify-between items-center'>
+                            <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handlePrev} disabled={searchResults.length <= 1}>
+                                <img src='/left-icon.png' alt='' width={20} height={20} />
+                            </Button>
+                            <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton} ~</span>
+                            <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handleNext} disabled={searchResults.length <= 1}>
+                                <img src='/right_icon.png' alt='' width={20} height={20} />
+                            </Button>
+                        </div>
                     </>
                 ) : (
                     <div className='flex justify-center items-center h-full'>
