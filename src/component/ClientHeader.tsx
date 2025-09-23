@@ -7,9 +7,6 @@ import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 
-// Assuming you have a list of all items and a function to find them
-// import { allItemsData } from '@/store/data';
-
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
 }

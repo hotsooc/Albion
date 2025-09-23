@@ -3,7 +3,8 @@
 import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation'; // Thêm import này
+import { useSearchParams } from 'next/navigation';
+import { motion, Transition } from 'framer-motion'; // Thêm Transition vào đây
 import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
 import { Baloo_2 } from 'next/font/google';
 
@@ -34,14 +35,43 @@ const balooFont = Baloo_2({
     weight: ['800'],
 });
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.05,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+    },
+};
+
+const detailVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.5,
+            ease: "easeOut",
+        } as Transition, // Sửa lỗi ở đây
+    },
+};
+
 export default function BuildPage() {
-    const searchParams = useSearchParams(); // Sử dụng hook để lấy tham số URL
+    const searchParams = useSearchParams();
     const [inputValue, setInputValue] = useState('');
     const [searchResults, setSearchResults] = useState<ItemType[]>([]);
     const [activeButton, setActiveButton] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
 
-    // Sử dụng useEffect để xử lý tham số tìm kiếm từ URL
     useEffect(() => {
         const query = searchParams.get('q');
         if (query) {
@@ -98,7 +128,6 @@ export default function BuildPage() {
         setSelectedItem(searchResults[prevIndex]);
     };
     
-    // Hàm xử lý khi click vào một vật phẩm từ danh sách kết quả tìm kiếm
     const handleItemClick = (item: ItemType) => {
         setSelectedItem(item);
     };
@@ -128,42 +157,59 @@ export default function BuildPage() {
                 </div>
 
                 <div className='grid grid-cols-1 gap-3'>
-                    <div className='flex flex-col gap-3 overflow-y-auto max-h-[470px] no-scrollbar'>
+                    <motion.div
+                        className='flex flex-col gap-3 overflow-y-auto max-h-[470px] no-scrollbar'
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
                         {!inputValue && buttonsToDisplay.map((label) => {
                             const data = dataSets[label as keyof typeof dataSets];
                             return (
-                                <Button
-                                    key={label}
-                                    onClick={() => handleToggleDataSet(data, label)}
-                                    className={`!rounded-md custom-button !text-lg !font-medium !bg-sky-200 !text-blue !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
-                                >
-                                    {label}
-                                </Button>
+                                <motion.div key={label} variants={itemVariants}>
+                                    <Button
+                                        onClick={() => handleToggleDataSet(data, label)}
+                                        className={`!rounded-md custom-button !text-lg w-full !font-medium !bg-sky-200 !text-blue !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
+                                    >
+                                        {label}
+                                    </Button>
+                                </motion.div>
                             );
                         })}
-                    </div>
+                    </motion.div>
                 </div>
 
                 {showResults && searchResults.length > 0 && (
                     <div className='w-full overflow-y-auto max-h-[500px]'>
-                        <div className='grid grid-cols-1 gap-3 text-black text-center'>
+                        <motion.div
+                            className='grid grid-cols-1 gap-3 text-black text-center'
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
                             {searchResults.map((item) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => handleItemClick(item)}
-                                    className="p-2 border rounded-md hover:bg-gray-200"
-                                >
-                                    {item.name}
-                                </button>
+                                <motion.div key={item.id} variants={itemVariants}>
+                                    <button
+                                        onClick={() => handleItemClick(item)}
+                                        className="p-2 border w-full rounded-md hover:bg-gray-200"
+                                    >
+                                        {item.name}
+                                    </button>
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
                     </div>
                 )}
             </div>
 
             <div className='flex flex-col gap-4 p-4 border-none rounded-lg bg-[#E4FFFE] shadow-xl'>
                 {selectedItem ? (
-                    <>
+                    <motion.div
+                        key={selectedItem.id}
+                        variants={detailVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
                         <span className={`${balooFont.className} text-[30px] text-center`}>Build Guide</span>
                         <div className='grid grid-cols-[1fr_5fr] gap-5'>
                             <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
@@ -219,7 +265,7 @@ export default function BuildPage() {
                                 <img src='/right_icon.png' alt='' width={20} height={20} />
                             </Button>
                         </div>
-                    </>
+                    </motion.div>
                 ) : (
                     <div className='flex justify-center items-center h-full'>
                         <p className='text-gray-500 text-lg'>Vui lòng chọn một vật phẩm để xem chi tiết.</p>
