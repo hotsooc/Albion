@@ -18,7 +18,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
     console.log('video', videoData)
 
     return (
-        <section className="bg-[#E4FFFE] w-auto h-[90%] p-4 shadow-xl rounded-xl mx-4 ">
+        <section className="bg-[#E4FFFE] w-auto p-4 shadow-xl rounded-xl mx-4 ">
             <div>
                 <div className="flex gap-2 mb-6">
                     <Button onClick={() => router.push('/videos')} className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9] !rounded-xl !mr-80">
@@ -38,7 +38,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                 </div>
                 
                 <div className="grid grid-cols-[4fr_2fr] gap-4 p-4">
-                    <div className="video-wrapper">
+                    <div className="video-wrapper h-auto">
                         <ReactPlayer
                             src={videoData.url}
                             controls={true}
@@ -46,11 +46,13 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                             height="100%"
                             className="!shadow-xl"
                         />
-                        <h1 className="text-black text-[32px] font-bold mt-4">{videoData.title}</h1>
-                        <h2 className="text-black text-[20px]">Author: {videoData.channel}</h2>
                     </div>
                     <div>
                         <CommentSection videoId={videoId} />
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-black text-[32px] font-bold mt-4">{videoData.title}</span>
+                        <span className="text-black text-[20px] font-medium">Author: {videoData.channel}</span>
                     </div>
                 </div>
             </div>

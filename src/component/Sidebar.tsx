@@ -124,28 +124,28 @@ const Sidebar = () => {
           <li className="mb-4">
             <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
               <Link
-                href="/account"
-                className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
-                  pathname.startsWith('/account') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/user_icon1.png" alt="" width={24} height={24} className="mb-2 ml-5 mr-5" />
-                <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Account</span>
-              </Link>
-            </motion.div>
-          </li>
-          <li className="mb-4">
-            <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
-              <Link
                 href="/setting"
                 className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
                   pathname.startsWith('/setting') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/settings_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
+                <img src="/user_icon1.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>About us</span>
+              </Link>
+            </motion.div>
+          </li>
+          <li className="mb-4">
+            <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
+              <Link
+                href="/account"
+                className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
+                  pathname.startsWith('/account') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/settings_icon.png" alt="" width={24} height={24} className="mb-2 ml-5 mr-5" />
+                <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Settings</span>
               </Link>
             </motion.div>
           </li>
