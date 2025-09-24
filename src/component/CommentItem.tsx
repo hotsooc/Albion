@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Avatar, Button, Dropdown, MenuProps, message } from 'antd';
+import React, { useState } from 'react';
+import { Avatar, Button, Dropdown, MenuProps, message, Input } from 'antd';
 import { UserOutlined, MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import 'moment/locale/vi';
@@ -9,11 +9,6 @@ import { supabase } from '../../lib/supabase/client';
 
 moment.locale('vi');
 
-/**
- * Kiểu dữ liệu cho dữ liệu bình luận, bao gồm thông tin user đã join.
- * Bạn cần đảm bảo truy vấn của mình trả về cấu trúc dữ liệu này.
- * Ví dụ: select('*, profiles(full_name, avatar_url)')
- */
 type CommentData = {
   id: string;
   content: string;
@@ -32,20 +27,51 @@ type CommentItemProps = {
   } | null;
   userRole: string | null;
   onDelete: (commentId: string) => void;
-  onEdit: (commentId: string, content: string) => void;
+  onUpdate: (commentId: string, content: string) => Promise<boolean>;
 };
 
-const CommentItem = ({ comment, currentUser, userRole, onDelete, onEdit }: CommentItemProps) => {
+const CommentItem = ({ comment, currentUser, userRole, onDelete, onUpdate }: CommentItemProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(comment.content);
+
   const isOwner = currentUser && currentUser.id === comment.user_id;
   const canDelete = isOwner || userRole === 'admin';
   const canEdit = isOwner;
 
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleBlur = async () => {
+    if (editedContent.trim() === '') {
+      setEditedContent(comment.content);
+      setIsEditing(false);
+      return;
+    }
+    const success = await onUpdate(comment.id, editedContent);
+    if (success) {
+      setIsEditing(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleBlur();
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setEditedContent(comment.content);
+      setIsEditing(false);
+    }
+  };
+  
   const items: MenuProps['items'] = [];
   if (canEdit) {
     items.push({
       key: 'edit',
       label: 'Sửa',
-      onClick: () => onEdit(comment.id, comment.content),
+      onClick: handleEditClick,
     });
   }
   if (canDelete) {
@@ -56,6 +82,7 @@ const CommentItem = ({ comment, currentUser, userRole, onDelete, onEdit }: Comme
       onClick: () => onDelete(comment.id),
     });
   }
+  
   const userName = comment.profiles?.full_name;
   const userAvatar = comment.profiles?.avatar_url;
 
@@ -79,7 +106,24 @@ const CommentItem = ({ comment, currentUser, userRole, onDelete, onEdit }: Comme
             </Dropdown>
           )}
         </div>
-        <p className="text-gray-700 mt-1">{comment.content}</p>
+        
+        {isEditing ? (
+          <div className="mt-1">
+            <Input.TextArea 
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              autoSize={{ minRows: 2, maxRows: 6 }}
+              className="flex-1"
+              autoFocus
+            />
+          </div>
+        ) : (
+          <p className="text-gray-700 mt-1" onClick={canEdit ? handleEditClick : undefined}>
+            {comment.content}
+          </p>
+        )}
       </div>
     </div>
   );

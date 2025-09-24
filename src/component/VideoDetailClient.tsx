@@ -44,13 +44,13 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                             controls={true}
                             width="100%"
                             height="100%"
-                            className="!shadow-xl"
+                            className="!shadow-2xl"
                         />
                     </div>
                     <div>
                         <CommentSection videoId={videoId} />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col -mt-5 ml-3">
                         <span className="text-black text-[32px] font-bold mt-4">{videoData.title}</span>
                         <span className="text-black text-[20px] font-medium">Author: {videoData.channel}</span>
                     </div>

@@ -21,13 +21,14 @@ export default function BuildPage({ searchParams }: { searchParams: { [key: stri
 
     if (!showContent) {
         const bannerImageSrc = isAnime ? '/umaru_build.png' : '/image_build.png';
+        const albionImage = isAnime ? '/albionIcon.png' : '/albion-icon.png';
 
         return (
             <div className='flex justify-center items-center w-full h-full pl-1 pr-10'>
                 <div className='albion-banner cursor-pointer'>
                     <img src={bannerImageSrc} alt="Albion Online Banner" className='banner-image w-screen rounded-xl' />
                     <div className='overlay-content'>
-                        <img src='/albion-icon.png' alt='Albion Online Icon' className='logo w-120 h-80 flex items-start justify-start -mt-20' />
+                        <img src={albionImage} alt='Albion Online Icon' className='logo w-120 h-80 flex items-start justify-start -mt-20' />
                         <span className={`${balooFont.className} flex justify-center items-center text-center ml-20 text-[40px]`}>Need a new build?</span>
                         <p className={`${balooFont.className} text-[24px] ml-10 text-center`}>Check out the latest meta builds for different activities in Albion Online.</p>
                         <div className='ml-25 flex flex-col gap-5'>

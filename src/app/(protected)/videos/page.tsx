@@ -38,7 +38,7 @@ export default function VideosPage() {
   }, []);
 
   return (
-    <div style={{ position: 'relative', overflow: 'hidden' }} className='ml-1 mr-10'>
+    <div style={{ position: 'relative', overflow: 'hidden' }} className='ml-1 mr-10 shadow-2xl'>
       <motion.div
         initial="hidden"
         animate={isMounted ? "visible" : "hidden"}
