@@ -41,6 +41,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "comments_video_id_fkey"
             columns: ["video_id"]
             isOneToOne: false
@@ -82,6 +89,24 @@ export type Database = {
         Update: {
           data?: Json | null
           id?: number
+        }
+        Relationships: []
+      }
+      teams_list: {
+        Row: {
+          id: number
+          team_keys: string[] | null
+          team_names: string[]
+        }
+        Insert: {
+          id?: number
+          team_keys?: string[] | null
+          team_names: string[]
+        }
+        Update: {
+          id?: number
+          team_keys?: string[] | null
+          team_names?: string[]
         }
         Relationships: []
       }
