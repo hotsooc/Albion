@@ -137,7 +137,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   if (!user) return null;
 
   return (
-    <header className="p-4 flex items-center justify-end bg-gradient-to-r from-sky-200 to-green-200">
+    <header className="p-4 flex items-center justify-end">
       <div className="flex-grow flex justify-center">
         <Dropdown
           overlay={searchDropdownContent}
