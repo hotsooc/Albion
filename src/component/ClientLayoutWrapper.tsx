@@ -5,6 +5,7 @@ import { App } from 'antd';
 import AppHeader from '@/component/AppHeader';
 import Sidebar from '@/component/Sidebar';
 import AntdProvider from '@/component/AntdProvider';
+import Footer from './footer';
 
 export default function ClientLayoutWrapper({ children }: { children: React.ReactNode }) {
     const [isPurpleTheme, setIsPurpleTheme] = useState(false);
@@ -19,13 +20,18 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
     return (
         <AntdProvider>
             <App>
-                <div className={`flex h-screen overflow-hidden ${bgClassName}`}>
-                    <Sidebar />
-                    <div className="flex flex-col flex-grow">
+                <div className={`flex flex-col h-screen overflow-hidden ${bgClassName}`}>
+                    <div className="flex flex-col overflow-auto no-scrollbar flex-grow">
                         <AppHeader />
-                        <main className='flex-grow'>
-                            {children}
-                        </main>
+                        <div className='flex flex-col -mt-4'>
+                            <main className='grid grid-cols-[1fr_5fr] mb-5'>
+                                <div className='mt-10'>
+                                    <Sidebar />
+                                </div>
+                                {children}
+                            </main>
+                            <Footer />
+                        </div>
                     </div>
                 </div>
                 {/* Thêm nút bấm chuyển đổi màu nền */}

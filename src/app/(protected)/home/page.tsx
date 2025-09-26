@@ -68,18 +68,14 @@ export default function Home() {
         </div>
       )}
 
-      <section className='flex flex-col justify-start items-center w-auto h-auto rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] mt-10 ml-1 mr-10'>
-        <div
-          className="transition-all duration-300 ease-in-out transform shadow-xl hover:scale-105 cursor-pointer overflow-hidden "
-          onClick={() => handleImageClick('/group123.png')}
-        >
+      <section className='flex flex-col justify-start items-center w-auto rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] ml-1 mr-10'>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/group123.png"
             alt="Guild Image"
-            className='max-w-auto max-h-[90vh] !rounded-xl !shadow-xl'
+            className='max-w-auto !h-[100%] !rounded-xl transition-all duration-300 ease-in-out transform shadow-xl hover:scale-105 cursor-pointer overflow-hidden'
+            onClick={() => handleImageClick('/group123.png')}
           />
-        </div>
       </section>
 
       <style jsx global>{`

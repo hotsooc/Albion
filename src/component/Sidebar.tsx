@@ -52,16 +52,16 @@ const Sidebar = () => {
   };
 
   return (
-    <section className="w-80 flex flex-col items-center h-screen px-8 -mt-2 flex-none">
-      <div className="flex flex-row justify-center items-center gap-4 mb-8 mt-4">
+    <section className="w-80 flex flex-col items-center max-h-[650px] px-8 -mt-2 flex-none">
+      {/* <div className="flex flex-row justify-center items-center gap-4 mb-8 mt-4"> */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <div className=''>
+        {/* <div className=''>
           <img src="/XHCN_icon.png" alt="XHCN Logo" width={60} height={60} />
         </div>
         <div>
           <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
         </div>
-      </div>
+      </div> */}
 
       <nav className="w-full flex-grow">
         <ul>
@@ -152,7 +152,7 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      <div className="mb-2 p-4">
+      <div className="p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
       </div>

@@ -7,6 +7,8 @@ export type ItemType = {
   image3: string;
 };
 
+// https://www.facebook.com/khanh.duy.57514
+
 export const dataSet1: ItemType[] = [
   { id: '1', name: 'Bow', detail: `Cung rác
     Tốt cho pvp 1v1 vì lượng dmg deal tốt và khá cơ động`, image: '/bow-op.png', image2: '/bow-op.png', image3: '/bow-op.png' },

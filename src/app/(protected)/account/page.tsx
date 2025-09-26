@@ -257,7 +257,7 @@ const Profile = () => {
                 <div className='flex justify-between items-start mb-0'>
                     <div>
                         <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
-                        <div className="flex w-[1020px] space-x-4 gap-5">
+                        <div className="flex w-[470px] space-x-4 gap-5">
                             <Form.Item
                                 name="firstName"
                                 label="First Name"
@@ -307,7 +307,7 @@ const Profile = () => {
                     <h2 className="text-xl font-semibold text-gray-700">Account Security</h2>
                     <Form.Item label="Email" className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
-                            <div className='w-[500px]'>
+                            <div className='w-auto'>
                                 <Input
                                     value={user?.email || ''}
                                     readOnly
@@ -320,7 +320,7 @@ const Profile = () => {
                     </Form.Item>
                     <Form.Item label="Password" className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
-                            <div className='w-[500px]'>
+                            <div className='w-auto'>
                                 <Input.Password
                                     placeholder="••••••••"
                                     readOnly
