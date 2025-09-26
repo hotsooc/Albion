@@ -97,7 +97,7 @@ export const dataSet7: ItemType[] = [
 ];
 
 export const dataSet8: ItemType[] = [
-  { id: '57', name: 'Battleaxe', detail: 'Farm solo khỏe, content solo tốt', image: '/asset/Axe/Battleaxe/hellgate.png', image2: '/asset/Axe/Battleaxe/corrupted.png', image3: '/asset/Axe/Battleaxe/openworld.png' },
+  { id: '57', name: 'Battleaxe', detail: 'Farm solo khỏe, content solo tốt', image: '/asset/Axe/BattleAxe/hellgate.png', image2: '/asset/Axe/BattleAxe/corrupted.png', image3: '/asset/Axe/BattleAxe/openworld.png' },
   { id: '58', name: 'Greataxe', detail: 'Đánh nhỏ mức ổn', image: '', image2: '', image3: '' },
   { id: '59', name: 'Halberd', detail: 'Thường dùng trong đánh Hellgate', image: '/asset/Axe/Halberd/hellgate.png', image2: '', image3: '' },
   { id: '60', name: 'Carrioncaller', detail: 'Thường dùng trong đánh Hellgate', image: '/asset/Axe/Carrion/hellgate.png', image2: '', image3: '' },
