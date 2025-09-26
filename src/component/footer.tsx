@@ -35,7 +35,7 @@ export default function Footer() {
                                 <a href="https://www.facebook.com/khanh.duy.57514" target='_blank' aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors duration-300">
                                     <FaFacebook size={36} />
                                 </a>
-                                <a href="https://discord.com" aria-label="Discord" className="text-gray-400 hover:text-white transition-colors duration-300">
+                                <a href="https://discord.gg/Xe6Hg7aW" aria-label="Discord" className="text-gray-400 hover:text-white transition-colors duration-300">
                                     <FaDiscord size={36} />
                                 </a>
                             </div>
