@@ -8,25 +8,35 @@ export type ItemType = {
 };
 
 export const dataSet1: ItemType[] = [
-  { id: '1', name: 'Bow', detail: 'Cung ghẻ', image: '/bow-op.png', image2: '/bow-op.png', image3: '/bow-op.png' },
-  { id: '2', name: 'Bow Of Badon', detail: 'Cung hành gà', image: '', image2: '', image3: '' },
-  { id: '3', name: 'MistPiercer', detail: 'Cung Avalonian', image: '', image2: '', image3: '' },
-  { id: '4', name: 'Skystrider Bow', detail: 'Cung mới', image: '', image2: '', image3: '' },
-  { id: '5', name: 'Walling Bow', detail: 'Cung Xuyên', image: '', image2: '', image3: '' },
-  { id: '6', name: 'Whispering Bow', detail: 'Cung thì thầm vào tai', image: '', image2: '', image3: '' },
-  { id: '7', name: 'WarBow', detail: 'Cung rỉa', image: '', image2: '', image3: '' },
-  { id: '8', name: 'LongBow', detail: 'Cung PVE', image: '', image2: '', image3: '' },
+  { id: '1', name: 'Bow', detail: `Cung rác
+    Tốt cho pvp 1v1 vì lượng dmg deal tốt và khá cơ động`, image: '/bow-op.png', image2: '/bow-op.png', image3: '/bow-op.png' },
+  { id: '2', name: 'Bow Of Badon', detail: `Cung Sét
+    Tốt cho các giao tranh nhỏ lẻ như SC, 5v5, ... dmg deal khá tốt và có cơ chế làm gián đoạn cast spell của người chơi`, image: '', image2: '', image3: '' },
+  { id: '3', name: 'MistPiercer', detail: `Cung Chim
+    Tốt cho các giao tranh nhỏ lẻ như SC, Road Avalonian, ... dmg deal tốt nhưng cần CC cứng từ team`, image: '', image2: '', image3: '' },
+  { id: '4', name: 'Skystrider Bow', detail: `Cung Sét v2
+    Khá tốt cho solo player với lượng dmg ổn và cơ chế miễn nhiễm sát thương khi đứng trên không khá ngầu`, image: '', image2: '', image3: '' },
+  { id: '5', name: 'Walling Bow', detail: `Cung Xuyên Thấu
+    Tốt cho các giao tranh lớn như ZvZ, Road Avalonian, ... dmg deal tốt nếu biết chọn góc bắn phù hợp với cơ chế càng xuyên qua nhiều người dmg càng lớn`, image: '', image2: '', image3: '' },
+  { id: '6', name: 'Whispering Bow', detail: `Đại bác tầm xa
+    Dmg deal khá tốt nếu được free shot nhưng rất mỏng và cần cover rất nhiều từ team`, image: '', image2: '', image3: '' },
+  { id: '7', name: 'WarBow', detail: `Cung Rỉa
+    Khá yếu khi đem đi đánh những content lớn và hầu như chỉ được chơi ở corrupted dungeon, 2v2`, image: '', image2: '', image3: '' },
+  { id: '8', name: 'LongBow', detail: `Cung PVE
+    Rất mạnh ở khoản clear mob và dmg deal khá tốt nếu như team có CC cứng`, image: '', image2: '', image3: '' },
 ];
 
 export const dataSet2: ItemType[] = [
-  { id: '9', name: 'Dagger', detail: '', image: '', image2: '', image3: '' },
-  { id: '10', name: 'DaggerPair', detail: '', image: '', image2: '', image3: '' },
-  { id: '11', name: 'DeathGivers', detail: '', image: '', image2: '', image3: '' },
-  { id: '12', name: 'DemonFang', detail: '', image: '', image2: '', image3: '' },
-  { id: '13', name: 'Bloodletter', detail: '', image: '', image2: '', image3: '' },
-  { id: '14', name: 'BridledFury', detail: '', image: '', image2: '', image3: '' },
-  { id: '15', name: 'Claws', detail: '', image: '', image2: '', image3: '' },
-  { id: '16', name: 'TwinSlayer', detail: '', image: '', image2: '', image3: '' },
+  { id: '9', name: 'Dagger', detail: `Dmg deal ổn và rất mạnh với các content solo boss.
+    Có các build 1shot khá dị nên thử qua (Khi đã master còn không thì +1 video funny moment vì cơ chế tự mất máu theo thời gian)`, image: '', image2: '', image3: '' },
+  { id: '10', name: 'DaggerPair', detail: 'Dmg deal ổn (Có bleed khi E) và khá được ưa chuộng khi đi gank vì rất dễ dismount địch', image: '', image2: '', image3: '' },
+  { id: '11', name: 'DeathGivers', detail: `Dmg deal tốt và rất phù hợp với những người có "bản năng sát thủ".
+    Bonus: Ngoài ra có rất nhiều radar player ưa chuộng trong the Mist`, image: '', image2: '', image3: '' },
+  { id: '12', name: 'DemonFang', detail: 'Dmg deal ổn và phù hợp với các content lớn như ZvZ', image: '', image2: '', image3: '' },
+  { id: '13', name: 'Bloodletter', detail: 'Khá hoàn hảo khi có thể tham dự hầu hết mọi content có khả năng dứt điểm với set 1shot hay đơn giản là set build tank để quẩy trong 1vX', image: '', image2: '', image3: '' },
+  { id: '14', name: 'BridledFury', detail: 'Dmg deal tốt khi đã master (spec > 400) phù hợp cho ZvZ', image: '', image2: '', image3: '' },
+  { id: '15', name: 'Claws', detail: 'Phù hợp với các content đi gank và có thể là corrupted dungeon', image: '', image2: '', image3: '' },
+  { id: '16', name: 'TwinSlayer', detail: 'Nếu bạn đã chơi Talon thì cây này phù hợp với bạn', image: '', image2: '', image3: '' },
 ];
 
 export const dataSet3: ItemType[] = [

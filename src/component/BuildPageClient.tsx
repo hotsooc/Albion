@@ -215,17 +215,17 @@ export default function BuildPageClient() {
                             <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
                                 <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ Detail ~ </h3>
                                 <p className={`${balooFont.className} text-xl text-black`}>Name: {selectedItem.name}</p>
-                                <p className={`${balooFont.className} text-xl text-black`}>Detail: {selectedItem.detail}</p>
+                                <p className={`${balooFont.className} text-xl text-black whitespace-pre-line`}>Detail: {selectedItem.detail}</p>
                                 <p className={`${balooFont.className} text-xl text-black`}>POV: ...</p>
-                                <div className='flex justify-center mt-10'>
+                                {/* <div className='flex justify-center mt-10'>
                                     <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
-                                </div>
+                                </div> */}
                             </div>
                             <div>
                                 <div className='flex flex-row justify-center gap-4'>
                                     {selectedItem.image && (
-                                        <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5</span>
+                                        <div className='bg-white rounded-xl p-4 shadow-2xl'>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5 (2v2)</span>
                                             <img
                                                 src={selectedItem.image}
                                                 alt={`${selectedItem.name} image 1`}
@@ -235,7 +235,7 @@ export default function BuildPageClient() {
                                     )}
                                     {selectedItem.image2 && (
                                         <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5 (2v2)</span>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>Corrupted Dungeon</span>
                                             <img
                                                 src={selectedItem.image2}
                                                 alt={`${selectedItem.name} image 2`}

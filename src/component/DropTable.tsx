@@ -6,6 +6,7 @@ import { allItemsData, ItemType } from '@/store/data';
 import { Modal } from 'antd';
 import { Database } from '../../lib/database.types';
 import { supabase } from '../../lib/supabase/client';
+import { Baloo_2 } from 'next/font/google';
 type DragItem = {
  id: string;
  name: string;
@@ -16,6 +17,11 @@ type DragItem = {
 };
 
 type DroppableSpot = DragItem | null;
+
+const balooFont = Baloo_2({
+    subsets: ['vietnamese'],
+    weight: ['800'],
+});
 
 type TeamData = {
   '7_cols': { [key: string]: DroppableSpot[] };
@@ -46,15 +52,15 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
      maskClosable={false}
      zIndex={100}
      destroyOnClose={true}
-     title="Thông tin chi tiết"
+    //  title="Thông tin chi tiết"
    >
      <div className='grid grid-cols-[2fr_4fr] gap-8'>
        <div>
-         <h2 className='text-xl font-bold mb-4'>Thông tin chi tiết</h2>
-         <p className='text-lg'>Tên mục: <span className='font-semibold'>{item.name}</span></p>
-         <p className='text-lg'>Detail: <span className='font-semibold'>{item.detail}</span></p>
+         <h2 className={`${balooFont.className} text-xl font-bold mb-4`}>Thông tin chi tiết</h2>
+         <p className={`${balooFont.className} text-lg`}>Tên mục: <span className='font-semibold'>{item.name}</span></p>
+         <p className={`${balooFont.className} text-lg`}>Detail: <span className='font-semibold whitespace-pre-line'>{item.detail}</span></p>
        </div>
-       <div className='flex flex-row gap-4'>
+       <div className='flex flex-row gap-4 mt-10'>
          {item.image && (
          <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
            <span>Hellgate 5v5 (2v2)</span>
