@@ -52,16 +52,16 @@ const Sidebar = () => {
   };
 
   return (
-    <section className="w-80 flex flex-col items-center h-screen px-8 -mt-2 flex-none">
-      <div className="flex flex-row justify-center items-center gap-4 mb-8 mt-4">
+    <section className="w-80 flex flex-col items-center max-h-[650px] px-8 -mt-2 flex-none">
+      {/* <div className="flex flex-row justify-center items-center gap-4 mb-8 mt-4"> */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <div className=''>
+        {/* <div className=''>
           <img src="/XHCN_icon.png" alt="XHCN Logo" width={60} height={60} />
         </div>
         <div>
           <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
         </div>
-      </div>
+      </div> */}
 
       <nav className="w-full flex-grow">
         <ul>
@@ -124,9 +124,9 @@ const Sidebar = () => {
           <li className="mb-4">
             <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
               <Link
-                href="/setting"
+                href="/aboutus"
                 className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
-                  pathname.startsWith('/setting') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
+                  pathname.startsWith('/aboutus') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -138,9 +138,9 @@ const Sidebar = () => {
           <li className="mb-4">
             <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
               <Link
-                href="/account"
+                href="/settings"
                 className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
-                  pathname.startsWith('/account') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
+                  pathname.startsWith('/settings') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -152,7 +152,7 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      <div className="mb-2 p-4">
+      <div className="p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
       </div>

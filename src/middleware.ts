@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const protectedRoutes = ['/home', '/teammate', '/build', '/video', '/account', '/setting']; 
+  const protectedRoutes = ['/home', '/teammate', '/build', '/video', '/settings', '/aboutus']; 
 
   if (!session && protectedRoutes.includes(request.nextUrl.pathname)) {
     const absoluteURL = new URL('/login', request.nextUrl.origin);

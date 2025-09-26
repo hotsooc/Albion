@@ -165,10 +165,10 @@ export default function TeammatePage() {
       initial="hidden"
       animate="visible"
       variants={fadeInVariants}
-      className='mt-5 bg-[#E4FFFE] w-auto h-auto p-4 rounded-2xl ml-1 mr-10 shadow-2xl'
+      className='bg-[#E4FFFE] w-auto h-auto p-4 rounded-2xl ml-1 mr-10 shadow-2xl'
     >
       <DragDropProvider>
-        <div className='flex mb-4 p-4'>
+        <div className='flex'>
           <TeamSelector
             teamNames={teamNames}
             teamKeys={teamKeys}

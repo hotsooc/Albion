@@ -6,10 +6,16 @@ import { SearchOutlined, LogoutOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
+import { Baloo_2 } from 'next/font/google';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
 }
+
+  const balooFont = Baloo_2({
+      subsets: ['vietnamese'],
+      weight: ['800'],
+  });
 
 const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,8 +30,8 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     { name: 'Team', icon: <img src="/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
     { name: 'Videos', icon: <img src="/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
     { name: 'Builds', icon: <img src="/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
-    { name: 'About Us', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/setting' },
-    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/account' },
+    { name: 'About Us', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
+    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
   ];
   
   useEffect(() => {
@@ -87,6 +93,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     setIsSearchDropdownVisible(false);
   };
 
+
   const searchDropdownContent = (
     <div className="bg-white p-4 rounded-lg shadow-lg min-w-[300px]">
       {recentSearches.length > 0 && (
@@ -135,10 +142,19 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   );
 
   if (!user) return null;
+  {/* eslint-disable-next-line @next/next/no-img-element */}
 
   return (
-    <header className="p-4 flex items-center justify-end">
-      <div className="flex-grow flex justify-center">
+    <header className="p-4 flex items-center justify-end -mt-4">
+      <div className="flex flex-row justify-center items-center gap-4 ml-10">
+        <div className=''>
+          <img src="/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
+        </div>
+        <div>
+          <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
+        </div>
+      </div>
+      <div className="flex-grow flex justify-center ml-20">
         <Dropdown
           overlay={searchDropdownContent}
           trigger={['click']}

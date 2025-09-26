@@ -219,7 +219,7 @@ const VideoPage = () => {
         </Row>
       )}
 
-      <div className="flex gap-2 mt-4 justify-between">
+      <div className="flex gap-2 mt-4 absolute bottom-5 right-5 justify-between">
         <div></div>
         <Button
           type="primary"
