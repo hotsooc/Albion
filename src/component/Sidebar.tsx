@@ -124,9 +124,9 @@ const Sidebar = () => {
           <li className="mb-4">
             <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
               <Link
-                href="/setting"
+                href="/aboutus"
                 className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
-                  pathname.startsWith('/setting') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
+                  pathname.startsWith('/aboutus') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -138,9 +138,9 @@ const Sidebar = () => {
           <li className="mb-4">
             <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
               <Link
-                href="/account"
+                href="/settings"
                 className={`flex items-center px-4 py-2 gap-4 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
-                  pathname.startsWith('/account') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
+                  pathname.startsWith('/settings') ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}

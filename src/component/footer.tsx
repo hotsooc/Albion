@@ -25,12 +25,12 @@ export default function Footer() {
                                 <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
                             </div>
                         </div>
-                        <p className={`${balooFont.className} text-[25px] font-bold mb-2`}>Contact: </p>
-                        <p className={`${balooFont.className} text-[16px] text-black`}>Discord: justhi_1203 (IG: Hi_1203)</p>
-                        <p className={`${balooFont.className} text-[16px] text-black`}>Discord: thewise0920 (IG: Thewise209)</p>
-                        <p className={`${balooFont.className} text-[16px] text-black`}>Facebook: Khanh Duy (IG: Potato211)</p>
+                        <span className={`${balooFont.className} text-[25px] font-bold mb-2`}>Contact: </span>
+                        <span className={`${balooFont.className} text-[16px] text-black`}>Discord: justhi_1203 (IG: Hi_1203)</span>
+                        <span className={`${balooFont.className} text-[16px] text-black`}>Discord: thewise0920 (IG: Thewise209)</span>
+                        <span className={`${balooFont.className} text-[16px] text-black`}>Facebook: Khanh Duy (IG: Potato211)</span>
                         <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                            <p className={`${balooFont.className} text-lg font-bold mb-2`}>Contact Us: </p>
+                            <span className={`${balooFont.className} text-lg font-bold mb-2`}>Contact Us: </span>
                             <div className='flex space-x-4'>
                                 <a href="https://www.facebook.com/khanh.duy.57514" target='_blank' aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors duration-300">
                                     <FaFacebook size={36} />
@@ -43,7 +43,7 @@ export default function Footer() {
                     </div>
 
                     <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                        <p className={`${balooFont.className} text-[30px] font-bold mb-2`}>Directory:</p>
+                        <span className={`${balooFont.className} text-[30px] font-bold`}>Directory:</span>
                         <Link href="/home" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
                             Home
                         </Link>
@@ -56,10 +56,10 @@ export default function Footer() {
                         <Link href="/build" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
                             Builds
                         </Link>
-                        <Link href="/setting" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
+                        <Link href="/aboutus" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
                             About us
                         </Link>
-                        <Link href="/about" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
+                        <Link href="/settings" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
                             Settings
                         </Link>
                     </div>

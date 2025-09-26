@@ -30,8 +30,8 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     { name: 'Team', icon: <img src="/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
     { name: 'Videos', icon: <img src="/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
     { name: 'Builds', icon: <img src="/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
-    { name: 'About Us', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/setting' },
-    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/account' },
+    { name: 'About Us', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
+    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
   ];
   
   useEffect(() => {
