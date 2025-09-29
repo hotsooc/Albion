@@ -6,13 +6,13 @@ import { SearchOutlined, LogoutOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { Baloo_2 } from 'next/font/google';
+import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
 }
 
-  const balooFont = Baloo_2({
+  const balooFont = Baloo_Bhai_2({
       subsets: ['vietnamese'],
       weight: ['800'],
   });

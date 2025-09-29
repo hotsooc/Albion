@@ -42,8 +42,8 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
                                 </div>
                                 {children}
                             </main>
-                            <Footer />
                         </div>
+                        <Footer />
                     </div>
                 </div>
                 {/* <button

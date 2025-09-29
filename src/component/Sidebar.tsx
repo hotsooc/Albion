@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Baloo_2 } from 'next/font/google';
+import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { supabase } from '../../lib/supabase/client';
 import { User, Session } from '@supabase/supabase-js'; // Import User và Session từ supabase
 import { motion, Variants } from 'framer-motion';
 
-const balooFont = Baloo_2({
+const balooFont = Baloo_Bhai_2({
   subsets: ['vietnamese'],
   weight: ['800'],
 });
@@ -52,7 +52,7 @@ const Sidebar = () => {
   };
 
   return (
-    <section className="w-80 flex flex-col items-center max-h-[650px] px-8 -mt-2 flex-none">
+    <section className="w-80 flex flex-col items-center h-auto px-8 -mt-2 flex-none">
       {/* <div className="flex flex-row justify-center items-center gap-4 mb-8 mt-4"> */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {/* <div className=''>

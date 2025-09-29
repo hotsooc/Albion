@@ -3,18 +3,17 @@
 import React from 'react'
 import Link from 'next/link'
 import { FaFacebook, FaDiscord } from 'react-icons/fa'
-import { Baloo_2 } from 'next/font/google';
+import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
 
-const balooFont = Baloo_2({
+const balooFont = Baloo_Bhai_2({
     subsets: ['vietnamese'],
     weight: ['800'],
 });
 
 export default function Footer() {
     return (
-        <section id='footer' className='text-black py-8 border-t border-gray-300 border-solid'>
-            {/* Thêm px-4 hoặc px-8 để tạo khoảng đệm bên trong */}
-            <div className='container mx-auto px-4'> 
+        <section id='footer' className='text-black py-8 w-full border-t border-gray-300 border-solid'>
+            <div className='w-full px-10'> 
                 <div className='flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0'>
                     <div className='flex flex-col items-center md:items-start text-center md:text-left'>
                         <div className="flex flex-row justify-center items-center mb-5 gap-4">

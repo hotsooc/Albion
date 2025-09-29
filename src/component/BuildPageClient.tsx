@@ -211,7 +211,7 @@ export default function BuildPageClient() {
                         animate="visible"
                     >
                         <span className={`${balooFont.className} text-[30px] flex justify-center mb-2 text-center`}>Build Guide</span>
-                        <div className='grid grid-cols-[1fr_5fr] gap-5'>
+                        <div className='grid grid-cols-[1fr_4fr] gap-5'>
                             <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
                                 <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ Detail ~ </h3>
                                 <p className={`${balooFont.className} text-xl text-black`}>Name: {selectedItem.name}</p>
