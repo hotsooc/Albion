@@ -7,7 +7,6 @@ import { supabase } from '../../../../lib/supabase/client';
 import { LockOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { User } from '@supabase/supabase-js';
 
-// Khai báo một kiểu dữ liệu mới cho Profile để TypeScript hiểu
 type ProfileData = {
     full_name: string | null;
     role: string | null;
@@ -15,7 +14,6 @@ type ProfileData = {
 };
 
 const Profile = () => {
-    // Khai báo kiểu dữ liệu rõ ràng cho các state
     const [loading, setLoading] = useState<boolean>(false);
     const [form] = Form.useForm();
     const router = useRouter();
@@ -31,7 +29,6 @@ const Profile = () => {
             setUser(user);
 
             if (user) {
-                // Ép kiểu dữ liệu cho profile nhận được từ Supabase
                 const { data: profile, error } = await supabase
                     .from('profiles')
                     .select('full_name, role, avatar_url')
@@ -305,7 +302,7 @@ const Profile = () => {
 
                 <div className="space-y-6">
                     <h2 className="text-xl font-semibold text-gray-700">Account Security</h2>
-                    <Form.Item label="Email" className="mb-0">
+                    {/* <Form.Item label="Email" className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
                             <div className='w-auto'>
                                 <Input
@@ -317,7 +314,7 @@ const Profile = () => {
                                 />
                             </div>
                         </div>
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item label="Password" className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
                             <div className='w-auto'>
