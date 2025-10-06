@@ -1,15 +1,25 @@
 'use client';
 
 import React from 'react';
-// import { Session } from '@supabase/supabase-js';
 import ClientHeader from './ClientHeader';
 
-const AppHeader: React.FC = () => {
-  const handleSearch = (value: string) => {
-    console.log('Searching for:', value);
-  };
+interface AppHeaderProps {
+    isVantaActive: boolean;
+    onToggleVanta: () => void;
+}
 
-  return <ClientHeader onSearch={handleSearch} />;
+const AppHeader: React.FC<AppHeaderProps> = ({ isVantaActive, onToggleVanta }) => {
+    const handleSearch = (value: string) => {
+        console.log('Searching for:', value);
+    };
+
+    return (
+        <ClientHeader 
+            onSearch={handleSearch} 
+            isVantaActive={isVantaActive}
+            onToggleVanta={onToggleVanta}
+        />
+    );
 };
 
 export default AppHeader;

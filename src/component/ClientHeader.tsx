@@ -3,21 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, MenuProps, Input, Button, Tag, Space } from 'antd';
 import { SearchOutlined, LogoutOutlined } from '@ant-design/icons';
-import { supabase } from '../../lib/supabase/client';
+import { supabase } from '../../lib/supabase/client'; 
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
+  isVantaActive: boolean;      
+  onToggleVanta: () => void;  
 }
 
-  const balooFont = Baloo_Bhai_2({
-      subsets: ['vietnamese'],
-      weight: ['800'],
-  });
+const balooFont = Baloo_Bhai_2({
+    subsets: ['vietnamese'],
+    weight: ['800'],
+});
 
-const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
+const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, onToggleVanta }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
@@ -72,9 +74,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const handleSearchSubmit = () => {
     if (searchTerm) {
       setRecentSearches(prev => [searchTerm, ...prev.filter(t => t !== searchTerm)].slice(0, 5));
-      
       router.push(`/build?q=${encodeURIComponent(searchTerm)}`);
-
       onSearch(searchTerm); 
       setIsSearchDropdownVisible(false);
     }
@@ -92,7 +92,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     router.push(path);
     setIsSearchDropdownVisible(false);
   };
-
 
   const searchDropdownContent = (
     <div className="bg-white p-4 rounded-lg shadow-lg min-w-[300px]">
@@ -142,12 +141,12 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   );
 
   if (!user) return null;
-  {/* eslint-disable-next-line @next/next/no-img-element */}
-
+  
   return (
     <header className="p-4 flex items-center justify-end -mt-4">
       <div className="flex flex-row justify-center items-center gap-4 ml-10">
         <div className=''>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
         </div>
         <div>
@@ -174,19 +173,34 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           />
         </Dropdown>
       </div>
-      <div className="flex items-center ml-auto bg-[#97DDD9] rounded-xl">
-        <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow>
-          <a
-            onClick={(e) => e.preventDefault()}
-            className="flex items-center space-x-2 text-gray-700 hover:text-sky-700 cursor-pointer transition-colors duration-200 bg-[#97DDD9] py-1 px-4 rounded-md"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/user_icon.png" width={30} height={30} alt="User" />
-            <span className="text-[20px] text-black font-medium">
-              {profile?.full_name || user?.user_metadata?.full_name || user?.email}
+      
+      <div className="flex items-center ml-auto gap-4"> 
+        
+        <Button
+            onClick={onToggleVanta}
+            type="primary"
+            className="!bg-[#97DDD9] !border-[#97DDD9] !shadow-xl hover:!bg-sky-700 !text-black !rounded-full !py-1 !px-4 !h-[40px] transition-colors"
+        >
+            <span className={`${balooFont.className} font-medium text-[16px]`}>
+                {isVantaActive ? 'Normal' : 'The Mist'}
             </span>
-          </a>
-        </Dropdown>
+        </Button>
+        
+        <div className="flex items-center bg-[#97DDD9] rounded-xl">
+          <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow>
+            <a
+              onClick={(e) => e.preventDefault()}
+              className="flex items-center space-x-2 text-gray-700 hover:text-sky-700 cursor-pointer transition-colors duration-200 bg-[#97DDD9] py-1 px-4 rounded-md"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/user_icon.png" width={30} height={30} alt="User" />
+              <span className="text-[20px] text-black font-medium">
+                {profile?.full_name || user?.user_metadata?.full_name || user?.email}
+              </span>
+            </a>
+          </Dropdown>
+        </div>
+        
       </div>
     </header>
   );
