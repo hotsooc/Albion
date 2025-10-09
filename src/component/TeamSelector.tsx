@@ -97,7 +97,7 @@ export const TeamSelector = ({
         className={'text-center text-xl font-bold cursor-pointer transition-colors border-[1px] border-solid border-gray-200 rounded-full px-8 py-2 bg-white text-gray-700 hover:bg-sky-200'}
         onClick={showAddModal}
       >
-        <img src='/image/image/add_icon.png' alt='Add new team' width={28} height={28} />
+        <img src='/image/add_icon.png' alt='Add new team' width={28} height={28} />
       </div>
 
       <button className='bg-transparent border-none p-0 cursor-pointer' onClick={handleNextTeam}>
