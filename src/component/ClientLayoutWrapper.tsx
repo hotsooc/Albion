@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation';
 type VantaInstance = { destroy: () => void; scene: THREE.Scene } | null;
 
 export default function ClientLayoutWrapper({ children }: { children: React.ReactNode }) {
-    const [isVantaActive, setIsVantaActive] = useState(true); 
+    const [isVantaActive, setIsVantaActive] = useState(false); 
     const vantaRef = useRef<HTMLDivElement>(null); 
     const vantaEffect = useRef<VantaInstance>(null); 
     const treeMeshRef = useRef<THREE.Group | null>(null);
