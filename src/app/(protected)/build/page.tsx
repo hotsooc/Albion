@@ -20,7 +20,7 @@ export default function BuildPage({ searchParams }: { searchParams: { [key: stri
     };
 
     if (!showContent) {
-        const bannerImageSrc = isAnime ? '/image/umaru_build.png' : '/image_build.png';
+        const bannerImageSrc = isAnime ? '/image/umaru_build.png' : '/image/image_build.png';
         const albionImage = isAnime ? '/image/albionIcon.png' : '/image/albion-icon.png';
 
         return (
