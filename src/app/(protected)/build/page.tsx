@@ -20,8 +20,8 @@ export default function BuildPage({ searchParams }: { searchParams: { [key: stri
     };
 
     if (!showContent) {
-        const bannerImageSrc = isAnime ? '/umaru_build.png' : '/image_build.png';
-        const albionImage = isAnime ? '/albionIcon.png' : '/albion-icon.png';
+        const bannerImageSrc = isAnime ? '/image/umaru_build.png' : '/image_build.png';
+        const albionImage = isAnime ? '/image/albionIcon.png' : '/image/albion-icon.png';
 
         return (
             <div className='flex justify-center items-center w-full h-full pl-1 pr-10'>

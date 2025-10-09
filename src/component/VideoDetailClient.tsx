@@ -22,7 +22,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
             <div>
                 <div className="flex gap-2 mb-6">
                     <Button onClick={() => router.push('/videos')} className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9] !rounded-xl !mr-80">
-                        <img src='/back_icon.png' alt="" width={20} height={20} />
+                        <img src='/image/back_icon.png' alt="" width={20} height={20} />
                         <span className="text-black font-bold text-[20px]">Back</span>
                     </Button>
                     

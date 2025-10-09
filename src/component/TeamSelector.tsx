@@ -62,7 +62,7 @@ export const TeamSelector = ({
   return (
     <div className='flex flex-row gap-4 w-full justify-center overflow-auto items-center p-2'>
       <button className='bg-transparent border-none p-0 cursor-pointer' onClick={handlePrevTeam}>
-        <img src='/left-icon.png' alt='Previous team' width={20} height={20} />
+        <img src='/image/left-icon.png' alt='Previous team' width={20} height={20} />
       </button>
 
       {Array.isArray(teamNames) && teamNames.map((name, index) => (
@@ -77,7 +77,7 @@ export const TeamSelector = ({
               onClick={(e) => { e.stopPropagation(); showEditModal(index); }}
               title="Sửa tên team"
             >
-              <img src='/edit_icon.png' alt='Edit' width={16} height={16} />
+              <img src='/image/edit_icon.png' alt='Edit' width={16} height={16} />
             </button>
           </div>
           
@@ -97,11 +97,11 @@ export const TeamSelector = ({
         className={'text-center text-xl font-bold cursor-pointer transition-colors border-[1px] border-solid border-gray-200 rounded-full px-8 py-2 bg-white text-gray-700 hover:bg-sky-200'}
         onClick={showAddModal}
       >
-        <img src='/add_icon.png' alt='Add new team' width={28} height={28} />
+        <img src='/image/image/add_icon.png' alt='Add new team' width={28} height={28} />
       </div>
 
       <button className='bg-transparent border-none p-0 cursor-pointer' onClick={handleNextTeam}>
-        <img src='/right_icon.png' alt='Next team' width={20} height={20} />
+        <img src='/image/right_icon.png' alt='Next team' width={20} height={20} />
       </button>
 
       <Modal

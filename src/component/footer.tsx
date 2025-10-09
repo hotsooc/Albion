@@ -18,7 +18,7 @@ export default function Footer() {
                     <div className='flex flex-col items-center md:items-start text-center md:text-left'>
                         <div className="flex flex-row justify-center items-center mb-5 gap-4">
                             <div className=''>
-                                <img src="/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
+                                <img src="/image/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
                             </div>
                             <div>
                                 <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
@@ -63,7 +63,7 @@ export default function Footer() {
                         </Link>
                     </div>
 
-                    <img src='/image_build.png' className='rounded-2xl' alt='' width={600} height={600} />
+                    <img src='/image/image_build.png' className='rounded-2xl' alt='' width={600} height={600} />
                 </div>
 
                 {/* Bản quyền */}

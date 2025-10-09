@@ -28,12 +28,12 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
   const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
 
   const categories = [
-    { name: 'Home', icon: <img src="/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
-    { name: 'Team', icon: <img src="/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
-    { name: 'Videos', icon: <img src="/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
-    { name: 'Builds', icon: <img src="/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
-    { name: 'About Us', icon: <img src="/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
-    { name: 'Settings', icon: <img src="/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
+    { name: 'Home', icon: <img src="/image/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
+    { name: 'Team', icon: <img src="/image/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
+    { name: 'Videos', icon: <img src="/image/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
+    { name: 'Builds', icon: <img src="/image/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
+    { name: 'About Us', icon: <img src="/image/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
+    { name: 'Settings', icon: <img src="/image/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
   ];
   
   useEffect(() => {
@@ -81,7 +81,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
   };
   
   const menuItems: MenuProps['items'] = [
-    { key: 'logout', label: 'Log Out', icon: <img src='/logout.png' alt='' width={24} height={24} /> },
+    { key: 'logout', label: 'Log Out', icon: <img src='/image/logout.png' alt='' width={24} height={24} /> },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
@@ -147,7 +147,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
       <div className="flex flex-row justify-center items-center gap-4 ml-10">
         <div className=''>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
+          <img src="/image/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
         </div>
         <div>
           <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
@@ -193,7 +193,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
               className="flex items-center space-x-2 text-gray-700 hover:text-sky-700 cursor-pointer transition-colors duration-200 bg-[#97DDD9] py-1 px-4 rounded-md"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/user_icon.png" width={30} height={30} alt="User" />
+              <img src="/image/user_icon.png" width={30} height={30} alt="User" />
               <span className="text-[20px] text-black font-medium">
                 {profile?.full_name || user?.user_metadata?.full_name || user?.email}
               </span>

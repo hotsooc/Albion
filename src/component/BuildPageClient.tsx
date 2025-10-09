@@ -258,11 +258,11 @@ export default function BuildPageClient() {
                         </div>
                         <div className='flex justify-center mt-5 gap-5 items-center'>
                             <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handlePrev} disabled={searchResults.length <= 1}>
-                                <img src='/left-icon.png' alt='' width={20} height={20} />
+                                <img src='/image/left-icon.png' alt='' width={20} height={20} />
                             </Button>
                             <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton} ~</span>
                             <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handleNext} disabled={searchResults.length <= 1}>
-                                <img src='/right_icon.png' alt='' width={20} height={20} />
+                                <img src='/image/right_icon.png' alt='' width={20} height={20} />
                             </Button>
                         </div>
                     </motion.div>

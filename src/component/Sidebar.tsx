@@ -74,7 +74,7 @@ const Sidebar = () => {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/home _icon.png" alt="" width={20} height={20} className="mb-2 ml-5 mr-5" />
+                <img src="/image/home _icon.png" alt="" width={20} height={20} className="mb-2 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Home</span>
               </Link>
             </motion.div>
@@ -88,7 +88,7 @@ const Sidebar = () => {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/team_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
+                <img src="/image/team_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Team</span>
               </Link>
             </motion.div>
@@ -102,7 +102,7 @@ const Sidebar = () => {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/video_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
+                <img src="/image/video_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Video</span>
               </Link>
             </motion.div>
@@ -116,7 +116,7 @@ const Sidebar = () => {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/build_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
+                <img src="/image/build_icon.png" alt="" width={24} height={24} className="mb-1 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Builds</span>
               </Link>
             </motion.div>
@@ -130,7 +130,7 @@ const Sidebar = () => {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/user_icon1.png" alt="" width={20} height={20} className="mb-1 ml-5 mr-5" />
+                <img src="/image/user_icon1.png" alt="" width={20} height={20} className="mb-1 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>About us</span>
               </Link>
             </motion.div>
@@ -144,7 +144,7 @@ const Sidebar = () => {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/settings_icon.png" alt="" width={20} height={20} className="mb-1 ml-5 mr-5" />
+                <img src="/image/settings_icon.png" alt="" width={20} height={20} className="mb-1 ml-5 mr-5" />
                 <span className={`${balooFont.className} text-[25px] lg-6 font-bold`}>Settings</span>
               </Link>
             </motion.div>
@@ -154,7 +154,7 @@ const Sidebar = () => {
 
       <div className="p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
+        <img src="/image/umaru.png" alt="Umaru-chan" width={400} height={400} />
       </div>
     </section>
   );

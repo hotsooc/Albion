@@ -98,14 +98,14 @@ export default function LoginPage() {
   <div className="grid grid-cols-5 min-h-screen">
    <div
     className="col-span-2 bg-cover bg-center h-full hidden md:flex"
-    style={{ backgroundImage: "url('/albion.png')" }}
+    style={{ backgroundImage: "url('/image/albion.png')" }}
    ></div>
 
    <div className="col-span-3 flex items-center justify-center p-4">
     <div className="w-full max-w-[75vh] p-8 flex flex-col items-center justify-center">
      <div className="flex flex-col items-center mb-6">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/XHCN_icon.png" alt="XHCN Logo" className="w-16 h-20 mb-4" />
+      <img src="/image/XHCN_icon.png" alt="XHCN Logo" className="w-16 h-20 mb-4" />
       <span className={`${balooFont.className} text-center text-[48px] text-[#686868]`}>
        Welcome to XHCN
       </span>
@@ -164,7 +164,7 @@ export default function LoginPage() {
 
      <Divider plain className="text-[#686868]">OR</Divider>
      <Button
-      icon={<img src="/google_icon.png" alt="Google" className="w-5 h-5" />}
+      icon={<img src="/image/google_icon.png" alt="Google" className="w-5 h-5" />}
       size="large"
       block
       onClick={handleGoogleLogin}
