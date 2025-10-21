@@ -18,7 +18,7 @@ export default function GamePage() {
       case 'list':
       default:
         return (
-          <div style={{ padding: '20px', textAlign: 'center' }}>
+          <div style={{ padding: '20px', textAlign: 'center' }} className='h-screen'>
             <h1>🎮 Danh Sách Trò Chơi 🎮</h1>
             <p>Chọn một trò chơi để bắt đầu:</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>

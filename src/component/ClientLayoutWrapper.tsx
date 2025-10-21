@@ -13,6 +13,10 @@ import { usePathname } from 'next/navigation';
 
 type VantaInstance = { destroy: () => void; scene: THREE.Scene } | null;
 
+const SIDEBAR_WIDTH_OPEN = '20rem'; 
+const SIDEBAR_WIDTH_CLOSED = '5rem';
+const HEADER_HEIGHT_PX = 64; 
+
 export default function ClientLayoutWrapper({ children }: { children: React.ReactNode }) {
     const [isVantaActive, setIsVantaActive] = useState(false); 
     const vantaRef = useRef<HTMLDivElement>(null); 
@@ -21,6 +25,10 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
     
     const scrollContainerRef = useRef<HTMLDivElement>(null); 
     const pathname = usePathname(); 
+    
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+
 
     const handleToggleTheme = () => {
         setIsVantaActive(prev => !prev);
@@ -90,6 +98,8 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
             scrollContainerRef.current.scrollTop = 0;
         }
     }, [pathname]);
+    
+    const mainMarginLeft = isSidebarOpen ? SIDEBAR_WIDTH_OPEN : SIDEBAR_WIDTH_CLOSED;
 
     return (
         <AntdProvider>
@@ -102,20 +112,26 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
                         >
                         </div>
                     )}
-                    
                     <div ref={scrollContainerRef} className="relative flex flex-col overflow-y-auto overflow-x-hidden no-scrollbar flex-grow z-10"> 
                         
                         <AppHeader 
                             isVantaActive={isVantaActive}
                             onToggleVanta={handleToggleTheme}
                         />
-
                         <div className='flex flex-col -mt-4 mb-5 flex-grow'>
-                            <main className='grid grid-cols-1 md:grid-cols-[1fr_5fr]'>
-                                <div className='mt-10'>
-                                    <Sidebar />
+                            <main 
+                                className='grid grid-cols-1'
+                                style={{ 
+                                    marginLeft: mainMarginLeft,
+                                    transition: 'margin-left 300ms ease'
+                                }}
+                            >
+                                <div className='mt-10 absolute top-0 left-0'> 
+                                    <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
                                 </div>
-                                {children}
+                                <div className='p-4 pt-14'>
+                                    {children}
+                                </div>
                             </main>
                         </div>
                         <Footer />
