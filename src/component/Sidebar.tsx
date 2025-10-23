@@ -53,34 +53,43 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
     tap: { scale: 0.95 },
   };
   
-  const sidebarWidthClass = isOpen ? "w-80" : "w-20";
-  const back = 
-  <div className='flex flex-row gap-2'>
-    {/* <img src="/image/left-icon.png" alt="Previous team" width="20" height="20"></img> */}
-    <span className={`${balooFont.className} text-[25px] font-bold`}>Navigation</span>
-  </div>
-  const abc = <span className='text-[30px]'>☰</span>
+  const sidebarWidthClass = isOpen ? "w-60" : "w-30 ml-5";
+  
+  const NavLabelAndIcon = (
+    <div className='flex flex-row justify-center items-center mt-10 gap-2'>
+      {/* <span className="text-[25px] text-black">{'<'}</span>  */}
+      <span className={`${balooFont.className} text-[25px] ml-5 font-bold text-black`}>Navigation</span>
+    </div>
+  );
+  const MenuIcon = <span className='text-[30px] text-black'>☰</span>
 
   return (
     <section 
-      className={`${sidebarWidthClass} flex flex-col items-center px-4 flex-none transition-all duration-300 ease-in-out overflow-hidden`}
+      className={`${sidebarWidthClass} flex flex-col items-center flex-none transition-all duration-300 ease-in-out`}
       style={{
           top: `${HEADER_HEIGHT_PX}px`, 
           height: `calc(100vh - ${HEADER_HEIGHT_PX}px)`, 
       }}
     >
-      <div className={`flex flex-row gap-2 mb-2 mt-10 w-full pt-8 ${isOpen ? 'px-4 ml-8' : 'px-1 justify-center'}`}>
-        {isOpen} 
-        
+      <div 
+        className={`flex flex-row items-center pt-8 pb-4 transition-all duration-300`}
+      >
         <button
             onClick={toggleSidebar}
-            className="p-2 cursor-pointer transition-colors duration-200"
+            className={`cursor-pointer transition-colors duration-200 ${isOpen ? 'justify-start px-2' : 'pt-10 justify-center'}`}
+            style={{ 
+                paddingLeft: isOpen ? '0rem' : '0rem', 
+                display: 'flex'
+            }}
         >
-            {isOpen ? back : abc } 
+            {isOpen ? NavLabelAndIcon : MenuIcon } 
         </button>
       </div>
 
-      <nav className="w-full flex-grow">
+      <nav 
+        className={`${!isOpen && 'overflow-hidden'}`}
+        style={{ flexGrow: 1 }}
+      >
         <ul>
           {[
             { href: "/home", icon: "/image/home _icon.png", label: "Home" },
@@ -90,16 +99,16 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
             { href: "/aboutus", icon: "/image/user_icon1.png", label: "About us" },
             { href: "/settings", icon: "/image/settings_icon.png", label: "Settings" },
           ].map((item) => (
-            <li key={item.href} className="mb-4">
+            <li key={item.href} className="mb-2">
               <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
                 <Link
                   href={item.href}
                   className={`flex items-center py-2 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
                     pathname.startsWith(item.href) ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
-                  } ${isOpen ? 'px-4 gap-4' : 'justify-center'}`}
+                  } ${isOpen ? 'px-4 gap-4' : 'justify-center w-20'}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.icon} alt={item.label} width={24} height={24} className={`${isOpen ? 'ml-5' : 'ml-2.5'} flex-shrink-0`} />
+                  <img src={item.icon} alt={item.label} width={24} height={24} className={`${isOpen ? 'ml-5' : 'ml-[27px]'} flex-shrink-0`} />
                   <span className={`${balooFont.className} text-[25px] font-bold whitespace-nowrap ${!isOpen && 'hidden'}`}>
                     {item.label}
                   </span>
@@ -110,8 +119,8 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
         </ul>
       </nav>
 
-      {isOpen && (
-        <div className="p-4 flex-grow-0">
+      {isOpen && ( 
+        <div className="p-4 flex-shrink-0 mt-auto"> 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/image/umaru.png" alt="Umaru-chan" width={200} height={200} className='w-full h-auto' />
         </div>
