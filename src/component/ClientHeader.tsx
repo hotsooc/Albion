@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Dropdown, MenuProps, Input, Button, Tag, Space } from 'antd';
-import { SearchOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Dropdown, MenuProps, Input, Button, Tag, Space, Image } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client'; 
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
+import { Baloo_Bhai_2 } from 'next/font/google';
+import { ChevronDownIcon } from 'lucide-react';
+import useTrans from '@/hooks/useTrans';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
@@ -26,6 +28,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
   const router = useRouter();
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
+  const { changeLanguage, lang, trans } = useTrans();
 
   const categories = [
     { name: 'Home', icon: <img src="/image/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
@@ -92,6 +95,33 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
     router.push(path);
     setIsSearchDropdownVisible(false);
   };
+
+  const RenderFlag = (language: string, size: number) => {
+  const flagMap: {
+    [key: string]: {
+      src: string;
+      text: string;
+    };
+  } = {
+    vi: {
+      src: '/vietnam.png',
+      text: 'Việt Nam',
+    },
+    en: {
+      src: '/united-kingdom.png',
+      text: 'English',
+    },
+  };
+
+  const flagSource = flagMap[language] || flagMap['vi'];
+
+  return (
+    <div className='flex items-center gap-2'>
+      {flagSource.text}
+      <Image src={flagSource.src} alt={flagSource.text} width={size} height={size} />
+    </div>
+  );
+};
 
   const searchDropdownContent = (
     <div className="bg-white p-4 rounded-lg shadow-lg min-w-[300px]">
@@ -175,7 +205,34 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
       </div>
       
       <div className="flex items-center ml-auto gap-4"> 
-        
+        <Dropdown
+            placement='bottomRight'
+            className={`${balooFont.className} text-[16px] !bg-[#97DDD9] !border-[#97DDD9] !shadow-xl font-bold !text-black !rounded-full !py-1 !px-4 !h-[40px] transition-colors`}
+            menu={{
+              items: [
+                {
+                  key: 'vn',
+                  label: <div>{trans.common.vi}</div>,
+                  onClick: () => {
+                    if (lang !== 'vi') changeLanguage('vi');
+                  },
+                },
+                {
+                  key: 'en',
+                  label: <div>{trans.common.en}</div>,
+                  onClick: () => {
+                    if (lang !== 'en') changeLanguage('en');
+                  },
+                },
+              ],
+            }}
+          >
+            <div className='flex flex-row items-center gap-2'>
+              <div className='flex flex-row items-center'>{lang && RenderFlag(lang, 24)}</div>
+              <ChevronDownIcon size={16} />
+            </div>
+          </Dropdown>
+
         <Button
             onClick={onToggleVanta}
             type="primary"
