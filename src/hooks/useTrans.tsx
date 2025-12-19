@@ -11,7 +11,12 @@ function getTrans(locale: string) {
 }
 
 const useTrans = () => {
-    const [lang, setLang] = useState<string>(localStorage.getItem('lang') || 'vi');
+    const [lang, setLang] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('lang') || 'vi';
+    }
+    return 'vi';
+});
 
     const trans = getTrans(lang);
 
