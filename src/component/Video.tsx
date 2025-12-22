@@ -219,8 +219,8 @@ const VideoPage = () => {
         </Row>
       )}
 
-      <div className="flex gap-2 mt-4 absolute bottom-5 right-5 justify-between">
-        <div></div>
+      <div className="flex gap-2 mt-4 right-5 justify-between">
+        <p></p>
         <Button
           type="primary"
           icon={<UploadOutlined />}
