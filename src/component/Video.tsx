@@ -220,7 +220,7 @@ const VideoPage = () => {
       )}
 
       <div className="flex gap-2 mt-4 right-5 justify-between">
-        <div></div>
+        <p></p>
         <Button
           type="primary"
           icon={<UploadOutlined />}
