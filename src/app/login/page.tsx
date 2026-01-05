@@ -7,6 +7,7 @@ import { Button, Form, Input, Typography, Divider, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { supabase } from "../../../lib/supabase/client";
 import { Baloo_2 } from "next/font/google";
+import useTrans from "@/hooks/useTrans";
 
 const { Paragraph, Link } = Typography;
 
@@ -23,6 +24,7 @@ const balooFont = Baloo_2({
 export default function LoginPage() {
  const [loading, setLoading] = useState(false);
  const router = useRouter();
+ const { trans } = useTrans();
 
  useEffect(() => {
   const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -54,13 +56,11 @@ export default function LoginPage() {
       return;
      }
      
-     // Chuyển hướng sau khi đã xác nhận người dùng và hồ sơ
      router.push('/home');
     }
    }
   );
 
-  // Dọn dẹp listener khi component unmount
   return () => {
    authListener.subscription.unsubscribe();
   };
@@ -107,36 +107,36 @@ export default function LoginPage() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/image/XHCN_icon.png" alt="XHCN Logo" className="w-16 h-20 mb-4" />
       <span className={`${balooFont.className} text-center text-[48px] text-[#686868]`}>
-       Welcome to XHCN
+        {trans.login.title}
       </span>
      </div>
 
      <Form layout="vertical" onFinish={onFinish} requiredMark={false} className="w-full">
       <label className="block text-[#686868] text-[20px] font-medium mb-2">
-       User
+       {trans.login.user}
       </label>
       <Form.Item
        name="username"
-       rules={[{ required: true, message: "Please input your Username!" }]}
+       rules={[{ required: true, message: `${trans.login.message1}` }]}
       >
        <Input
         prefix={<UserOutlined />}
-        placeholder="Username"
+        placeholder={trans.login.user}
         size="large"
         className="rounded-[12px] h-[60px] text-lg border-none"
        />
       </Form.Item>
 
       <label className="block text-[#686868] text-[20px] font-medium mb-2">
-       Password
+       {trans.login.password}
       </label>
       <Form.Item
        name="password"
-       rules={[{ required: true, message: "Please input your Password!" }]}
+       rules={[{ required: true, message: `${trans.login.message2}` }]}
       >
        <Input.Password
         prefix={<LockOutlined />}
-        placeholder="Password"
+        placeholder={trans.login.password}
         size="large"
         className="rounded-[12px] h-[60px] text-lg border-none"
        />
@@ -144,7 +144,7 @@ export default function LoginPage() {
 
       <div className="text-left mb-4">
        <Link href="#" className="text-[#3299FF] text-[20px] hover:underline">
-        Forgot Password?
+        {trans.login.forgotPassword}
        </Link>
       </div>
 
@@ -157,12 +157,12 @@ export default function LoginPage() {
         size="large"
         className="bg-[#3299FF] hover:bg-[#2A82D1] border-none h-[60px]"
        >
-        <span className="text-lg font-bold">Log in</span>
+        <span className="text-lg font-bold">{trans.login.login}</span>
        </Button>
       </Form.Item>
      </Form>
 
-     <Divider plain className="text-[#686868]">OR</Divider>
+     <Divider plain className="text-[#686868]">{trans.login.or}</Divider>
      <Button
       icon={<img src="/image/google_icon.png" alt="Google" className="w-5 h-5" />}
       size="large"
@@ -170,13 +170,13 @@ export default function LoginPage() {
       onClick={handleGoogleLogin}
       className="flex items-center justify-center space-x-2 rounded-full h-[60px]"
      >
-      <span className="text-lg font-bold text-[#686868]">Continue with Google</span>
+      <span className="text-lg font-bold text-[#686868]">{trans.login.continue}</span>
      </Button>
 
      <Paragraph className="text-center mt-4 text-[#686868]">
-      Don&apos;t have account?{" "}
+      {trans.login.haveAccount}{" "}
       <Link href="/register" className="text-[#3299FF] hover:underline">
-       Sign Up
+       {trans.login.signUp}
       </Link>
      </Paragraph>
     </div>

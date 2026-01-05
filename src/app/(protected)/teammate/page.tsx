@@ -9,6 +9,7 @@ import { ButtonChangeColumn } from '@/component/ButtonChangeColumn';
 import { motion, Variants } from 'framer-motion';
 import { supabase } from '../../../../lib/supabase/client';
 import { Database } from '../../../../lib/database.types';
+import useTrans from '@/hooks/useTrans';
 
 type TeamsListRow = Database['public']['Tables']['teams_list']['Row'];
 type TeamsListInsert = Database['public']['Tables']['teams_list']['Insert'];
@@ -31,8 +32,7 @@ export default function TeammatePage() {
   const [teamNames, setTeamNames] = useState<string[]>([]);
   const [teamKeys, setTeamKeys] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Load team data from Supabase on component mount
+  const {trans} = useTrans();
   useEffect(() => {
     const fetchTeams = async () => {
       setIsLoading(true);
@@ -73,7 +73,6 @@ export default function TeammatePage() {
     fetchTeams();
   }, []);
 
-  // Function to save team data to Supabase
   const saveTeamsToSupabase = async (names: string[], keys: string[]) => {
     const { error } = await supabase
       .from('teams_list')
@@ -89,11 +88,9 @@ export default function TeammatePage() {
     const newTeamNames = [...teamNames, name];
     const newTeamKeys = [...teamKeys, newTeamKey];
 
-    // Update state first for a responsive UI
     setTeamNames(newTeamNames);
     setTeamKeys(newTeamKeys);
 
-    // Save to Supabase
     await saveTeamsToSupabase(newTeamNames, newTeamKeys);
 
     setOpenTeamIndex(newTeamNames.length - 1);
@@ -110,7 +107,6 @@ export default function TeammatePage() {
       const newTeamNames = teamNames.filter((_, i) => i !== index);
       const newTeamKeys = teamKeys.filter((_, i) => i !== index);
 
-      // Delete the team's data from the main `teams_data` table
       const { error: deleteError } = await supabase
         .from('teams_data')
         .update({ data: { [deletedTeamKey]: null } })
@@ -120,14 +116,11 @@ export default function TeammatePage() {
         console.error('Lỗi khi xóa dữ liệu team:', deleteError);
       }
 
-      // Update state after the database operation is complete
       setTeamNames(newTeamNames);
       setTeamKeys(newTeamKeys);
 
-      // Save the updated team list to Supabase
       await saveTeamsToSupabase(newTeamNames, newTeamKeys);
 
-      // Adjust the active team index
       if (openTeamIndex === index) {
         setOpenTeamIndex(0);
       } else if (openTeamIndex > index) {
@@ -157,7 +150,7 @@ export default function TeammatePage() {
   };
 
   if (isLoading) {
-    return <div className='p-8 text-center text-xl font-bold'>Đang tải dữ liệu...</div>;
+    return <div className='p-8 text-center text-xl font-bold'>{trans.loading}</div>;
   }
 
   return (

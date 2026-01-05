@@ -95,6 +95,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
             { href: "/home", icon: "/image/home _icon.png", label: "Home" },
             { href: "/teammate", icon: "/image/team_icon.png", label: "Team" },
             { href: "/videos", icon: "/image/video_icon.png", label: "Video" },
+            { href: "/youtube", icon: "/image/video_icon.png", label: 'RetroTV' },
             { href: "/build", icon: "/image/build_icon.png", label: "Builds" },
             { href: "/aboutus", icon: "/image/user_icon1.png", label: "About us" },
             { href: "/settings", icon: "/image/settings_icon.png", label: "Settings" },

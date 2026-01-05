@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Modal, Input } from 'antd';
+import useTrans from '@/hooks/useTrans';
 
 type TeamSelectorProps = {
   teamNames: string[];
@@ -29,7 +30,7 @@ export const TeamSelector = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newTeamName, setNewTeamName] = useState('');
   const [editIndex, setEditIndex] = useState<number | null>(null);
-
+  const {trans} = useTrans();
   const showAddModal = () => {
     setNewTeamName('');
     setEditIndex(null);
@@ -85,7 +86,7 @@ export const TeamSelector = ({
             <button
               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={(e) => { e.stopPropagation(); handleDeleteTeam(index); }}
-              title="Xóa team"
+              title={trans.teammate.delete}
             >
               &times;
             </button>
@@ -105,7 +106,7 @@ export const TeamSelector = ({
       </button>
 
       <Modal
-        title={editIndex !== null ? 'Sửa tên Team' : 'Thêm Team mới'}
+        title={editIndex !== null ? trans.teammate.changeName : trans.teammate.addTeam}
         open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -113,7 +114,7 @@ export const TeamSelector = ({
         destroyOnClose
       >
         <Input
-          placeholder="Nhập tên team"
+          placeholder={trans.teammate.teamName}
           value={newTeamName}
           onChange={(e) => setNewTeamName(e.target.value)}
         />
