@@ -3,10 +3,10 @@ import React from 'react';
 
 const YouTubeTV = ({ videoId }: { videoId: string }) => {
   return (
-    <div className="relative w-full max-w-[1000px] mx-auto group">
-      <div className="relative bg-[#2a2a2a] p-6 rounded-[3.5rem] shadow-[0_0_60px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.1)] border-b-[10px] border-black">
+    <div className="relative w-full max-w-[1000px] h-[600px]">
+      <div className="relative bg-[#2a2a2a] h-[600px] p-6 rounded-[3.5rem] shadow-[0_0_60px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.1)] border-b-[10px] border-black">
         
-        <div className="relative bg-black rounded-[2.5rem] overflow-hidden aspect-[4/3] border-[15px] border-[#1a1a1a] shadow-inner">
+        <div className="relative w-full h-[480px] bg-black rounded-[2.5rem] overflow-hidden aspect-[4/3] border-[15px] border-[#1a1a1a] shadow-inner">
           
           <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-[2rem]">
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 opacity-60"></div>

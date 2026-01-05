@@ -19,7 +19,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen= bg-[#0f172a] flex flex-col items-center justify-center rounded-2xl">
+    <main className="bg-[#0f172a] flex flex-col items-center justify-center rounded-2xl">
       <div className="my-5 text-center">
         <p className="text-4xl font-black text-white tracking-tighter">
           Retro <span className="text-red-500">Tube</span>
