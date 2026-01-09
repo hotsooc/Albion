@@ -10,7 +10,6 @@ interface AppHeaderProps {
 
 const AppHeader: React.FC<AppHeaderProps> = ({ isVantaActive, onToggleVanta }) => {
     const handleSearch = (value: string) => {
-        console.log('Searching for:', value);
     };
 
     return (

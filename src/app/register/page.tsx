@@ -33,7 +33,6 @@ export default function SignupPage() {
     email: values.email,
     password: values.password,
   });
-  console.log(data)
 
   setLoading(false);
 

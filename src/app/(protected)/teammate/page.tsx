@@ -57,7 +57,6 @@ export default function TeammatePage() {
           .insert(initialData);
         
         if (insertError) {
-          console.error("Lỗi khi thêm dữ liệu ban đầu:", insertError);
         }
         
         setTeamNames(initialNames);
@@ -79,7 +78,6 @@ export default function TeammatePage() {
       .update({ team_names: names, team_keys: keys })
       .eq('id', 1);
     if (error) {
-      console.error('Lỗi khi lưu danh sách team:', error);
     }
   };
 
@@ -113,7 +111,6 @@ export default function TeammatePage() {
         .eq('id', 1);
 
       if (deleteError) {
-        console.error('Lỗi khi xóa dữ liệu team:', deleteError);
       }
 
       setTeamNames(newTeamNames);

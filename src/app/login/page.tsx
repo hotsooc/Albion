@@ -46,12 +46,10 @@ export default function LoginPage() {
        .insert({ id: user.id, full_name: userName });
       
       if (createError) {
-       console.error('Lỗi khi tạo hồ sơ người dùng:', createError.message);
        message.error('Lỗi khi tạo hồ sơ. Vui lòng thử lại.');
        return;
       }
      } else if (error && error.code !== 'PGRST116') {
-      console.error('Lỗi khi lấy hồ sơ người dùng:', error.message);
       message.error('Không thể tải hồ sơ người dùng. Vui lòng thử lại.');
       return;
      }

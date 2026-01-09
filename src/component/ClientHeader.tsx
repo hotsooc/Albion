@@ -62,7 +62,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
       if (profileData) {
         setProfile(profileData);
       } else {
-        console.error('Lỗi khi lấy hồ sơ:', profileError);
       }
     };
     getProfile();

@@ -32,7 +32,6 @@ export default async function VideoDetailPage({
     .single();
 
   if (error || !data?.url) {
-    console.error('Lỗi khi lấy video từ Supabase:', error);
     return <div>Video không tồn tại.</div>;
   }
 

@@ -43,7 +43,6 @@ const Profile = () => {
                     const lastName = lastNameParts.join(' ');
                     form.setFieldsValue({ firstName, lastName, email: user.email });
                 } else {
-                    console.error("Error fetching profile:", error);
                     message.error("Lỗi khi lấy thông tin hồ sơ. Vui lòng kiểm tra kết nối hoặc thiết lập profiles.");
                 }
             }
@@ -141,7 +140,6 @@ const Profile = () => {
             .eq('id', user.id);
 
         if (profileError) {
-            console.error("Lỗi khi cập nhật profiles:", profileError);
             throw new Error(profileError.message);
         }
 
@@ -150,7 +148,6 @@ const Profile = () => {
         });
 
         if (authError) {
-            console.error("Lỗi khi cập nhật auth.users:", authError);
             throw new Error(authError.message);
         }
     };

@@ -196,7 +196,6 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
  useEffect(() => {
     const saveToSupabase = async () => {
       if (isLoading || Object.keys(allData).length === 0) return;
-      console.log('Đang lưu dữ liệu...');
 
       const updatePayload = { data: allData };
       
@@ -206,9 +205,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
         .eq('id', 1);
 
       if (error) {
-        console.error('Lỗi khi lưu dữ liệu:', error.message);
       } else {
-        console.log('Lưu dữ liệu thành công!');
       }
     };
 

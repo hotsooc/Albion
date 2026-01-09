@@ -12,21 +12,9 @@ const handleError: OnErrorEventHandler = (event, error) => {
   if (event instanceof Event) {
     const videoElement = (event.target as HTMLVideoElement);
     if (videoElement && videoElement.error) {
-      console.error(
-        `Lỗi video #${videoElement.error.code}: ${videoElement.error.message}`,
-        `Lỗi cho URL: ${videoUrl}`
-      );
     } else {
-      console.error(
-        `Lỗi tải video hoặc tạo thumbnail cho ${videoUrl}:`,
-        event
-      );
     }
   } else {
-    console.error(
-      `Lỗi tải video hoặc tạo thumbnail cho ${videoUrl}:`,
-      event || error
-    );
   }
   reject(new Error(`Không thể tạo thumbnail cho video: ${videoUrl}`));
 };

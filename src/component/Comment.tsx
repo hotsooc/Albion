@@ -26,7 +26,6 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .order('created_at', { ascending: true });
 
         if (error) {
-            console.error("Error fetching comments:", error.message);
             message.error("Lỗi khi tải bình luận.");
         } else {
             setComments(data);
@@ -81,7 +80,6 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .single();
 
         if (error) {
-            console.error("Error submitting comment:", error.message);
             message.error("Lỗi khi gửi bình luận.");
         } else {
             if (data) {
@@ -113,7 +111,6 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .eq('id', commentId);
 
         if (error) {
-            console.error("Lỗi khi cập nhật bình luận:", error.message);
             message.error("Lỗi khi cập nhật bình luận.");
             return false;
         } else {

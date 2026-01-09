@@ -15,7 +15,6 @@ const balooFont = Baloo_2({
 
 export default function VideoDetailClient({ videoData, videoId }: { videoData: any, videoId: string }) {
     const router = useRouter();
-    console.log('video', videoData)
 
     return (
         <section className="bg-[#E4FFFE] w-auto p-4 shadow-xl rounded-xl mx-4 ">

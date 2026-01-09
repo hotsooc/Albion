@@ -68,14 +68,12 @@ const VideoPage = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       setLoading(true);
-      console.log('Fetching videos for tab:', activeTab);
       const { data, error } = await supabase
         .from('videos')
         .select('*')
         .eq('category', activeTab);
 
       if (error || !data || data.length === 0) {
-        console.error('Error fetching videos or no data, falling back to local data:', error);
         const fallbackVideos = (VideoAlbion as any)[activeTab] || [];
         const dataWithThumbnails: VideoWithThumbnailType[] = fallbackVideos.map((video: any) => {
           const videoId = getYouTubeVideoId(video.url);
@@ -129,7 +127,6 @@ const VideoPage = () => {
       .select();
 
     if (error) {
-      console.error('Error uploading video:', error);
       return;
     }
     

@@ -28,7 +28,6 @@ const SettingPage = () => {
                 .select('id, full_name, role, avatar_url');
 
             if (error) {
-                console.error('Lỗi khi tải danh sách người dùng:', error.message);
                 message.error('Lỗi khi tải danh sách người dùng.');
             } else {
                 if (data) {
