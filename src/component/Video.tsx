@@ -9,6 +9,7 @@ import { VideoAlbion } from "@/store/video";
 import { Baloo_2 } from "next/font/google";
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import useTrans from "@/hooks/useTrans";
 
 const { Meta } = Card;
 
@@ -47,6 +48,13 @@ const balooFont = Baloo_2({
 });
 
 const VideoPage = () => {
+  const { trans } = useTrans();
+  const tabs = [
+    { key: "Highlight", label: trans.video.categoryHighlight },
+    { key: "Funny Moment", label: trans.video.categoryFunny },
+    { key: "Record", label: trans.video.categoryRecord }
+  ];
+
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
   const [videosWithThumbnails, setVideosWithThumbnails] = useState<VideoWithThumbnailType[]>([]);
   const [activeTab, setActiveTab] = useState("Highlight");
@@ -58,7 +66,7 @@ const VideoPage = () => {
 
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
-    if (tabFromUrl && tabs.includes(tabFromUrl)) {
+    if (tabFromUrl && tabs.some(t => t.key === tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else {
       setActiveTab("Highlight");
@@ -94,10 +102,10 @@ const VideoPage = () => {
           const thumbnail = getYouTubeThumbnail(videoId);
           return {
             id: video.id,
-            name: video.name || 'Untitled',
+            name: video.name || trans.video.untitled,
             url: video.url || '',
-            description: video.description || 'No description provided.',
-            category: video.category || 'General',
+            description: video.description || trans.video.noDescription,
+            category: video.category || trans.video.general,
             thumbnail: thumbnail,
           };
         });
@@ -107,7 +115,7 @@ const VideoPage = () => {
     };
 
     fetchVideos();
-  }, [activeTab]);
+  }, [activeTab, trans]);
 
   const showUploadModal = () => setIsUploadModalVisible(true);
   const handleUploadCancel = () => {
@@ -137,10 +145,10 @@ const VideoPage = () => {
 
       const newVideoWithThumbnail: VideoWithThumbnailType = {
         id: newVideo.id,
-        name: newVideo.name || 'Untitled',
+        name: newVideo.name || trans.video.untitled,
         url: newVideo.url || '',
-        description: newVideo.description || 'No description provided.',
-        category: newVideo.category || 'General',
+        description: newVideo.description || trans.video.noDescription,
+        category: newVideo.category || trans.video.general,
         thumbnail: thumbnail
       };
 
@@ -159,16 +167,16 @@ const VideoPage = () => {
       <div className="flex justify-center gap-2 mb-6">
         {tabs.map((tab) => (
           <button
-            key={tab}
+            key={tab.key}
             onClick={() => {
-              setActiveTab(tab);
-              router.push(`/videos/?tab=${tab}`)
+              setActiveTab(tab.key);
+              router.push(`/videos/?tab=${tab.key}`)
               }}
             className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition ${
-              activeTab === tab ? "bg-[#77BFFA] text-black" : "bg-[#8BDDFB] text-black"
+              activeTab === tab.key ? "bg-[#77BFFA] text-black" : "bg-[#8BDDFB] text-black"
             }`}
           >
-            {tab}
+            {tab.label}
           </button>
         ))}
       </div>
@@ -176,7 +184,7 @@ const VideoPage = () => {
       <div className="flex justify-center mb-6">
         <Input
           prefix={<SearchOutlined />}
-          placeholder="Search..."
+          placeholder={trans.common.searchPlaceholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className="!border !border-gray-300 !shadow-xl bg-white !w-1/3 !h-10 px-4 !rounded-full focus:ring-2 focus:ring-blue-400"
@@ -224,12 +232,12 @@ const VideoPage = () => {
           className="!bg-[#97DDD9] !h-[46px] !text-[20px] !font-bold !text-black !hover:bg-[#97DDD9]"
           onClick={showUploadModal}
         >
-          Upload
+          {trans.video.upload}
         </Button>
       </div>
 
       <Modal
-        title="Upload Video"
+        title={trans.video.uploadTitle}
         open={isUploadModalVisible}
         onCancel={handleUploadCancel}
         footer={null}
@@ -238,34 +246,35 @@ const VideoPage = () => {
         <Form form={form} onFinish={handleUploadSubmit} layout="vertical">
           <Form.Item
             name="name" 
-            label="Video Title"
-            rules={[{ required: true, message: "Please enter the video title!" }]}
+            label={trans.video.titleLabel}
+            rules={[{ required: true, message: trans.video.messageTitle }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="url" 
-            label="YouTube URL"
-            rules={[{ required: true, message: "Please enter the YouTube URL!" }, { type: 'url', message: 'Please enter a valid URL!' }]}
+            label={trans.video.urlLabel}
+            rules={[{ required: true, message: trans.video.messageUrl }, { type: 'url', message: trans.video.messageUrlInvalid }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="description" 
-            label="Description"
-            rules={[{ required: true, message: "Please enter a description!" }]}
+            label={trans.video.descLabel}
+            rules={[{ required: true, message: trans.video.messageDesc }]}
           >
             <Input.TextArea />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Submit
+              {trans.common.submit}
             </Button>
           </Form.Item>
         </Form>
       </Modal>
+
     </div>
   );
 };
 
-export default VideoPage;
+export default VideoPage;

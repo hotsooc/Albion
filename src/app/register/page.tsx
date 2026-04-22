@@ -1,4 +1,3 @@
-// file: src/app/signup/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -7,6 +6,7 @@ import { Button, Form, Input, Typography, Divider } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { supabase } from '../../../lib/supabase/client';
 import { Baloo_2 } from 'next/font/google';
+import useTrans from '@/hooks/useTrans';
 
 const { Paragraph, Link } = Typography;
 
@@ -25,6 +25,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [form] = Form.useForm();
+  const { trans } = useTrans();
 
   const onFinish = async (values: SignupValues) => {
   setLoading(true);
@@ -39,7 +40,7 @@ export default function SignupPage() {
   if (error) {
     alert(error.message);
   } else {
-    alert('Tạo tài khoản thành công! Vui lòng kiểm tra email để xác nhận.');
+    alert(trans.register.signUpSuccess);
     router.push('/login');
   }
 };
@@ -69,63 +70,63 @@ export default function SignupPage() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src='/image/XHCN_icon.png' alt='XHCN Logo' className='w-12 h-16 mb-4' />
             <div className={`${balooFont.className} text-center text-[48px] text-[#686868]`}>
-              Welcome to XHCN
+              {trans.register.title}
             </div>
           </div>
 
           <Form form={form} layout='vertical' onFinish={onFinish} requiredMark={false} className='w-full'>
             <label className="block text-[#686868] text-[20px] font-medium mb-2">
-              Email
+              {trans.register.email}
             </label>
             <Form.Item
               name='email'
-              rules={[{ required: true, message: 'Please input your Email!' }, { type: 'email', message: 'The input is not a valid E-mail!' }]}
+              rules={[{ required: true, message: trans.register.messageEmail }, { type: 'email', message: trans.register.messageEmailInvalid }]}
             >
               <Input
                 prefix={<MailOutlined />} 
-                placeholder='Email'
+                placeholder={trans.register.email}
                 size='large'
                 className="rounded-[12px] h-[60px] text-lg border-none"
               />
             </Form.Item>
 
             <label className="block text-[#686868] text-[20px] font-medium mb-2">
-              Password
+              {trans.register.password}
             </label>
             <Form.Item
               name='password'
-              rules={[{ required: true, message: 'Please input your Password!' }, { min: 6, message: 'Password must be at least 6 characters!' }]}
+              rules={[{ required: true, message: trans.register.messagePassword }, { min: 6, message: trans.register.messagePasswordMin }]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder='Password'
+                placeholder={trans.register.password}
                 size='large'
                 className="rounded-[12px] h-[60px] text-lg border-none"
               />
             </Form.Item>
 
             <label className="block text-[#686868] text-[20px] font-medium mb-2">
-              Confirm Password
+              {trans.register.confirmPassword}
             </label>
             <Form.Item
               name='confirmPassword' 
               dependencies={['password']}
               hasFeedback
               rules={[
-                { required: true, message: 'Please confirm your password!' },
+                { required: true, message: trans.register.messageConfirmPassword },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
+                    return Promise.reject(new Error(trans.register.messageConfirmPasswordMismatch));
                   },
                 }),
               ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder='Confirm Password'
+                placeholder={trans.register.confirmPassword}
                 size='large'
                 className="rounded-[12px] h-[60px] text-lg border-none"
               />
@@ -140,12 +141,12 @@ export default function SignupPage() {
                 size='large'
                 className='bg-blue-500 hover:bg-blue-600 border-none'
               >
-                Sign up
+                {trans.register.signUp}
               </Button>
             </Form.Item>
           </Form>
 
-          <Divider plain>OR</Divider>
+          <Divider plain>{trans.register.or}</Divider>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <Button
             icon={<img src='/image/google_icon.png' alt='Google' className='w-5 h-5' />}
@@ -154,17 +155,17 @@ export default function SignupPage() {
             onClick={handleGoogleSignup} // Thêm handler Google signup
             className='flex items-center justify-center space-x-2'
           >
-            <span>Continue with Google</span>
+            <span>{trans.register.continueWithGoogle}</span>
           </Button>
 
           <Paragraph className='text-center mt-4 text-gray-600'>
-            Already have an account?{' '}
+            {trans.register.alreadyHaveAccount}{' '}
             <Link href='/login' className='text-blue-500 hover:underline'>
-              Log in
+              {trans.register.login}
             </Link>
           </Paragraph>
         </div>
       </div>
     </div>
   );
-}
+}

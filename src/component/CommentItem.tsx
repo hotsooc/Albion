@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 import { Avatar, Button, Dropdown, MenuProps, message, Input } from 'antd';
 import { UserOutlined, MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import 'moment/locale/vi';
+// import 'moment/locale/vi';
 import { supabase } from '../../lib/supabase/client';
-
-moment.locale('vi');
 
 type CommentData = {
   id: string;
@@ -30,10 +28,12 @@ type CommentItemProps = {
   onUpdate: (commentId: string, content: string) => Promise<boolean>;
 };
 
+import useTrans from '@/hooks/useTrans';
+
 const CommentItem = ({ comment, currentUser, userRole, onDelete, onUpdate }: CommentItemProps) => {
+  const { trans } = useTrans();
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
-
   const isOwner = currentUser && currentUser.id === comment.user_id;
   const canDelete = isOwner || userRole === 'admin';
   const canEdit = isOwner;
@@ -70,14 +70,14 @@ const CommentItem = ({ comment, currentUser, userRole, onDelete, onUpdate }: Com
   if (canEdit) {
     items.push({
       key: 'edit',
-      label: 'Sửa',
+      label: trans.common.edit,
       onClick: handleEditClick,
     });
   }
   if (canDelete) {
     items.push({
       key: 'delete',
-      label: 'Xóa',
+      label: trans.teammate.delete,
       danger: true,
       onClick: () => onDelete(comment.id),
     });

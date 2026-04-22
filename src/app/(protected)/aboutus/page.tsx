@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Card, Col, Row, message, Spin, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../../../lib/supabase/client';
+import useTrans from '@/hooks/useTrans';
 
 const { Title, Text } = Typography;
 
@@ -19,6 +20,7 @@ const SettingPage = () => {
     const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
     const [filter, setFilter] = useState<string>('admin');
     const [loading, setLoading] = useState<boolean>(true);
+    const { trans } = useTrans();
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -28,7 +30,7 @@ const SettingPage = () => {
                 .select('id, full_name, role, avatar_url');
 
             if (error) {
-                message.error('Lỗi khi tải danh sách người dùng.');
+                message.error(trans.aboutUs.loadUsersError);
             } else {
                 if (data) {
                      setUsers(data as UserProfile[]);
@@ -38,7 +40,7 @@ const SettingPage = () => {
         };
 
         fetchUsers();
-    }, []);
+    }, [trans.aboutUs.loadUsersError]);
 
     const filteredUsers = users.filter(user => user.role === filter);
 
@@ -55,7 +57,7 @@ const SettingPage = () => {
             <Row gutter={24}>
                 <Col span={10}>
                     <Card
-                        title="Quản lý Người dùng"
+                        title={trans.aboutUs.manageUsers}
                         className="shadow-lg rounded-lg"
                         extra={
                             <div className="flex gap-2">
@@ -67,7 +69,7 @@ const SettingPage = () => {
                                     }}
                                     className={filter === 'admin' ? '!bg-[#97DDD9]' : ''}
                                 >
-                                    Admin
+                                    {trans.aboutUs.adminLabel}
                                 </Button>
                                 <Button
                                     type={filter === 'user' ? 'primary' : 'default'}
@@ -77,7 +79,7 @@ const SettingPage = () => {
                                     }}
                                     className={filter === 'user' ? '!bg-[#97DDD9]' : ''}
                                 >
-                                    Bộ lạc Cu Đỏ
+                                    {trans.aboutUs.cuDoTribe}
                                 </Button>
                             </div>
                         }
@@ -96,7 +98,7 @@ const SettingPage = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-500 italic">Không có người dùng nào trong nhóm này.</p>
+                                <p className="text-gray-500 italic">{trans.aboutUs.noUsersFound}</p>
                             )}
                         </div>
                     </Card>
@@ -104,7 +106,7 @@ const SettingPage = () => {
 
                 <Col span={14}>
                     <Card
-                        title="Thông tin chi tiết"
+                        title={trans.aboutUs.detailInfo}
                         className="shadow-lg rounded-lg min-h-[570px]"
                     >
                         {selectedUser ? (
@@ -119,12 +121,12 @@ const SettingPage = () => {
                                     {selectedUser.full_name}
                                 </Title>
                                 <Text type="secondary" className="text-lg">
-                                    {selectedUser.role === 'admin' ? 'Quản trị viên' : 'Thành viên'}
+                                    {selectedUser.role === 'admin' ? trans.aboutUs.admin : trans.aboutUs.member}
                                 </Text>
                             </div>
                         ) : (
                             <div className="flex justify-center items-center min-h-[500px] text-gray-400 italic">
-                                Vui lòng chọn một người dùng để xem thông tin
+                                {trans.aboutUs.selectUserPrompt}
                             </div>
                         )}
                     </Card>
@@ -134,4 +136,4 @@ const SettingPage = () => {
     );
 }
 
-export default SettingPage;
+export default SettingPage;

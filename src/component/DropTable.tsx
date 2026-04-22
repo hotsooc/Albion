@@ -7,6 +7,7 @@ import { Modal } from 'antd';
 import { Database } from '../../lib/database.types';
 import { supabase } from '../../lib/supabase/client';
 import { Baloo_2 } from 'next/font/google';
+import useTrans from '@/hooks/useTrans';
 type DragItem = {
  id: string;
  name: string;
@@ -41,6 +42,7 @@ type DroppableTableProps = {
 };
 
 const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }) => {
+  const { trans } = useTrans();
   if (!item) return null;
   return (
    <Modal
@@ -56,26 +58,26 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
    >
      <div className='grid grid-cols-[2fr_4fr] gap-8'>
        <div>
-         <h2 className={`${balooFont.className} text-xl font-bold mb-4`}>Thông tin chi tiết</h2>
-         <p className={`${balooFont.className} text-lg`}>Tên mục: <span className='font-semibold'>{item.name}</span></p>
-         <p className={`${balooFont.className} text-lg`}>Detail: <span className='font-semibold whitespace-pre-line'>{item.detail}</span></p>
+         <h2 className={`${balooFont.className} text-xl font-bold mb-4`}>{trans.aboutUs.detailInfo}</h2>
+         <p className={`${balooFont.className} text-lg`}>{trans.common.name}: <span className='font-semibold'>{(trans.items as any)[item.id]?.name || item.name}</span></p>
+         <p className={`${balooFont.className} text-lg`}>{trans.common.detailLabel} <span className='font-semibold whitespace-pre-line'>{(trans.items as any)[item.id]?.detail || item.detail}</span></p>
        </div>
        <div className='flex flex-row gap-4 mt-10'>
          {item.image && (
          <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-           <span>Hellgate 5v5 (2v2)</span>
+           <span>{trans.build.hellgate}</span>
            <img src={item.image} alt='' height={450} width={300} />
          </div>
          )}
          {item.image2 && (
          <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-           <span>Corrupted dungeon</span>
+           <span>{trans.build.corrupted}</span>
            <img src={item.image2} alt='' height={450} width={300} />
          </div>
          )}
          {item.image3 && (
          <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-           <span>Open World</span>
+           <span>{trans.build.openworld}</span>
            <img src={item.image3} alt='' height={450} width={300} />
          </div>
          )}
@@ -108,6 +110,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
  const [allData, setAllData] = useState<AllData>({});
  const [isLoading, setIsLoading] = useState<boolean>(true);
  const [popupItem, setPopupItem] = useState<DragItem | null>(null);
+ const { trans } = useTrans();
 
  const handleItemClick = (item: DroppableSpot) => {
   if (item) {
@@ -249,30 +252,30 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
       case 7:
         return (
           <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-7 gap-4 text-black'>
-            {renderColumn(teamKey, 'column_A', 'Tank')}
-            {renderColumn(teamKey, 'column_B', 'Sub Tank')}
-            {renderColumn(teamKey, 'column_C', 'Flex')}
-            {renderColumn(teamKey, 'column_F', 'Cover')}
-            {renderColumn(teamKey, 'column_D', 'DPS')}
-            {renderColumn(teamKey, 'column_G', 'Sub Dps')}
-            {renderColumn(teamKey, 'column_E', 'Heal')}
+            {renderColumn(teamKey, 'column_A', trans.teammate.roles.tank)}
+            {renderColumn(teamKey, 'column_B', trans.teammate.roles.subTank)}
+            {renderColumn(teamKey, 'column_C', trans.teammate.roles.flex)}
+            {renderColumn(teamKey, 'column_F', trans.teammate.roles.cover)}
+            {renderColumn(teamKey, 'column_D', trans.teammate.roles.dps)}
+            {renderColumn(teamKey, 'column_G', trans.teammate.roles.subDps)}
+            {renderColumn(teamKey, 'column_E', trans.teammate.roles.heal)}
           </div>
         );
       case 5:
         return (
           <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-5 gap-4 text-black'>
-            {renderColumn(teamKey, 'column_A', 'Tank')}
-            {renderColumn(teamKey, 'column_B', 'Sub Tank')}
-            {renderColumn(teamKey, 'column_C', 'Flex (Cover)')}
-            {renderColumn(teamKey, 'column_D', 'DPS (Sub DPS)')}
-            {renderColumn(teamKey, 'column_E', 'Heal')}
+            {renderColumn(teamKey, 'column_A', trans.teammate.roles.tank)}
+            {renderColumn(teamKey, 'column_B', trans.teammate.roles.subTank)}
+            {renderColumn(teamKey, 'column_C', trans.teammate.roles.flexCover)}
+            {renderColumn(teamKey, 'column_D', trans.teammate.roles.dpsSubDps)}
+            {renderColumn(teamKey, 'column_E', trans.teammate.roles.heal)}
           </div>
         );
       case 2: 
         return (
           <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-2 gap-4 text-black'>
-            {renderColumn(teamKey, 'column_A', 'Player 1')}
-            {renderColumn(teamKey, 'column_B', 'Player 2')}
+            {renderColumn(teamKey, 'column_A', trans.teammate.roles.player1)}
+            {renderColumn(teamKey, 'column_B', trans.teammate.roles.player2)}
           </div>
         );
       default:
@@ -280,12 +283,12 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
     }
   };
  if (isLoading || Object.keys(allData).length === 0) {
-  return <div className='p-8 text-center text-xl font-bold'>Đang tải dữ liệu...</div>;
+  return <div className='p-8 text-center text-xl font-bold'>{trans.loading}</div>;
  }
  
  const currentTeamKey = teamKeys[openTeamIndex];
  if (!currentTeamKey || !allData[currentTeamKey]) {
-    return <div className='p-8 text-center text-xl font-bold'>Đang tải dữ liệu...</div>;
+    return <div className='p-8 text-center text-xl font-bold'>{trans.loading}</div>;
  }
  
  return (

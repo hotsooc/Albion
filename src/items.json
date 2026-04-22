@@ -1,0 +1,314 @@
+{
+  "1": {
+    "name": "Bow",
+    "detail": "Cung rác\r\n    Tốt cho pvp 1v1 vì lượng dmg deal tốt và khá cơ động"
+  },
+  "2": {
+    "name": "Bow Of Badon",
+    "detail": "Cung Sét\r\n    Tốt cho các giao tranh nhỏ lẻ như SC, 5v5, ... dmg deal khá tốt và có cơ chế làm gián đoạn cast spell của người chơi"
+  },
+  "3": {
+    "name": "MistPiercer",
+    "detail": "Cung Chim\r\n    Tốt cho các giao tranh nhỏ lẻ như SC, Road Avalonian, ... dmg deal tốt nhưng cần CC cứng từ team"
+  },
+  "4": {
+    "name": "Skystrider Bow",
+    "detail": "Cung Sét v2\r\n    Khá tốt cho solo player với lượng dmg ổn và cơ chế miễn nhiễm sát thương khi đứng trên không khá ngầu"
+  },
+  "5": {
+    "name": "Walling Bow",
+    "detail": "Cung Xuyên Thấu\r\n    Tốt cho các giao tranh lớn như ZvZ, Road Avalonian, ... dmg deal tốt nếu biết chọn góc bắn phù hợp với cơ chế càng xuyên qua nhiều người dmg càng lớn"
+  },
+  "6": {
+    "name": "Whispering Bow",
+    "detail": "Đại bác tầm xa\r\n    Dmg deal khá tốt nếu được free shot nhưng rất mỏng và cần cover rất nhiều từ team"
+  },
+  "7": {
+    "name": "WarBow",
+    "detail": "Cung Rỉa\r\n    Khá yếu khi đem đi đánh những content lớn và hầu như chỉ được chơi ở corrupted dungeon, 2v2"
+  },
+  "8": {
+    "name": "LongBow",
+    "detail": "Cung PVE\r\n    Rất mạnh ở khoản clear mob và dmg deal khá tốt nếu như team có CC cứng"
+  },
+  "9": {
+    "name": "Dagger",
+    "detail": "Dmg deal ổn và rất mạnh với các content solo boss.\r\n    Có các build 1shot khá dị nên thử qua (Khi đã master còn không thì +1 video funny moment vì cơ chế tự mất máu theo thời gian)"
+  },
+  "10": {
+    "name": "DaggerPair",
+    "detail": "Dmg deal ổn (Có bleed khi E) và khá được ưa chuộng khi đi gank vì rất dễ dismount địch"
+  },
+  "11": {
+    "name": "DeathGivers",
+    "detail": "Dmg deal tốt và rất phù hợp với những người có \"bản năng sát thủ\".\r\n    Bonus: Ngoài ra có rất nhiều radar player ưa chuộng trong the Mist"
+  },
+  "12": {
+    "name": "DemonFang",
+    "detail": "Dmg deal ổn và phù hợp với các content lớn như ZvZ"
+  },
+  "13": {
+    "name": "Bloodletter",
+    "detail": "Khá hoàn hảo khi có thể tham dự hầu hết mọi content có khả năng dứt điểm với set 1shot hay đơn giản là set build tank để quẩy trong 1vX"
+  },
+  "14": {
+    "name": "BridledFury",
+    "detail": "Dmg deal tốt khi đã master (spec > 400) phù hợp cho ZvZ"
+  },
+  "15": {
+    "name": "Claws",
+    "detail": "Phù hợp với các content đi gank và có thể là corrupted dungeon"
+  },
+  "16": {
+    "name": "TwinSlayer",
+    "detail": "Nếu bạn đã chơi Talon thì cây này phù hợp với bạn"
+  },
+  "17": {
+    "name": "Spear",
+    "detail": "Thích hợp cho solo (Mist, Openworld, Corrupted)"
+  },
+  "18": {
+    "name": "Pike",
+    "detail": "Mạnh ở khoảng solo, dồn sát thương 1 nhịp, phù hợp content Mist, Corrupted"
+  },
+  "19": {
+    "name": "Glaive",
+    "detail": "Phù hợp content Hellgate 2v2 hoặc 5v5, cô lập với heal dứt điểm mục tiêu còn lại"
+  },
+  "20": {
+    "name": "Heron Spear",
+    "detail": "Phù hợp nhất content SC, đi cùng LongBow hoặc Bloodletter, có khả năng đánh outnumbered"
+  },
+  "21": {
+    "name": "Spirit Hunter",
+    "detail": "Phù hợp đội hình 1-shot"
+  },
+  "22": {
+    "name": "Trinity Spear",
+    "detail": "Phù hợp với solo (corrupted)"
+  },
+  "23": {
+    "name": "DayBreaker",
+    "detail": "Phù hợp với content đông người, MDPS khỏe, E xóa buff mạnh"
+  },
+  "24": {
+    "name": "Rift Glaive",
+    "detail": "Cần tối thiểu 3 cây trong 1 team, team 1-shot"
+  },
+  "25": {
+    "name": "Quarterstaff",
+    "detail": "Phù hợp cho solo"
+  },
+  "26": {
+    "name": "Iron-clad Staff",
+    "detail": "Phế vật"
+  },
+  "27": {
+    "name": "Double Bladed Staff",
+    "detail": "Phù hợp content gank"
+  },
+  "28": {
+    "name": "Black Monk Stave",
+    "detail": "Thường dùng trong tank boss HCE"
+  },
+  "29": {
+    "name": "Soulscythe",
+    "detail": "Thường đánh trong ZvZ, hoặc Hellgate 2v2 oneshot"
+  },
+  "30": {
+    "name": "Staff of Balance",
+    "detail": "Thường đánh trong ZvZ, hoặc Hellgate 2v2 oneshot"
+  },
+  "31": {
+    "name": "Grailseeker",
+    "detail": "Thường đánh trong Hellgate 2v2 oneshot chung với Dagger"
+  },
+  "32": {
+    "name": "Phantom Twinblade",
+    "detail": "Chỉ chơi được trong The Depth, không tính tiền"
+  },
+  "33": {
+    "name": "Prowling Staff",
+    "detail": "Phù hợp chơi solo, đặc biệt là trong the Mist"
+  },
+  "34": {
+    "name": "Rootbound Staff",
+    "detail": "Đánh team tốt với vai trò cover, hold kẻ địch, tăng heal tốt, shield"
+  },
+  "35": {
+    "name": "Primal Staff",
+    "detail": "Đánh với vai trò Sub Tank, gây CC nhiều, áp lực hàng sau tốt"
+  },
+  "36": {
+    "name": "Bloodmoon Staff",
+    "detail": "Khả năng 1vX, 2vX cực tốt, đánh team vẫn ổn, vai trò Flex"
+  },
+  "37": {
+    "name": "Hellspawn Staff",
+    "detail": "Vũ khí RDPS sát thương cao cần biết tận dung nội tại + skill hợp lí, nhưng hơi giấy ở dạng biến hình"
+  },
+  "38": {
+    "name": "Earthrune Staff",
+    "detail": "Vai trò Tanker, thường chỉ dùng trong ZvZ"
+  },
+  "39": {
+    "name": "Lightcaller Staff",
+    "detail": "Vũ khí RDPS sát thương cao, cần biết tận dụng nội tại tốt, chống chịu tầm trung"
+  },
+  "40": {
+    "name": "Stillgaze Staff",
+    "detail": "Vũ khí đánh team tốt với vai trò Cover, khả năng giảm heal, hold kẻ địch"
+  },
+  "41": {
+    "name": "Nature Staff",
+    "detail": "Vũ khí top tier của Nature, phù hợp với team 3 trở lên, với team trên 5 cần dùng W 5 để tận dụng tốt được khả năng heal AOE theo stack của E"
+  },
+  "42": {
+    "name": "Great Nature Staff",
+    "detail": "Chỉ phù hợp với đánh 2v2"
+  },
+  "43": {
+    "name": "Wild Staff",
+    "detail": "Heal mức khá, phù hợp đánh team nhưng cần xử lí tốt E vì chiêu cố định vị trí và có cast time"
+  },
+  "44": {
+    "name": "Druidic Staff",
+    "detail": "Chỉ dùng để solo farm"
+  },
+  "45": {
+    "name": "Blight Staff",
+    "detail": "Vũ khí top tier của Nature, team 3 trở lên đánh cực khỏe"
+  },
+  "46": {
+    "name": "Rampant Staff",
+    "detail": "Chỉ dùng trong ZvZ"
+  },
+  "47": {
+    "name": "Ironroot Staff",
+    "detail": "Chỉ phù hợp 2v2, đồi hỏi có Spec của Nature cao (500 trở lên)"
+  },
+  "48": {
+    "name": "Forgebark Staff",
+    "detail": "Đánh team 3-5 tốt với mức heal khá, tạo sheild, nhược điểm là hồi chiêu 30s của E"
+  },
+  "50": {
+    "name": "Claymore",
+    "detail": "Thường chỉ dùng trong Hellgate 2v2"
+  },
+  "51": {
+    "name": "Dual Swords",
+    "detail": "Có khả năng solo tốt"
+  },
+  "52": {
+    "name": "Clarent Blade",
+    "detail": "Thường dùng trong đánh SC"
+  },
+  "53": {
+    "name": "Carving Sword",
+    "detail": "Debuff mạnh, phù hợp đánh Hellgate, SC,..."
+  },
+  "54": {
+    "name": "Galatine Pair",
+    "detail": "Phế vật đừng coi youtube rồi ảo"
+  },
+  "55": {
+    "name": "Kingmaker",
+    "detail": "Đòi hỏi kĩ năng cao, bình tĩnh"
+  },
+  "56": {
+    "name": "Infinity Blade",
+    "detail": "Neft xong phế xD"
+  },
+  "57": {
+    "name": "Battleaxe",
+    "detail": "Farm solo khỏe, content solo tốt"
+  },
+  "58": {
+    "name": "Greataxe",
+    "detail": "Đánh nhỏ mức ổn"
+  },
+  "59": {
+    "name": "Halberd",
+    "detail": "Thường dùng trong đánh Hellgate"
+  },
+  "60": {
+    "name": "Carrioncaller",
+    "detail": "Thường dùng trong đánh Hellgate"
+  },
+  "61": {
+    "name": "Infernal Scythe",
+    "detail": "Thường dùng trong CS, ZvZ, mạnh ở khả năng dứt điểm"
+  },
+  "62": {
+    "name": "Bear Paws",
+    "detail": "Gank tốt, đánh team vẫn ổn nếu biết ra vào hợp lí"
+  },
+  "63": {
+    "name": "Realmbreaker",
+    "detail": "Đi chung với team 1 shot hoặc team Balance tốt"
+  },
+  "64": {
+    "name": "Crystal Reaper",
+    "detail": "Đừng xem youtube rồi ảo"
+  },
+  "65": {
+    "name": "Mace",
+    "detail": "Bomb, SC tốt"
+  },
+  "66": {
+    "name": "Heavy Mace",
+    "detail": "Dùng nhiều trong Hellgate, SC, ZvZ"
+  },
+  "72": {
+    "name": "Dreadstorm Monarch",
+    "detail": "Vũ khí thiên hướng dame, kén đội hình"
+  },
+  "74": {
+    "name": "Polehammer",
+    "detail": "CC theo đường thẳng tầm xa, đi chung với team có MistPiercer"
+  },
+  "75": {
+    "name": "Great Hammer\t",
+    "detail": "Thường dùng đánh Hellgate, Avalon"
+  },
+  "76": {
+    "name": "Tombhammer",
+    "detail": "Khả năng CC tầm xa, cũng phù hợp team có MistPierce"
+  },
+  "77": {
+    "name": "Forge Hammers",
+    "detail": "Thường dùng trong Hellgate, gây áp lực cho hàng sau"
+  },
+  "97": {
+    "name": "Holy Staff",
+    "detail": "Đáy xã hội"
+  },
+  "98": {
+    "name": "Great Holy Staff",
+    "detail": "Đáy xã hội"
+  },
+  "99": {
+    "name": "Divine Staff",
+    "detail": "Đáy xã hội"
+  },
+  "100": {
+    "name": "Lifetouch Staff",
+    "detail": "Đáy xã hội"
+  },
+  "101": {
+    "name": "Fallen Staff",
+    "detail": "Đáy xã hội"
+  },
+  "102": {
+    "name": "Redemption Staff",
+    "detail": "Đáy xã hội"
+  },
+  "103": {
+    "name": "Hallowfall",
+    "detail": "Đáy xã hội"
+  },
+  "104": {
+    "name": "Exalted Staff",
+    "detail": "Đáy xã hội"
+  }
+}

@@ -75,7 +75,10 @@ const getGhostMoveDirection = (
 };
 
 
+import useTrans from '@/hooks/useTrans';
+
 export default function PacmanGame({ onGoBack }: PacmanGameProps) {
+  const { trans } = useTrans();
   const [pacmanPos, setPacmanPos] = useState<Coordinate>(INITIAL_PACMAN);
   const [gameMap, setGameMap] = useState<number[][]>(copyMap(INITIAL_MAP));
   const [ghosts, setGhostPos] = useState<Ghost[]>(INITIAL_GHOSTS);
@@ -277,7 +280,7 @@ export default function PacmanGame({ onGoBack }: PacmanGameProps) {
         <div style={messageStyle('red')}>
           GAME OVER! 💀
           <button onClick={handleRestart} style={buttonStyle}>
-            Chơi Lại
+            {trans.game.playAgain}
           </button>
         </div>
       );
@@ -285,10 +288,10 @@ export default function PacmanGame({ onGoBack }: PacmanGameProps) {
     if (gameStatus === 'WIN') {
       return (
         <div style={messageStyle('green')}>
-          BẠN THẮNG! 🎉
-          <p>Điểm tối đa: {score}</p>
+          {trans.game.youWin}
+          <p>{trans.game.maxScore}: {score}</p>
           <button onClick={handleRestart} style={buttonStyle}>
-            Chơi Lại (Level 2?)
+            {trans.game.playAgain}
           </button>
         </div>
       );
@@ -299,9 +302,9 @@ export default function PacmanGame({ onGoBack }: PacmanGameProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-      <h1>🟡 Pac-Man - Có Ma! (Thông Minh Hơn) 👻</h1>
+      <h1>{trans.game.pacmanTitle}</h1>
       <div style={{ marginBottom: '10px', fontSize: '22px', fontWeight: 'bold' }}>
-        Điểm: <span style={{ color: '#FFC107' }}>{score}</span> / {TOTAL_DOTS}
+        {trans.game.score}: <span style={{ color: '#FFC107' }}>{score}</span> / {TOTAL_DOTS}
       </div>
 
       <div
@@ -322,16 +325,16 @@ export default function PacmanGame({ onGoBack }: PacmanGameProps) {
 
       <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
         <button onClick={onGoBack} style={buttonStyle}>
-          &larr; Quay lại Danh sách Game
+          {trans.game.backToGames}
         </button>
         {gameStatus === 'PLAYING' && (
             <button onClick={handleRestart} style={buttonStyle}>
-              Khởi động lại
+              {trans.game.restart}
             </button>
         )}
       </div>
       <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-        Sử dụng các phím **W A S D** để di chuyển. Tốc độ Ma là **{GHOST_SPEED}ms**.
+        {trans.game.pacmanInstructions.replace('{speed}', GHOST_SPEED.toString())}
       </p>
     </div>
   );

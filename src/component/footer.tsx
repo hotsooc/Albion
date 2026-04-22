@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { FaFacebook, FaDiscord } from 'react-icons/fa'
 import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
+import useTrans from '@/hooks/useTrans';
 
 const balooFont = Baloo_Bhai_2({
     subsets: ['vietnamese'],
@@ -11,6 +12,7 @@ const balooFont = Baloo_Bhai_2({
 });
 
 export default function Footer() {
+    const { trans } = useTrans();
     return (
         <section id='footer' className='text-black py-8 w-full border-t border-gray-300 border-solid'>
             <div className='w-full px-10'> 
@@ -24,12 +26,12 @@ export default function Footer() {
                                 <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
                             </div>
                         </div>
-                        <span className={`${balooFont.className} text-[25px] font-bold mb-2`}>Contact: </span>
+                        <span className={`${balooFont.className} text-[25px] font-bold mb-2`}>{trans.footer.contact} </span>
                         <span className={`${balooFont.className} text-[16px] text-black`}>Discord: justhi_1203 (IG: Hi_1203)</span>
                         <span className={`${balooFont.className} text-[16px] text-black`}>Discord: thewise0920 (IG: Thewise209)</span>
                         <span className={`${balooFont.className} text-[16px] text-black`}>Facebook: Khanh Duy (IG: Potato211)</span>
                         <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                            <span className={`${balooFont.className} text-lg font-bold mb-2`}>Contact Us: </span>
+                            <span className={`${balooFont.className} text-lg font-bold mb-2`}>{trans.footer.contactUs} </span>
                             <div className='flex space-x-4'>
                                 <a href="https://www.facebook.com/khanh.duy.57514" target='_blank' aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors duration-300">
                                     <FaFacebook size={36} />
@@ -42,24 +44,24 @@ export default function Footer() {
                     </div>
 
                     <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                        <span className={`${balooFont.className} text-[30px] font-bold`}>Directory:</span>
+                        <span className={`${balooFont.className} text-[30px] font-bold`}>{trans.footer.directory}</span>
                         <Link href="/home" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            Home
+                            {trans.sidebar.home}
                         </Link>
                         <Link href="/teammate" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            Team
+                            {trans.sidebar.team}
                         </Link>
                         <Link href="/videos" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            Video
+                            {trans.sidebar.video}
                         </Link>
                         <Link href="/build" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            Builds
+                            {trans.sidebar.builds}
                         </Link>
                         <Link href="/aboutus" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            About us
+                            {trans.sidebar.aboutUs}
                         </Link>
                         <Link href="/settings" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            Settings
+                            {trans.sidebar.settings}
                         </Link>
                     </div>
 
@@ -68,9 +70,9 @@ export default function Footer() {
 
                 {/* Bản quyền */}
                 <div className={`${balooFont.className} mt-8 pt-8 w-full border-t border-gray-700 text-center text-[25px] text-black font-bold`}>
-                    © {new Date().getFullYear()} XHCN Guild - ASIA Server
+                    {trans.footer.copyright.replace('{year}', new Date().getFullYear().toString())}
                 </div>
             </div>
         </section>
     );
-}
+}

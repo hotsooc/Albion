@@ -96,10 +96,10 @@ export default function TeammatePage() {
 
   const handleDeleteTeam = async (index: number) => {
     if (teamNames.length <= 1) {
-      alert('Không thể xóa team cuối cùng.');
+      alert(trans.teammate.deleteLastError);
       return;
     }
-    const isConfirmed = window.confirm(`Bạn có chắc chắn muốn xóa team "${teamNames[index]}"?`);
+    const isConfirmed = window.confirm(trans.teammate.deleteConfirm.replace('{name}', teamNames[index]));
     if (isConfirmed) {
       const deletedTeamKey = teamKeys[index];
       const newTeamNames = teamNames.filter((_, i) => i !== index);

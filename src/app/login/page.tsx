@@ -46,11 +46,11 @@ export default function LoginPage() {
        .insert({ id: user.id, full_name: userName });
       
       if (createError) {
-       message.error('Lỗi khi tạo hồ sơ. Vui lòng thử lại.');
+       message.error(trans.login.createProfileError);
        return;
       }
      } else if (error && error.code !== 'PGRST116') {
-      message.error('Không thể tải hồ sơ người dùng. Vui lòng thử lại.');
+      message.error(trans.login.loadProfileError);
       return;
      }
      

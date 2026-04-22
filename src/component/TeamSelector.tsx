@@ -39,7 +39,7 @@ export const TeamSelector = ({
 
   const handleOk = () => {
     if (newTeamName.trim() === '') {
-      alert('Tên team không được để trống.');
+      alert(trans.teammate.teamNameEmptyError);
       return;
     }
     if (editIndex !== null) {
@@ -76,7 +76,7 @@ export const TeamSelector = ({
             <button
               className="p-1 rounded-full text-blue-800 bg-opacity-80 hover:bg-opacity-100 transition-opacity opacity-0 group-hover:opacity-100"
               onClick={(e) => { e.stopPropagation(); showEditModal(index); }}
-              title="Sửa tên team"
+              title={trans.common.editTeamName}
             >
               <img src='/image/edit_icon.png' alt='Edit' width={16} height={16} />
             </button>

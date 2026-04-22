@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { supabase } from '../../lib/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import { motion, Variants } from 'framer-motion';
+import useTrans from '@/hooks/useTrans';
 
 const HEADER_HEIGHT_PX = 64; 
 
@@ -18,6 +19,7 @@ const balooFont = Baloo_Bhai_2({
 const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: () => void }) => { 
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+  const { trans } = useTrans();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -58,7 +60,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
   const NavLabelAndIcon = (
     <div className='flex flex-row justify-center items-center mt-10 gap-2'>
       {/* <span className="text-[25px] text-black">{'<'}</span>  */}
-      <span className={`${balooFont.className} text-[25px] ml-5 font-bold text-black`}>Navigation</span>
+      <span className={`${balooFont.className} text-[25px] ml-5 font-bold text-black`}>{trans.sidebar.navigation}</span>
     </div>
   );
   const MenuIcon = <span className='text-[30px] text-black'>☰</span>
@@ -92,13 +94,13 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
       >
         <ul>
           {[
-            { href: "/home", icon: "/image/home _icon.png", label: "Home" },
-            { href: "/teammate", icon: "/image/team_icon.png", label: "Team" },
-            { href: "/videos", icon: "/image/video_icon.png", label: "Video" },
-            { href: "/youtube", icon: "/image/video_icon.png", label: 'RetroTV' },
-            { href: "/build", icon: "/image/build_icon.png", label: "Builds" },
-            { href: "/aboutus", icon: "/image/user_icon1.png", label: "About us" },
-            { href: "/settings", icon: "/image/settings_icon.png", label: "Settings" },
+            { href: "/home", icon: "/image/home _icon.png", label: trans.sidebar.home },
+            { href: "/teammate", icon: "/image/team_icon.png", label: trans.sidebar.team },
+            { href: "/videos", icon: "/image/video_icon.png", label: trans.sidebar.video },
+            { href: "/youtube", icon: "/image/video_icon.png", label: trans.sidebar.retroTV },
+            { href: "/build", icon: "/image/build_icon.png", label: trans.sidebar.builds },
+            { href: "/aboutus", icon: "/image/user_icon1.png", label: trans.sidebar.aboutUs },
+            { href: "/settings", icon: "/image/settings_icon.png", label: trans.sidebar.settings },
           ].map((item) => (
             <li key={item.href} className="mb-2">
               <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
@@ -123,11 +125,11 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
       {isOpen && ( 
         <div className="p-4 flex-shrink-0 mt-auto"> 
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/image/umaru.png" alt="Umaru-chan" width={200} height={200} className='w-full h-auto' />
+          {/* <img src="/image/umaru.png" alt="Umaru-chan" width={200} height={200} className='w-full h-auto' /> */}
         </div>
       )}
     </section>
   );
 };
 
-export default Sidebar;
+export default Sidebar;

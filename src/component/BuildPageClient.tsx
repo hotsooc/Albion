@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { motion, Transition } from 'framer-motion';
 import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
 import { Baloo_2 } from 'next/font/google';
+import useTrans from '@/hooks/useTrans';
 
 const dataSets = {
     Sword: dataSet7,
@@ -71,6 +72,7 @@ export default function BuildPageClient() {
     const [searchResults, setSearchResults] = useState<ItemType[]>([]);
     const [activeButton, setActiveButton] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
+    const { trans } = useTrans();
 
     useEffect(() => {
         const query = searchParams.get('q');
@@ -135,13 +137,38 @@ export default function BuildPageClient() {
     const buttonsToDisplay = activeButton ? [activeButton] : Object.keys(dataSets);
     const showResults = inputValue || activeButton;
 
+    const getButtonLabel = (key: string) => {
+        const mapping: { [key: string]: string } = {
+            Sword: trans.build.weaponTypes.sword,
+            Axe: trans.build.weaponTypes.axe,
+            Mace: trans.build.weaponTypes.mace,
+            Hammer: trans.build.weaponTypes.hammer,
+            'War Gloves': trans.build.weaponTypes.warGloves,
+            Bow: trans.build.weaponTypes.bow,
+            Dagger: trans.build.weaponTypes.dagger,
+            Spear: trans.build.weaponTypes.spear,
+            'Quarterstaves': trans.build.weaponTypes.quarterstaves,
+            'Shapeshifter Staves': trans.build.weaponTypes.shapeshifter,
+            'Nature Staves': trans.build.weaponTypes.nature,
+            'Fire Staves': trans.build.weaponTypes.fire,
+            'Holy Staves': trans.build.weaponTypes.holy,
+            'Arcane Staves': trans.build.weaponTypes.arcane,
+            'Frost Staves': trans.build.weaponTypes.frost,
+            'Cursed Staves': trans.build.weaponTypes.cursed,
+            Shields: trans.build.weaponTypes.shields,
+            Torches: trans.build.weaponTypes.torches,
+            Tomes: trans.build.weaponTypes.tomes,
+        };
+        return mapping[key] || key;
+    };
+
     return (
         <section className='grid grid-cols-[1fr_5fr] bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] h-auto p-4 rounded-xl shadow-xl gap-4 ml-1 mr-10'>
             <div className='flex flex-col gap-4'>
                 <div className="flex items-center bg-white rounded-full w-full overflow-hidden shadow-sm px-4">
                     <SearchOutlined className="text-black text-lg mr-2" />
                     <Input
-                        placeholder="Tìm kiếm..."
+                        placeholder={trans.common.searchPlaceholder}
                         value={inputValue}
                         onChange={handleSearch}
                         className="!border-none !shadow-none bg-transparent flex-grow h-10 focus:ring-0"
@@ -171,7 +198,7 @@ export default function BuildPageClient() {
                                         onClick={() => handleToggleDataSet(data, label)}
                                         className={`!rounded-md custom-button w-full !text-lg !font-medium !bg-sky-200 !text-blue !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
                                     >
-                                        {label}
+                                        {getButtonLabel(label)}
                                     </Button>
                                 </motion.div>
                             );
@@ -193,7 +220,7 @@ export default function BuildPageClient() {
                                         onClick={() => handleItemClick(item)}
                                         className="p-2 border rounded-md w-full hover:bg-gray-200"
                                     >
-                                        {item.name}
+                                        {(trans.items as any)[item.id]?.name || item.name}
                                     </button>
                                 </motion.div>
                             ))}
@@ -210,22 +237,19 @@ export default function BuildPageClient() {
                         initial="hidden"
                         animate="visible"
                     >
-                        <span className={`${balooFont.className} text-[30px] flex justify-center mb-2 text-center`}>Build Guide</span>
+                        <span className={`${balooFont.className} text-[30px] flex justify-center mb-2 text-center`}>{trans.build.guide}</span>
                         <div className='grid grid-cols-[1fr_4fr] gap-5'>
                             <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
-                                <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ Detail ~ </h3>
-                                <p className={`${balooFont.className} text-xl text-black`}>Name: {selectedItem.name}</p>
-                                <p className={`${balooFont.className} text-xl text-black whitespace-pre-line`}>Detail: {selectedItem.detail}</p>
-                                <p className={`${balooFont.className} text-xl text-black`}>POV: ...</p>
-                                {/* <div className='flex justify-center mt-10'>
-                                    <img src="/umaru.png" alt="Umaru-chan" width={400} height={400} />
-                                </div> */}
+                                <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ {trans.common.detail} ~ </h3>
+                                <p className={`${balooFont.className} text-xl text-black`}>{trans.common.name}: {(trans.items as any)[selectedItem.id]?.name || selectedItem.name}</p>
+                                <p className={`${balooFont.className} text-xl text-black whitespace-pre-line`}>{trans.common.detailLabel} {(trans.items as any)[selectedItem.id]?.detail || selectedItem.detail}</p>
+                                <p className={`${balooFont.className} text-xl text-black`}>{trans.build.pov} ...</p>
                             </div>
                             <div>
                                 <div className='flex flex-row justify-center gap-4'>
                                     {selectedItem.image && (
                                         <div className='bg-white rounded-xl p-4 shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>HellGate 5v5 (2v2)</span>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>{trans.build.hellgate}</span>
                                             <img
                                                 src={selectedItem.image}
                                                 alt={`${selectedItem.name} image 1`}
@@ -235,7 +259,7 @@ export default function BuildPageClient() {
                                     )}
                                     {selectedItem.image2 && (
                                         <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>Corrupted Dungeon</span>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>{trans.build.corrupted}</span>
                                             <img
                                                 src={selectedItem.image2}
                                                 alt={`${selectedItem.name} image 2`}
@@ -245,7 +269,7 @@ export default function BuildPageClient() {
                                     )}
                                     {selectedItem.image3 && (
                                         <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>OpenWorld</span>
+                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>{trans.build.openworld}</span>
                                             <img
                                                 src={selectedItem.image3}
                                                 alt={`${selectedItem.name} image 3`}
@@ -268,10 +292,10 @@ export default function BuildPageClient() {
                     </motion.div>
                 ) : (
                     <div className='flex justify-center items-center h-full'>
-                        <p className='text-gray-500 text-lg'>Vui lòng chọn một vật phẩm để xem chi tiết.</p>
+                        <p className='text-gray-500 text-lg'>{trans.build.selectItemPrompt}</p>
                     </div>
                 )}
             </div>
         </section>
     );
-}
+}

@@ -14,7 +14,10 @@ interface SnakeGameProps {
   onGoBack: () => void;
 }
 
+import useTrans from '@/hooks/useTrans';
+
 export default function SnakeGame({ onGoBack }: SnakeGameProps) {
+  const { trans } = useTrans();
   const [snake, setSnake] = useState<Coordinate[]>(INITIAL_SNAKE);
   const [food, setFood] = useState<Coordinate>(INITIAL_FOOD);
   const [direction, setDirection] = useState<Direction>('UP');
@@ -209,9 +212,9 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
         backgroundColor: '#f5f5f5', 
         minHeight: '100vh' 
     }}>
-      <h1>🐍 Rắn Săn Mồi 🐍</h1>
+      <h1>{trans.game.snakeTitle}</h1>
       <div style={{ marginBottom: '15px', fontSize: '24px', fontWeight: 'bold', color: '#333' }}>
-        Điểm: <span style={{ color: '#4CAF50' }}>{score}</span>
+        {trans.game.score}: <span style={{ color: '#4CAF50' }}>{score}</span>
       </div>
       
       <div
@@ -247,13 +250,13 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
           >
             GAME OVER!
             <div style={{ fontSize: '20px', marginTop: '10px' }}>
-                Điểm cuối cùng: {score}
+                {trans.game.finalScore}: {score}
             </div>
             <button 
               onClick={handleRestart} 
               style={{ ...buttonStyle, marginTop: '20px', backgroundColor: '#FFC107', color: '#333' }}
             >
-              Chơi Lại
+              {trans.game.playAgain}
             </button>
           </div>
         )}
@@ -261,16 +264,16 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
 
       <div style={{ marginTop: '25px', display: 'flex', gap: '15px' }}>
         <button onClick={onGoBack} style={buttonStyle}>
-          &larr; Quay lại Danh sách Game
+          {trans.game.backToGames}
         </button>
         {!isGameOver && (
             <button onClick={handleRestart} style={buttonStyle}>
-                Khởi động lại
+                {trans.game.restart}
             </button>
         )}
       </div>
       <p style={{ marginTop: '15px', fontSize: '16px', color: '#666' }}>
-        Sử dụng các phím **W** (lên), **A** (trái), **S** (xuống), **D** (phải) để di chuyển.
+        {trans.game.snakeInstructions}
       </p>
     </div>
   );

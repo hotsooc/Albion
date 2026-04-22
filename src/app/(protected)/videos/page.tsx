@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import VideoPage from '@/component/Video';
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
+import useTrans from '@/hooks/useTrans';
 
 const contentSwirlVariants: Variants = {
   hidden: {
@@ -32,6 +33,7 @@ const contentSwirlVariants: Variants = {
 
 export default function VideosPage() {
   const [isMounted, setIsMounted] = useState(false);
+  const { trans } = useTrans();
 
   useEffect(() => {
     setIsMounted(true);
@@ -45,7 +47,7 @@ export default function VideosPage() {
         variants={contentSwirlVariants}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        <Suspense fallback={<div>Đang tải video...</div>}>
+        <Suspense fallback={<div>{trans.common.loadingVideo}</div>}>
           <VideoPage />
         </Suspense>
       </motion.div>

@@ -31,12 +31,12 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
   const { changeLanguage, lang, trans } = useTrans();
 
   const categories = [
-    { name: 'Home', icon: <img src="/image/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
-    { name: 'Team', icon: <img src="/image/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
-    { name: 'Videos', icon: <img src="/image/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
-    { name: 'Builds', icon: <img src="/image/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
-    { name: 'About Us', icon: <img src="/image/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
-    { name: 'Settings', icon: <img src="/image/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
+    { name: trans.sidebar.home, icon: <img src="/image/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
+    { name: trans.sidebar.team, icon: <img src="/image/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
+    { name: trans.sidebar.video, icon: <img src="/image/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
+    { name: trans.sidebar.builds, icon: <img src="/image/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
+    { name: trans.sidebar.aboutUs, icon: <img src="/image/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
+    { name: trans.sidebar.settings, icon: <img src="/image/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
   ];
   
   useEffect(() => {
@@ -83,7 +83,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
   };
   
   const menuItems: MenuProps['items'] = [
-    { key: 'logout', label: 'Log Out', icon: <img src='/image/logout.png' alt='' width={24} height={24} /> },
+    { key: 'logout', label: trans.common.logout, icon: <img src='/image/logout.png' alt='' width={24} height={24} /> },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
@@ -104,11 +104,11 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
   } = {
     vi: {
       src: '/vietnam.png',
-      text: 'Việt Nam',
+      text: trans.common.viFull,
     },
     en: {
       src: '/united-kingdom.png',
-      text: 'English',
+      text: trans.common.enFull,
     },
   };
 
@@ -126,7 +126,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
     <div className="bg-white p-4 rounded-lg shadow-lg min-w-[300px]">
       {recentSearches.length > 0 && (
         <div className="mb-4">
-          <h3 className="text-gray-500 text-sm font-semibold mb-2">Recent</h3>
+          <h3 className="text-gray-500 text-sm font-semibold mb-2">{trans.common.recent}</h3>
           <Space size={[0, 8]} wrap>
             {recentSearches.map(tag => (
               <Tag
@@ -152,7 +152,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
       )}
       
       <div>
-        <h3 className="text-gray-500 text-sm font-semibold mb-2">Categories</h3>
+        <h3 className="text-gray-500 text-sm font-semibold mb-2">{trans.common.categories}</h3>
         <div className="grid grid-cols-2 gap-3">
           {categories.map(category => (
             <Button 
@@ -192,7 +192,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
           onOpenChange={setIsSearchDropdownVisible}
         >
           <Input
-            placeholder="Tìm kiếm..."
+            placeholder={trans.common.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onPressEnter={handleSearchSubmit}
@@ -238,9 +238,10 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch, isVantaActive, on
             className="!bg-[#97DDD9] !border-[#97DDD9] !shadow-xl hover:!bg-sky-700 !text-black !rounded-full !py-1 !px-4 !h-[40px] transition-colors"
         >
             <span className={`${balooFont.className} font-medium text-[16px]`}>
-                {isVantaActive ? 'Normal' : 'The Mist'}
+                {isVantaActive ? trans.common.normal : trans.common.theMist}
             </span>
         </Button>
+
         
         <div className="flex items-center bg-[#97DDD9] rounded-xl">
           <Dropdown menu={{ items: menuItems, onClick: handleMenuClick }} placement="bottomRight" arrow>

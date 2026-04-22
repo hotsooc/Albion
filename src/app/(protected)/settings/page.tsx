@@ -6,6 +6,7 @@ import { Input, Button, Form, message, Modal, Avatar, Upload } from 'antd';
 import { supabase } from '../../../../lib/supabase/client';
 import { LockOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { User } from '@supabase/supabase-js';
+import useTrans from '@/hooks/useTrans';
 
 type ProfileData = {
     full_name: string | null;
@@ -22,6 +23,7 @@ const Profile = () => {
     const [modal, contextHolder] = Modal.useModal();
     const isDisabled = userRole !== 'admin';
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const { trans } = useTrans();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -43,16 +45,16 @@ const Profile = () => {
                     const lastName = lastNameParts.join(' ');
                     form.setFieldsValue({ firstName, lastName, email: user.email });
                 } else {
-                    message.error("Lỗi khi lấy thông tin hồ sơ. Vui lòng kiểm tra kết nối hoặc thiết lập profiles.");
+                    message.error(trans.settings.fetchProfileError);
                 }
             }
         };
         fetchUserData();
-    }, [form]);
+    }, [form, trans.settings.fetchProfileError]);
     
    const handleAvatarUpload = async (info: any) => {
     if (!user) {
-        message.error('Người dùng chưa được xác thực.');
+        message.error(trans.settings.unauthenticatedError);
         return;
     }
 
@@ -72,7 +74,7 @@ const Profile = () => {
         });
 
     if (uploadError) {
-        message.error(`Lỗi tải ảnh: ${uploadError.message}`);
+        message.error(`${trans.common.loading} Error: ${uploadError.message}`);
         setLoading(false);
         return;
     }
@@ -86,19 +88,19 @@ const Profile = () => {
             .eq('id', user.id);
     
         if (updateError) {
-            message.error(`Lỗi cập nhật hồ sơ: ${updateError.message}`);
+            message.error(`Error: ${updateError.message}`);
         } else {
             setAvatarUrl(publicUrl);
-            message.success('Tải ảnh đại diện thành công!');
+            message.success(trans.settings.uploadAvatarSuccess);
         }
     } else {
-        message.error('Không thể lấy URL ảnh công khai.');
+        message.error(trans.settings.urlError);
     }
 
     setLoading(false);
 };
     const handleRemoveAvatar = async () => {
-        if (!user) return message.error('Người dùng chưa được xác thực.');
+        if (!user) return message.error(trans.settings.unauthenticatedError);
         setLoading(true);
         
         const avatarPath = (avatarUrl as String).split('public/avatars/')[1];
@@ -108,7 +110,7 @@ const Profile = () => {
             .remove([avatarPath]);
     
         if (deleteError) {
-            message.error(`Lỗi xóa ảnh: ${deleteError.message}`);
+            message.error(`Error: ${deleteError.message}`);
             setLoading(false);
             return;
         }
@@ -119,10 +121,10 @@ const Profile = () => {
             .eq('id', user.id);
     
         if (updateError) {
-            message.error(`Lỗi cập nhật hồ sơ: ${updateError.message}`);
+            message.error(`Error: ${updateError.message}`);
         } else {
             setAvatarUrl(null);
-            message.success('Đã xóa ảnh đại diện thành công!');
+            message.success(trans.settings.removeAvatarSuccess);
         }
     
         setLoading(false);
@@ -130,7 +132,7 @@ const Profile = () => {
 
     const updateProfile = async (fullName: string) => {
         if (!user) {
-            message.error("Người dùng chưa được xác thực.");
+            message.error(trans.settings.unauthenticatedError);
             return;
         }
 
@@ -154,7 +156,7 @@ const Profile = () => {
 
     const onFinish = async (values: any) => {
         if (isDisabled) {
-            message.error('Bạn không có quyền cập nhật hồ sơ này.');
+            message.error(trans.settings.permissionDenied);
             return;
         }
 
@@ -162,9 +164,9 @@ const Profile = () => {
         const fullName = `${values.firstName} ${values.lastName}`.trim();
         try {
             await updateProfile(fullName);
-            message.success('Cập nhật hồ sơ thành công!');
+            message.success(trans.settings.updateProfileSuccess);
         } catch (error: any) {
-            message.error('Lỗi khi cập nhật hồ sơ: ' + error.message);
+            message.error('Error: ' + error.message);
         } finally {
             setLoading(false);
         }
@@ -173,16 +175,16 @@ const Profile = () => {
     const handleChangePassword = () => {
         let newPassword = '';
         modal.confirm({
-            title: 'Thay đổi mật khẩu',
+            title: trans.settings.changePasswordTitle,
             content: (
                 <div>
-                    <p>Vui lòng nhập mật khẩu mới:</p>
+                    <p>{trans.settings.enterNewPassword}</p>
                     <Input.Password onChange={(e) => (newPassword = e.target.value)} />
                 </div>
             ),
             onOk: async () => {
                 if (!newPassword || newPassword.length < 6) {
-                    message.error('Mật khẩu phải có ít nhất 6 ký tự.');
+                    message.error(trans.settings.passwordLengthError);
                     return Promise.reject();
                 }
                 setLoading(true);
@@ -190,10 +192,10 @@ const Profile = () => {
                 setLoading(false);
 
                 if (error) {
-                    message.error('Lỗi khi đổi mật khẩu: ' + error.message);
+                    message.error('Error: ' + error.message);
                     return Promise.reject();
                 } else {
-                    message.success('Mật khẩu đã được đổi thành công!');
+                    message.success(trans.settings.passwordChangeSuccess);
                 }
             },
         });
@@ -201,15 +203,15 @@ const Profile = () => {
 
     const handleDeleteAccount = async () => {
         if (!user || !user.id) {
-            message.error('Không tìm thấy người dùng.');
+            message.error(trans.settings.userNotFound);
             return;
         }
         modal.confirm({
-            title: 'Bạn có chắc chắn muốn xóa tài khoản?',
-            content: 'Thao tác này sẽ xóa vĩnh viễn tài khoản của bạn và không thể hoàn tác.',
-            okText: 'Xóa',
+            title: trans.settings.deleteAccountConfirm,
+            content: trans.settings.deleteAccountWarning,
+            okText: trans.settings.deleteAccountButton,
             okType: 'danger',
-            cancelText: 'Hủy',
+            cancelText: trans.common.cancel,
             onOk: async () => {
                 setLoading(true);
                 try {
@@ -220,12 +222,12 @@ const Profile = () => {
                         throw error;
                     }
                     await supabase.auth.signOut();
-                    message.success('Tài khoản đã được xóa thành công.');
+                    message.success(trans.settings.deleteAccountSuccess);
                     setTimeout(() => {
                         router.push('/login');
                     }, 1000);
                 } catch (err: any) {
-                    message.error('Lỗi khi xóa tài khoản: ' + err.message);
+                    message.error('Error: ' + err.message);
                 } finally {
                     setLoading(false);
                 }
@@ -237,8 +239,8 @@ const Profile = () => {
         <div className="bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] p-8 rounded-xl shadow-xl max-w-screen ml-1 mr-10">
             {userRole === 'admin' && (
                 <div className="mb-8 p-6 bg-blue-100 border border-blue-400 rounded-lg">
-                    <h3 className="text-xl font-bold text-blue-700">Admin Dashboard</h3>
-                    <p className="mt-2 text-blue-600">Bạn có quyền truy cập quản trị.</p>
+                    <h3 className="text-xl font-bold text-blue-700">{trans.settings.adminDashboard}</h3>
+                    <p className="mt-2 text-blue-600">{trans.settings.adminAccess}</p>
                 </div>
             )}
             <Form
@@ -250,21 +252,21 @@ const Profile = () => {
             >
                 <div className='flex justify-between items-start mb-0'>
                     <div>
-                        <h2 className="text-xl font-bold mb-6 text-gray-800">My Profile</h2>
+                        <h2 className="text-xl font-bold mb-6 text-gray-800">{trans.settings.myProfile}</h2>
                         <div className="flex w-[470px] space-x-4 gap-5">
                             <Form.Item
                                 name="firstName"
-                                label="First Name"
+                                label={trans.settings.firstName}
                                 className="flex-1"
-                                rules={[{ required: true, message: 'Please enter your first name!' }]}
+                                rules={[{ required: true, message: trans.settings.messageFirstName }]}
                             >
                                 <Input size="large" disabled={isDisabled} />
                             </Form.Item>
                             <Form.Item
                                 name="lastName"
-                                label="Last Name"
+                                label={trans.settings.lastName}
                                 className="flex-1"
-                                rules={[{ required: true, message: 'Please enter your last name!' }]}
+                                rules={[{ required: true, message: trans.settings.messageLastName }]}
                             >
                                 <Input size="large" disabled={isDisabled} />
                             </Form.Item>
@@ -282,7 +284,7 @@ const Profile = () => {
                                 showUploadList={false}
                                 onChange={handleAvatarUpload}
                             >
-                                <Button icon={<UploadOutlined />} className="!w-[200px] !border-none !bg-[#97DDD9] !h-[46px] !text-[18px] !font-bold !text-black !hover:bg-[#97DDD9]" size="large">Upload</Button>
+                                <Button icon={<UploadOutlined />} className="!w-[200px] !border-none !bg-[#97DDD9] !h-[46px] !text-[18px] !font-bold !text-black !hover:bg-[#97DDD9]" size="large">{trans.settings.upload}</Button>
                             </Upload>
                             <Button
                                 danger
@@ -291,28 +293,15 @@ const Profile = () => {
                                 disabled={!avatarUrl}
                                 className='!text-[18px] !w-[200px]'
                             >
-                                Remove
+                                {trans.settings.remove}
                             </Button>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-6">
-                    <h2 className="text-xl font-semibold text-gray-700">Account Security</h2>
-                    {/* <Form.Item label="Email" className="mb-0">
-                        <div className="flex items-center !justify-between !gap-5">
-                            <div className='w-auto'>
-                                <Input
-                                    value={user?.email || ''}
-                                    readOnly
-                                    className="flex-1"
-                                    size="large"
-                                    suffix={<LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />}
-                                />
-                            </div>
-                        </div>
-                    </Form.Item> */}
-                    <Form.Item label="Password" className="mb-0">
+                    <h2 className="text-xl font-semibold text-gray-700">{trans.settings.accountSecurity}</h2>
+                    <Form.Item label={trans.settings.password} className="mb-0">
                         <div className="flex items-center !justify-between !gap-5">
                             <div className='w-auto'>
                                 <Input.Password
@@ -323,28 +312,28 @@ const Profile = () => {
                                     iconRender={() => <LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />}
                                 />
                             </div>
-                            <Button onClick={handleChangePassword} className="ml-4 !bg-[#97DDD9] !border-none" size="large">Change Password</Button>
+                            <Button onClick={handleChangePassword} className="ml-4 !bg-[#97DDD9] !border-none" size="large">{trans.settings.changePassword}</Button>
                         </div>
                     </Form.Item>
                 </div>
 
                 <div className="space-y-6">
-                    <h2 className="text-xl font-semibold text-gray-700">Support Access</h2>
+                    <h2 className="text-xl font-semibold text-gray-700">{trans.settings.supportAccess}</h2>
                     <div className="flex justify-between items-center bg-white p-5 rounded-md border border-red-400">
                         <div className="space-y-1">
-                            <h3 className="text-red-500 font-bold text-lg">Delete my account</h3>
-                            <p className="text-sm text-gray-600">Permanently delete the account and remove access from all workspaces.</p>
+                            <h3 className="text-red-500 font-bold text-lg">{trans.settings.deleteAccountTitle}</h3>
+                            <p className="text-sm text-gray-600">{trans.settings.deleteAccountDesc}</p>
                         </div>
-                        <Button danger onClick={handleDeleteAccount} size="large">Delete Account</Button>
+                        <Button danger onClick={handleDeleteAccount} size="large">{trans.settings.deleteAccountButton}</Button>
                     </div>
                 </div>
 
                 <div className="flex justify-end space-x-4 pt-6 gap-5">
                     <Button onClick={() => router.back()} size="large" className='!w-[91px]'>
-                        Cancel
+                        {trans.common.cancel}
                     </Button>
                     <Button type="primary" htmlType="submit" className='!bg-[#97DDD9] !border-none !text-black !w-[91px]' loading={loading} size="large">
-                        Save
+                        {trans.common.save}
                     </Button>
                 </div>
             </Form>
@@ -353,4 +342,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default Profile;

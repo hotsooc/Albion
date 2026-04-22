@@ -6,9 +6,12 @@ import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import CommentItem from './CommentItem';
 
+import useTrans from '@/hooks/useTrans';
+
 const { TextArea } = Input;
 
 const CommentSection = ({ videoId }: { videoId: string }) => {
+    const { trans } = useTrans();
     const [comments, setComments] = useState<any[]>([]);
     const [value, setValue] = useState('');
     const [user, setUser] = useState<any>(null);
@@ -26,7 +29,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .order('created_at', { ascending: true });
 
         if (error) {
-            message.error("Lỗi khi tải bình luận.");
+            message.error(trans.comment.loadError);
         } else {
             setComments(data);
         }
@@ -55,15 +58,15 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
         if (videoId) {
             fetchData();
         }
-    }, [videoId]);
+    }, [videoId, trans]);
 
     const handleSubmit = async () => {
         if (!value.trim()) {
-            message.warning("Vui lòng nhập bình luận.");
+            message.warning(trans.comment.emptyWarning);
             return;
         }
         if (!user) {
-            message.error("Bạn cần đăng nhập để bình luận.");
+            message.error(trans.comment.loginRequired);
             return;
         }
 
@@ -80,12 +83,12 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .single();
 
         if (error) {
-            message.error("Lỗi khi gửi bình luận.");
+            message.error(trans.comment.submitError);
         } else {
             if (data) {
                 setComments([...comments, data]);
                 setValue('');
-                message.success("Bình luận đã được gửi thành công!");
+                message.success(trans.comment.submitSuccess);
             }
         }
     };
@@ -97,10 +100,10 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .eq('id', commentId);
 
         if (error) {
-            message.error("Lỗi khi xóa bình luận.");
+            message.error(trans.comment.deleteError);
         } else {
             setComments(comments.filter(c => c.id !== commentId));
-            message.success("Bình luận đã được xóa.");
+            message.success(trans.comment.deleteSuccess);
         }
     };
 
@@ -111,11 +114,11 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             .eq('id', commentId);
 
         if (error) {
-            message.error("Lỗi khi cập nhật bình luận.");
+            message.error(trans.comment.updateError);
             return false;
         } else {
             setComments(comments.map(c => c.id === commentId ? { ...c, content: newContent } : c));
-            message.success("Bình luận đã được cập nhật.");
+            message.success(trans.comment.updateSuccess);
             return true;
         }
     };
@@ -139,7 +142,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                         />
                     ))
                 ) : (
-                    <p className="text-black italic">Chưa có bình luận nào</p>
+                    <p className="text-black italic">No comments yet</p>
                 )}
             </div>
 
@@ -152,7 +155,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                 <TextArea
                     rows={1}
                     className="flex-grow rounded-full !text-black px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder={user ? "Viết bình luận..." : "Đăng nhập để bình luận..."}
+                    placeholder={user ? trans.comment.placeholder : trans.comment.loginRequired}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     onPressEnter={(e) => {
@@ -169,7 +172,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                     disabled={!user || value.trim().length === 0}
                     className="!bg-[#97DDD9] !text-black !border-none"
                 >
-                    Gửi
+                    {trans.comment.post}
                 </Button>
             </div>
         </div>
