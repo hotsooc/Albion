@@ -47,7 +47,7 @@ export default function VideosPage() {
         variants={contentSwirlVariants}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        <Suspense fallback={<div>{trans.common.loadingVideo}</div>}>
+        <Suspense fallback={<div>{trans.common.loading}</div>}>
           <VideoPage />
         </Suspense>
       </motion.div>
