@@ -7,7 +7,6 @@ export type ItemType = {
   image3: string;
 };
 
-// https://www.facebook.com/khanh.duy.57514
 
 export const dataSet1: ItemType[] = [
   { id: '1', name: 'Bow', detail: `Cung rác
@@ -195,16 +194,6 @@ export const dataSet16: ItemType[] = [
   { id: '128', name: 'Rotcaller Staff', detail: '', image: '', image2: '', image3: '' },
 ];
 
-// export const dataSet17: ItemType[] = [
-//   { id: '129', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '130', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '131', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '132', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '133', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '134', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '135', name: '', detail: '', image: '', image2: '', image3: '' },
-//   { id: '136', name: '', detail: '', image: '', image2: '', image3: '' },
-// ];
 
 export const dataSet18: ItemType[] = [
   { id: '137', name: 'Shield', detail: '', image: '', image2: '', image3: '' },

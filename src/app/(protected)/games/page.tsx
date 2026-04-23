@@ -50,7 +50,6 @@ export default function GamePage() {
   );
 }
 
-// Style cơ bản cho button
 const buttonStyle: React.CSSProperties = {
   padding: '10px 20px',
   fontSize: '18px',

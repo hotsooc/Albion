@@ -132,4 +132,4 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
   );
 };
 
-export default Sidebar;
+export default Sidebar;

@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// import { Baloo_2 } from 'next/font/google';
 
-// const balooFont = Baloo_2({
-//   subsets: ['vietnamese'],
-//   weight: ['800'],
-// });
 
 export default function Home() {
   const [showFullImage, setShowFullImage] = useState(true);

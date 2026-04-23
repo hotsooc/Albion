@@ -54,7 +54,6 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
      maskClosable={false}
      zIndex={100}
      destroyOnClose={true}
-    //  title="Thông tin chi tiết"
    >
      <div className='grid grid-cols-[2fr_4fr] gap-8'>
        <div>
@@ -167,7 +166,6 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
     });
  };
 
- // Sync data from Supabase when component loads and when teamKeys change
  useEffect(() => {
     const fetchData = async () => {
       const { data: existingData, error: fetchError } = await supabase
@@ -195,7 +193,6 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
     fetchData();
  }, [teamKeys]);
 
- // Save data to Supabase
  useEffect(() => {
     const saveToSupabase = async () => {
       if (isLoading || Object.keys(allData).length === 0) return;

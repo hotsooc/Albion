@@ -1,7 +1,5 @@
-// SnakeGame.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 
-// Cài đặt game
 const GRID_SIZE = 20; // Tăng kích thước lưới
 const INITIAL_SNAKE = [{ x: 10, y: 10 }, { x: 10, y: 11 }];
 const INITIAL_FOOD = { x: 5, y: 5 };
@@ -24,7 +22,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
   const [isGameOver, setIsGameOver] = useState(false);
   const [score, setScore] = useState(0);
 
-  // Hàm tạo thức ăn ngẫu nhiên
   const createFood = (currentSnake: Coordinate[]): Coordinate => {
     let newFood: Coordinate;
     do {
@@ -36,7 +33,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
     return newFood;
   };
 
-  // Logic di chuyển
   const moveSnake = useCallback(() => {
     if (isGameOver) return;
 
@@ -58,7 +54,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
           break;
       }
 
-      // 1. Kiểm tra va chạm với tường
       if (
         newHead.x < 0 || newHead.x >= GRID_SIZE ||
         newHead.y < 0 || newHead.y >= GRID_SIZE
@@ -67,7 +62,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
         return prevSnake;
       }
 
-      // 2. Kiểm tra va chạm với thân
       if (prevSnake.slice(1).some(segment => segment.x === newHead.x && segment.y === newHead.y)) {
         setIsGameOver(true);
         return prevSnake;
@@ -75,9 +69,7 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
 
       const newSnake = [newHead, ...prevSnake];
 
-      // 3. Kiểm tra ăn thức ăn
       if (newHead.x === food.x && newHead.y === food.y) {
-        // Tạo thức ăn mới, truyền trạng thái rắn hiện tại để tránh thức ăn trùng rắn
         setFood(createFood(newSnake)); 
         setScore(s => s + 10);
         return newSnake; // Giữ nguyên đuôi (rắn dài ra)
@@ -88,7 +80,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
     });
   }, [direction, isGameOver, food]);
 
-  // Thiết lập vòng lặp game
   useEffect(() => {
     if (isGameOver) return;
 
@@ -96,7 +87,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
     return () => clearInterval(gameLoop);
   }, [moveSnake, isGameOver]);
 
-  // Xử lý phím bấm (Sửa lỗi quay ngược 180 độ)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isGameOver) return;
@@ -121,7 +111,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
           break;
       }
       
-      // Chỉ cập nhật hướng nếu hợp lệ
       if (newDirection) {
           setDirection(newDirection);
       }
@@ -131,7 +120,6 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [direction, isGameOver]); 
   
-  // Reset game
   const handleRestart = () => {
     setSnake(INITIAL_SNAKE);
     setFood(INITIAL_FOOD);
@@ -140,13 +128,11 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
     setScore(0);
   };
 
-  // Hàm render ô lưới (Làm đẹp hơn)
   const renderCell = (x: number, y: number) => {
     const isSnake = snake.some(segment => segment.x === x && segment.y === y);
     const isFood = food.x === x && food.y === y;
     const isHead = snake[0].x === x && snake[0].y === y;
 
-    // Base cell style
     const cellStyle: React.CSSProperties = {
         width: '20px',
         height: '20px',

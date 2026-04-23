@@ -136,4 +136,4 @@ const SettingPage = () => {
     );
 }
 
-export default SettingPage;
+export default SettingPage;

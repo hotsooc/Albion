@@ -3,7 +3,6 @@ const fs = require('fs');
 
 const items = JSON.parse(fs.readFileSync('d:\\\\Code làm việc\\\\test\\\\Albion\\\\src\\\\items.json', 'utf8'));
 
-// Function to translate common phrases for items
 function translateItemDetail(detail) {
     let d = detail.toLowerCase();
     if (d.includes('tốt')) detail = detail.replace(/tốt/gi, 'good');
