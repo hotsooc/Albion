@@ -21,7 +21,11 @@ export const EnglishScript = {
         logout: 'Log Out',
         theMist: 'The Mist',
         normal: 'Normal',
-        submit: 'Submit'
+        submit: 'Submit',
+        error: 'Error',
+        success: 'Success',
+        warning: 'Warning',
+        info: 'Info'
     },
     login: {
         title: 'Welcome to XHCN',
@@ -93,10 +97,13 @@ export const EnglishScript = {
         messageUrl: 'Please enter the YouTube URL!',
         messageUrlInvalid: 'Please enter a valid URL!',
         messageDesc: 'Please enter a description!',
-        untitled: 'Untitled',
-        noDescription: 'No description provided.',
         general: 'General',
-        thumbnailError: 'Could not create thumbnail for video: {url}'
+        thumbnailError: 'Could not create thumbnail for video: {url}',
+        back: 'Back',
+        author: 'Author:',
+        notFound: 'Video not found.',
+        untitled: 'Untitled',
+        unknownAuthor: 'Unknown Author'
     },
     comment: {
         loadError: 'Error loading comments.',
@@ -122,7 +129,13 @@ export const EnglishScript = {
         snakeInstructions: 'Use **W** (up), **A** (left), **S** (down), **D** (right) keys to move.',
         pacmanInstructions: 'Use **W A S D** keys to move. Ghost speed is **{speed}ms**.',
         youWin: 'YOU WIN! 🎉',
-        maxScore: 'Max Score'
+        maxScore: 'Max Score',
+        gameOver: 'GAME OVER! 💀',
+        gameList: '🎮 Game List 🎮',
+        selectGame: 'Choose a game to start:',
+        snakeName: '🐍 Snake Game',
+        pacmanName: '🟡 Pac-Man',
+        demoNote: '*These are simple versions to illustrate the structure.'
     },
     youtube: {
         placeholder: 'Paste YouTube link here...'
@@ -212,7 +225,8 @@ export const EnglishScript = {
         retroTV: 'RetroTV',
         builds: 'Builds',
         aboutUs: 'About Us',
-        settings: 'Settings'
+        settings: 'Settings',
+        dashboard: 'Dashboard'
     },
     footer: {
         directory: 'Directory:',
@@ -223,315 +237,315 @@ export const EnglishScript = {
     items: {
     "1": {
         "name": "Bow",
-        "detail": "Cung rác\r\n    good cho pvp 1v1 vì lượng dmg deal good và quite cơ động"
+        "detail": "Underwhelming bow.\nGood for 1v1 PvP due to solid damage output and decent mobility."
     },
     "2": {
         "name": "Bow Of Badon",
-        "detail": "Cung Sét\r\n    good cho các giao tranh nhỏ lẻ như SC, 5v5, ... dmg deal quite good và có cơ chế làm gián đoạn cast spell của người chơi"
+        "detail": "Lightning Bow.\nGreat for small-scale skirmishes like SC, 5v5, etc. Deals good damage and has a mechanic to interrupt enemy spell casting."
     },
     "3": {
         "name": "MistPiercer",
-        "detail": "Cung Chim\r\n    good cho các giao tranh nhỏ lẻ như SC, Road Avalonian, ... dmg deal good nhưng cần CC cứng từ team"
+        "detail": "Bird Bow.\nEffective in small-scale fights like SC or Avalonian Roads. High damage but requires hard CC support from the team."
     },
     "4": {
         "name": "Skystrider Bow",
-        "detail": "Cung Sét v2\r\n    quite good cho solo player với lượng dmg ổn và cơ chế miễn nhiễm sát thương khi đứng trên không quite ngầu"
+        "detail": "Lightning Bow v2.\nQuite good for solo players with stable damage and a cool airborne damage immunity mechanic."
     },
     "5": {
         "name": "Walling Bow",
-        "detail": "Cung Xuyên Thấu\r\n    good cho các giao tranh lớn như ZvZ, Road Avalonian, ... dmg deal good nếu biết chọn góc bắn suitable với cơ chế càng xuyên qua nhiều người dmg càng lớn"
+        "detail": "Piercing Bow.\nExcellent for large-scale battles like ZvZ or Avalonian Roads. High damage potential if you can line up shots; damage increases with the number of enemies pierced."
     },
     "6": {
         "name": "Whispering Bow",
-        "detail": "Đại bác tầm xa\r\n    Dmg deal quite good nếu được free shot nhưng very mỏng và cần cover very nhiều từ team"
+        "detail": "Long-range Cannon.\nDeals great damage if left unchecked (free shot), but very squishy and requires significant protection from the team."
     },
     "7": {
         "name": "WarBow",
-        "detail": "Cung Rỉa\r\n    quite yếu khi đem đi fight những content lớn và hầu như chỉ được chơi ở corrupted dungeon, 2v2"
+        "detail": "Poke Bow.\nRelatively weak in large-scale content; primarily used in Corrupted Dungeons or 2v2."
     },
     "8": {
         "name": "LongBow",
-        "detail": "Cung PVE\r\n    very strong ở khoản clear mob và dmg deal quite good nếu như team có CC cứng"
+        "detail": "PvE Bow.\nExtremely strong at clearing mobs and deals good damage if the team provides hard CC."
     },
     "9": {
         "name": "Dagger",
-        "detail": "Dmg deal ổn và very strong với các content solo boss.\r\n    Có các build 1shot quite dị nên thử qua (Khi đã master còn không thì +1 video funny moment vì cơ chế tự mất máu theo thời gian)"
+        "detail": "Decent damage and very strong for solo boss content.\nSupports unique one-shot builds (requires high mastery, otherwise you'll just end up in a 'funny moment' video due to the self-damaging mechanic)."
     },
     "10": {
         "name": "DaggerPair",
-        "detail": "Dmg deal ổn (Có bleed khi E) và quite được ưa chuộng khi đi gank vì very dễ dismount địch"
+        "detail": "Decent damage (applies bleed with E). Popular for ganking as it easily dismounts targets."
     },
     "11": {
         "name": "DeathGivers",
-        "detail": "Dmg deal good và very suitable với những người có \"bản năng sát thủ\".\r\n    Bonus: Ngoài ra có very nhiều radar player ưa chuộng trong the Mist"
+        "detail": "High damage output, perfect for players with an 'assassin's instinct'.\nBonus: Highly favored by 'radar' players in The Mists."
     },
     "12": {
         "name": "DemonFang",
-        "detail": "Dmg deal ổn và suitable với các content lớn như ZvZ"
+        "detail": "Decent damage, suitable for large-scale content like ZvZ."
     },
     "13": {
         "name": "Bloodletter",
-        "detail": "quite hoàn hảo khi có thể tham dự hầu hết mọi content có khả năng dứt điểm với set 1shot hay đơn giản là set build tank để quẩy trong 1vX"
+        "detail": "Highly versatile; fits almost any content. Capable of executing targets with one-shot builds or serving as a mobile tank in 1vX situations."
     },
     "14": {
         "name": "BridledFury",
-        "detail": "Dmg deal good khi đã master (spec > 400) suitable cho ZvZ"
+        "detail": "High damage potential once mastered (400+ spec). Well-suited for ZvZ."
     },
     "15": {
         "name": "Claws",
-        "detail": "suitable với các content đi gank và có thể là corrupted dungeon"
+        "detail": "Ideal for ganking and sometimes used in Corrupted Dungeons."
     },
     "16": {
         "name": "TwinSlayer",
-        "detail": "Nếu bạn đã chơi Talon thì cây này suitable với bạn"
+        "detail": "If you enjoy Talon-style gameplay, this is the weapon for you."
     },
     "17": {
         "name": "Spear",
-        "detail": "Thích hợp cho solo (Mist, Openworld, Corrupted)"
+        "detail": "Great for solo play (Mists, Open World, Corrupted Dungeons)."
     },
     "18": {
         "name": "Pike",
-        "detail": "strong ở khoảng solo, dồn sát thương 1 nhịp, suitable content Mist, Corrupted"
+        "detail": "Strong solo potential with high burst damage. Suitable for Mists and Corrupted Dungeons."
     },
     "19": {
         "name": "Glaive",
-        "detail": "suitable content Hellgate 2v2 hoặc 5v5, cô lập với heal dứt điểm mục tiêu còn lại"
+        "detail": "Excellent for 2v2 or 5v5 Hellgates; great for isolating targets from their healer to finish them off."
     },
     "20": {
         "name": "Heron Spear",
-        "detail": "suitable nhất content SC, đi cùng LongBow hoặc Bloodletter, có khả năng fight outnumbered"
+        "detail": "Best for SC content when paired with LongBow or Bloodletter. Strong outnumbered fighting capability."
     },
     "21": {
         "name": "Spirit Hunter",
-        "detail": "suitable đội hình 1-shot"
+        "detail": "A core component for one-shot team compositions."
     },
     "22": {
         "name": "Trinity Spear",
-        "detail": "suitable với solo (corrupted)"
+        "detail": "Well-suited for solo Corrupted Dungeons."
     },
     "23": {
         "name": "DayBreaker",
-        "detail": "suitable với content đông người, MDPS khỏe, E xóa buff strong"
+        "detail": "Effective in group content. High MDPS and a powerful E that purges enemy buffs."
     },
     "24": {
         "name": "Rift Glaive",
-        "detail": "Cần tối thiểu 3 cây trong 1 team, team 1-shot"
+        "detail": "Requires at least 3 players in a team; essential for one-shot compositions."
     },
     "25": {
         "name": "Quarterstaff",
-        "detail": "suitable cho solo"
+        "detail": "Suitable for solo play."
     },
     "26": {
         "name": "Iron-clad Staff",
-        "detail": "useless"
+        "detail": "Trash tier."
     },
     "27": {
         "name": "Double Bladed Staff",
-        "detail": "suitable content gank"
+        "detail": "Excellent for ganking content."
     },
     "28": {
         "name": "Black Monk Stave",
-        "detail": "commonly used trong tank boss HCE"
+        "detail": "Commonly used for tanking bosses in HCE."
     },
     "29": {
         "name": "Soulscythe",
-        "detail": "Thường fight trong ZvZ, hoặc Hellgate 2v2 oneshot"
+        "detail": "Typically used in ZvZ or one-shot Hellgate 2v2 compositions."
     },
     "30": {
         "name": "Staff of Balance",
-        "detail": "Thường fight trong ZvZ, hoặc Hellgate 2v2 oneshot"
+        "detail": "Commonly found in ZvZ or one-shot Hellgate 2v2 setups."
     },
     "31": {
         "name": "Grailseeker",
-        "detail": "Thường fight trong Hellgate 2v2 oneshot chung với Dagger"
+        "detail": "Usually paired with a Dagger for one-shot 2v2 Hellgates."
     },
     "32": {
         "name": "Phantom Twinblade",
-        "detail": "Chỉ chơi được trong The Depth, không tính tiền"
+        "detail": "Only viable in The Depths; otherwise not worth mentioning."
     },
     "33": {
         "name": "Prowling Staff",
-        "detail": "suitable chơi solo, đặc biệt là trong the Mist"
+        "detail": "Ideal for solo play, especially in The Mists."
     },
     "34": {
         "name": "Rootbound Staff",
-        "detail": "fight team good với vai trò cover, hold kẻ địch, tăng heal good, shield"
+        "detail": "Strong team utility: provides cover, crowd control, increased healing, and shields."
     },
     "35": {
         "name": "Primal Staff",
-        "detail": "fight với vai trò Sub Tank, gây CC nhiều, áp lực hàng sau good"
+        "detail": "Functions as a Sub-Tank; provides heavy CC and pressure on the enemy backline."
     },
     "36": {
         "name": "Bloodmoon Staff",
-        "detail": "Khả năng 1vX, 2vX cực good, fight team vẫn ổn, vai trò Flex"
+        "detail": "Exceptional 1vX and 2vX potential. Versatile (Flex role) and performs well in team fights."
     },
     "37": {
         "name": "Hellspawn Staff",
-        "detail": "Vũ khí RDPS sát thương cao cần biết tận dung nội tại + skill hợp lí, nhưng hơi giấy ở dạng biến hình"
+        "detail": "High damage RDPS weapon. Requires precise passive and skill management; quite fragile in shapeshift form."
     },
     "38": {
         "name": "Earthrune Staff",
-        "detail": "Vai trò Tanker, thường chỉ dùng trong ZvZ"
+        "detail": "Tank role, primarily used in ZvZ."
     },
     "39": {
         "name": "Lightcaller Staff",
-        "detail": "Vũ khí RDPS sát thương cao, cần biết tận dụng nội tại good, chống chịu tầm trung"
+        "detail": "High burst RDPS weapon. Requires good passive management; average survivability."
     },
     "40": {
         "name": "Stillgaze Staff",
-        "detail": "Vũ khí fight team good với vai trò Cover, khả năng giảm heal, hold kẻ địch"
+        "detail": "Effective team weapon for support/cover; features healing reduction and enemy displacement."
     },
     "41": {
         "name": "Nature Staff",
-        "detail": "Vũ khí top tier của Nature, suitable với team 3 trở lên, với team trên 5 cần dùng W 5 để tận dụng good được khả năng heal AOE theo stack của E"
+        "detail": "Top-tier Nature weapon for groups of 3+. For teams over 5, use W5 to maximize AoE healing stacks from E."
     },
     "42": {
         "name": "Great Nature Staff",
-        "detail": "Chỉ suitable với fight 2v2"
+        "detail": "Only recommended for 2v2 content."
     },
     "43": {
         "name": "Wild Staff",
-        "detail": "Heal mức quite, suitable fight team nhưng cần xử lí good E vì chiêu cố định vị trí và có cast time"
+        "detail": "Decent healing for team play, but requires skill to land E due to its fixed position and cast time."
     },
     "44": {
         "name": "Druidic Staff",
-        "detail": "Chỉ dùng để solo farm"
+        "detail": "Primarily used for solo farming."
     },
     "45": {
         "name": "Blight Staff",
-        "detail": "Vũ khí top tier của Nature, team 3 trở lên fight cực khỏe"
+        "detail": "Top-tier Nature weapon. Extremely powerful in groups of 3 or more."
     },
     "46": {
         "name": "Rampant Staff",
-        "detail": "Chỉ dùng trong ZvZ"
+        "detail": "Exclusively used in ZvZ."
     },
     "47": {
         "name": "Ironroot Staff",
-        "detail": "Chỉ suitable 2v2, đồi hỏi có Spec của Nature cao (500 trở lên)"
+        "detail": "Suited for 2v2. Requires high Nature mastery (500+ spec)."
     },
     "48": {
         "name": "Forgebark Staff",
-        "detail": "fight team 3-5 good với mức heal quite, tạo sheild, nhược điểm là hồi chiêu 30s của E"
+        "detail": "Good for 3-5 man teams; provides decent healing and shields. Downside is the long 30s cooldown on E."
     },
     "50": {
         "name": "Claymore",
-        "detail": "Thường chỉ dùng trong Hellgate 2v2"
+        "detail": "Mainly used in 2v2 Hellgates."
     },
     "51": {
         "name": "Dual Swords",
-        "detail": "Có khả năng solo good"
+        "detail": "Possesses strong solo capability."
     },
     "52": {
         "name": "Clarent Blade",
-        "detail": "commonly used trong fight SC"
+        "detail": "Commonly used in SC compositions."
     },
     "53": {
         "name": "Carving Sword",
-        "detail": "Debuff strong, suitable fight Hellgate, SC,..."
+        "detail": "Strong debuff potential. Excellent for Hellgates, SC, etc."
     },
     "54": {
         "name": "Galatine Pair",
-        "detail": "useless đừng coi youtube rồi ảo"
+        "detail": "Useless; don't be fooled by YouTube highlights."
     },
     "55": {
         "name": "Kingmaker",
-        "detail": "Đòi hỏi kĩ năng cao, bình tĩnh"
+        "detail": "Requires high skill and a calm head."
     },
     "56": {
         "name": "Infinity Blade",
-        "detail": "Neft xong phế xD"
+        "detail": "Heavily nerfed; currently trash tier."
     },
     "57": {
         "name": "Battleaxe",
-        "detail": "Farm solo khỏe, content solo good"
+        "detail": "Excellent for solo farming and solo content."
     },
     "58": {
         "name": "Greataxe",
-        "detail": "fight nhỏ mức ổn"
+        "detail": "Average performance in small-scale fights."
     },
     "59": {
         "name": "Halberd",
-        "detail": "commonly used trong fight Hellgate"
+        "detail": "Frequently used in Hellgates."
     },
     "60": {
         "name": "Carrioncaller",
-        "detail": "commonly used trong fight Hellgate"
+        "detail": "Frequently used in Hellgates."
     },
     "61": {
         "name": "Infernal Scythe",
-        "detail": "commonly used trong CS, ZvZ, strong ở khả năng dứt điểm"
+        "detail": "Used in CS and ZvZ; strong finishing/execution capability."
     },
     "62": {
         "name": "Bear Paws",
-        "detail": "Gank good, fight team vẫn ổn nếu biết ra vào hợp lí"
+        "detail": "Great for ganking; decent in team fights with good positioning."
     },
     "63": {
         "name": "Realmbreaker",
-        "detail": "Đi chung với team 1 shot hoặc team Balance good"
+        "detail": "Works well with one-shot teams or balanced compositions."
     },
     "64": {
         "name": "Crystal Reaper",
-        "detail": "Đừng xem youtube rồi ảo"
+        "detail": "Don't be fooled by YouTube; not as strong as it looks."
     },
     "65": {
         "name": "Mace",
-        "detail": "Bomb, SC good"
+        "detail": "Great for Bomb squads and SC."
     },
     "66": {
         "name": "Heavy Mace",
-        "detail": "Dùng nhiều trong Hellgate, SC, ZvZ"
+        "detail": "Widely used in Hellgates, SC, and ZvZ."
     },
     "72": {
         "name": "Dreadstorm Monarch",
-        "detail": "Vũ khí thiên hướng dame, kén đội hình"
+        "detail": "Damage-oriented weapon; very niche and requires a specific team composition."
     },
     "74": {
         "name": "Polehammer",
-        "detail": "CC theo đường thẳng tầm xa, đi chung với team có MistPiercer"
+        "detail": "Long-range linear CC. Pairs perfectly with MistPiercer teams."
     },
     "75": {
-        "name": "Great Hammer\t",
-        "detail": "commonly used fight Hellgate, Avalon"
+        "name": "Great Hammer",
+        "detail": "Commonly used in Hellgates and Avalonian content."
     },
     "76": {
         "name": "Tombhammer",
-        "detail": "Khả năng CC tầm xa, cũng suitable team có MistPierce"
+        "detail": "Long-range CC; also suitable for MistPiercer teams."
     },
     "77": {
         "name": "Forge Hammers",
-        "detail": "commonly used trong Hellgate, gây áp lực cho hàng sau"
+        "detail": "Commonly used in Hellgates to pressure the enemy backline."
     },
     "97": {
         "name": "Holy Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "98": {
         "name": "Great Holy Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "99": {
         "name": "Divine Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "100": {
         "name": "Lifetouch Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "101": {
         "name": "Fallen Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "102": {
         "name": "Redemption Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "103": {
         "name": "Hallowfall",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     },
     "104": {
         "name": "Exalted Staff",
-        "detail": "bottom of society"
+        "detail": "Bottom of the barrel."
     }
 }
 }

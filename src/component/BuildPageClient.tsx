@@ -243,7 +243,7 @@ export default function BuildPageClient() {
                                 <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ {trans.common.detail} ~ </h3>
                                 <p className={`${balooFont.className} text-xl text-black`}>{trans.common.name}: {(trans.items as any)[selectedItem.id]?.name || selectedItem.name}</p>
                                 <p className={`${balooFont.className} text-xl text-black whitespace-pre-line`}>{trans.common.detailLabel} {(trans.items as any)[selectedItem.id]?.detail || selectedItem.detail}</p>
-                                <p className={`${balooFont.className} text-xl text-black`}>{trans.build.pov} ...</p>
+                                <p className={`${balooFont.className} text-xl text-black`}>{trans.build.pov}</p>
                             </div>
                             <div>
                                 <div className='flex flex-row justify-center gap-4'>
@@ -284,7 +284,7 @@ export default function BuildPageClient() {
                             <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handlePrev} disabled={searchResults.length <= 1}>
                                 <img src='/image/left-icon.png' alt='' width={20} height={20} />
                             </Button>
-                            <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton} ~</span>
+                            <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton ? getButtonLabel(activeButton) : ''} ~</span>
                             <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handleNext} disabled={searchResults.length <= 1}>
                                 <img src='/image/right_icon.png' alt='' width={20} height={20} />
                             </Button>

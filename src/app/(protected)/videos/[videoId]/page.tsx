@@ -32,13 +32,13 @@ export default async function VideoDetailPage({
     .single();
 
   if (error || !data?.url) {
-    return <div>Video không tồn tại.</div>;
+    return <div>Video not found.</div>;
   }
 
   const youtubeId = getYouTubeVideoId(data.url);
   const metadata = youtubeId
     ? await fetchYouTubeMetadata(youtubeId)
-    : { title: 'Không có tiêu đề', channel: 'Không rõ tác giả' };
+    : { title: 'Untitled', channel: 'Unknown' };
 
   const videoData = { ...data, ...metadata };
 

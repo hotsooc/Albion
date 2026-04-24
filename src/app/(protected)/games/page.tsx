@@ -3,11 +3,13 @@
 import PacmanGame from '@/component/games/Packman';
 import SnakeGame from '@/component/games/Snake';
 import React, { useState } from 'react';
+import useTrans from '@/hooks/useTrans';
 
 type GameType = 'list' | 'snake' | 'pacman';
 
 export default function GamePage() {
   const [currentGame, setCurrentGame] = useState<GameType>('list');
+  const { trans } = useTrans();
 
   const renderGame = () => {
     switch (currentGame) {
@@ -19,24 +21,24 @@ export default function GamePage() {
       default:
         return (
           <div style={{ padding: '20px', textAlign: 'center' }} className='h-screen'>
-            <h1>🎮 Danh Sách Trò Chơi 🎮</h1>
-            <p>Chọn một trò chơi để bắt đầu:</p>
+            <h1>{trans.game.gameList}</h1>
+            <p>{trans.game.selectGame}</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
               <button 
                 onClick={() => setCurrentGame('snake')} 
                 style={buttonStyle}
               >
-                🐍 Rắn Săn Mồi (Snake)
+                {trans.game.snakeName}
               </button>
               <button 
                 onClick={() => setCurrentGame('pacman')} 
                 style={buttonStyle}
               >
-                🟡 Pac-Man
+                {trans.game.pacmanName}
               </button>
             </div>
             <p style={{ marginTop: '30px', color: '#666' }}>
-              *Đây là các phiên bản đơn giản để minh họa cấu trúc.
+              {trans.game.demoNote}
             </p>
           </div>
         );

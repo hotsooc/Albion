@@ -2,6 +2,7 @@
 import { useDrop } from 'react-dnd';
 import { Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
+import useTrans from '@/hooks/useTrans';
 
 type DragItem = {
   id: string;
@@ -23,6 +24,7 @@ type DropSpotProps<T, C> = {
 };
 
 export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, onDropItem, onDeleteItem, onItemClick }: DropSpotProps<T, C>) => {
+  const { trans } = useTrans();
   const [{ isOver }, drop] = useDrop<DragItem, void, { isOver: boolean }>(() => ({
     accept: 'INPUT_ITEM',
     drop: (droppedItem) => {
@@ -52,7 +54,7 @@ export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, o
             }
           }}
         >
-          <span>{item.name}</span>
+          <span>{(trans.items as any)[item.id]?.name || item.name}</span>
           <Button
             type="text"
             danger

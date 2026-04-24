@@ -9,7 +9,8 @@ import AppHeader from '@/component/AppHeader';
 import Sidebar from '@/component/Sidebar';
 import AntdProvider from '@/component/AntdProvider';
 import Footer from './footer';
-import { usePathname } from 'next/navigation'; 
+import { TransProvider } from '@/hooks/useTrans';
+import { usePathname } from 'next/navigation';
 
 type VantaInstance = { destroy: () => void; scene: THREE.Scene } | null;
 
@@ -101,40 +102,42 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
 
   return (
     <AntdProvider>
-      <App>
-        <div className={`flex flex-col h-screen overflow-hidden ${fallbackBgClassName}`}>
-          {isVantaActive && (
-            <div 
-              ref={vantaRef} 
-              className="fixed inset-0 z-0 opacity-90 transition-opacity duration-500" 
-            >
+      <TransProvider>
+        <App>
+          <div className={`flex flex-col h-screen overflow-hidden ${fallbackBgClassName}`}>
+            {isVantaActive && (
+              <div 
+                ref={vantaRef} 
+                className="fixed inset-0 z-0 opacity-90 transition-opacity duration-500" 
+              >
+              </div>
+            )}
+            <div ref={scrollContainerRef} className="relative flex flex-col overflow-y-auto overflow-x-hidden no-scrollbar flex-grow z-10"> 
+              
+              <AppHeader 
+                isVantaActive={isVantaActive}
+                onToggleVanta={handleToggleTheme}
+              /> 
+                          <div className='flex flex-grow'>
+                              <div className="h-[calc(100vh-64px)] -mt-14"> 
+                                  <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+                              </div>
+  
+                              <main 
+                                  className='flex-grow p-4 mt-2 mb-5 transition-all duration-300 ease-in-out' 
+                                  style={{
+                                      marginLeft: mainMarginLeft,
+                                      width: `calc(100% - ${mainMarginLeft})`,
+                                  }}
+                              >
+                                  {children}
+                              </main>
+                          </div>
+              <Footer />
             </div>
-          )}
-          <div ref={scrollContainerRef} className="relative flex flex-col overflow-y-auto overflow-x-hidden no-scrollbar flex-grow z-10"> 
-            
-            <AppHeader 
-              isVantaActive={isVantaActive}
-              onToggleVanta={handleToggleTheme}
-            /> 
-                        <div className='flex flex-grow'>
-                            <div className="h-[calc(100vh-64px)] -mt-14"> 
-                                <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-                            </div>
-
-                            <main 
-                                className='flex-grow p-4 mt-2 mb-5 transition-all duration-300 ease-in-out' 
-                                style={{
-                                    marginLeft: mainMarginLeft,
-                                    width: `calc(100% - ${mainMarginLeft})`,
-                                }}
-                            >
-                                {children}
-                            </main>
-                        </div>
-            <Footer />
           </div>
-        </div>
-      </App>
+        </App>
+      </TransProvider>
     </AntdProvider>
   );
 }

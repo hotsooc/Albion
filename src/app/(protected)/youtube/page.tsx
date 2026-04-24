@@ -1,10 +1,12 @@
 "use client";
 import YouTubeTV from '@/component/retroTV';
 import React, { useState } from 'react';
+import useTrans from '@/hooks/useTrans';
 
 export default function Home() {
   const [inputUrl, setInputUrl] = useState('');
   const [currentVideoId, setCurrentVideoId] = useState('');
+  const { trans } = useTrans();
 
   const handleUpdateVideo = (e: any) => {
     const value = e.target.value;
@@ -32,7 +34,7 @@ export default function Home() {
         <div className="relative">
           <input
             type="text"
-            placeholder="Dán link YouTube vào đây..."
+            placeholder={trans.youtube.placeholder}
             value={inputUrl}
             onChange={handleUpdateVideo}
             className="w-full px-6 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all duration-300"

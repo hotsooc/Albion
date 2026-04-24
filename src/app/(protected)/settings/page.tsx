@@ -74,7 +74,7 @@ const Profile = () => {
         });
 
     if (uploadError) {
-        message.error(`${trans.common.loading} Error: ${uploadError.message}`);
+        message.error(`${trans.common.error}: ${uploadError.message}`);
         setLoading(false);
         return;
     }

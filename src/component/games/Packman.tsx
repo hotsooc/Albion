@@ -278,7 +278,7 @@ export default function PacmanGame({ onGoBack }: PacmanGameProps) {
     if (gameStatus === 'LOSE') {
       return (
         <div style={messageStyle('red')}>
-          GAME OVER! 💀
+          {trans.game.gameOver}
           <button onClick={handleRestart} style={buttonStyle}>
             {trans.game.playAgain}
           </button>

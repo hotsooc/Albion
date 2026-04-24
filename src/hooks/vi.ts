@@ -21,7 +21,11 @@ export const VnScript = {
         logout: 'Đăng xuất',
         theMist: 'The Mist',
         normal: 'Bình thường',
-        submit: 'Gửi'
+        submit: 'Gửi',
+        error: 'Lỗi',
+        success: 'Thành công',
+        warning: 'Cảnh báo',
+        info: 'Thông tin'
     },
     login: {
         title: 'Chào mừng bạn tới với XHCN',
@@ -93,10 +97,13 @@ export const VnScript = {
         messageUrl: 'Vui lòng nhập URL YouTube!',
         messageUrlInvalid: 'Vui lòng nhập URL hợp lệ!',
         messageDesc: 'Vui lòng nhập mô tả!',
-        untitled: 'Chưa đặt tiêu đề',
-        noDescription: 'Không có mô tả.',
         general: 'Chung',
-        thumbnailError: 'Không thể tạo thumbnail cho video: {url}'
+        thumbnailError: 'Không thể tạo thumbnail cho video: {url}',
+        back: 'Quay lại',
+        author: 'Tác giả:',
+        notFound: 'Video không tồn tại.',
+        untitled: 'Không có tiêu đề',
+        unknownAuthor: 'Không rõ tác giả'
     },
     comment: {
         loadError: 'Lỗi khi tải bình luận.',
@@ -122,7 +129,13 @@ export const VnScript = {
         snakeInstructions: 'Sử dụng các phím **W** (lên), **A** (trái), **S** (xuống), **D** (phải) để di chuyển.',
         pacmanInstructions: 'Sử dụng các phím **W A S D** để di chuyển. Tốc độ Ma là **{speed}ms**.',
         youWin: 'BẠN THẮNG! 🎉',
-        maxScore: 'Điểm tối đa'
+        maxScore: 'Điểm tối đa',
+        gameOver: 'TRÒ CHƠI KẾT THÚC! 💀',
+        gameList: '🎮 Danh Sách Trò Chơi 🎮',
+        selectGame: 'Chọn một trò chơi để bắt đầu:',
+        snakeName: '🐍 Rắn Săn Mồi (Snake)',
+        pacmanName: '🟡 Pac-Man',
+        demoNote: '*Đây là các phiên bản đơn giản để minh họa cấu trúc.'
     },
     youtube: {
         placeholder: 'Dán link YouTube vào đây...'
@@ -212,7 +225,8 @@ export const VnScript = {
         retroTV: 'RetroTV',
         builds: 'Builds',
         aboutUs: 'Về chúng tôi',
-        settings: 'Cài đặt'
+        settings: 'Cài đặt',
+        dashboard: 'Bảng điều khiển'
     },
     footer: {
         directory: 'Danh mục:',
