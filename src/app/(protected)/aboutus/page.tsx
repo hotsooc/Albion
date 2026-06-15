@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, Card, Col, Row, App, Spin, Typography } from 'antd';
+import { Avatar, Card, Col, Row, App, Spin, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../../../lib/supabase/client';
 import useTrans from '@/hooks/useTrans';
-
-const { Title, Text } = Typography;
 
 type UserProfile = {
     id: string;
