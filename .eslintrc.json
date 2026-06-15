@@ -7,18 +7,15 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "error",
-      { "vars": "all", "args": "after-used", "ignoreRestSiblings": false, "argsIgnorePattern": "^_" }
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": false,
+        "argsIgnorePattern": "^_"
+      }
     ],
     "@next/next/no-img-element": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    // "@typescript-eslint/no-unused-vars": [
-    //   "error",
-    //   {
-    //     "argsIgnorePattern": "^_",
-    //     "varsIgnorePattern": "^_",
-    //     "caughtErrorsIgnorePattern": "^_"
-    //   }
-    // ],
     "no-unused-expressions": "off",
     "no-nested-ternary": "off",
     "no-await-in-loop": "off",
@@ -29,7 +26,14 @@
     "no-useless-escape": "off",
     "no-unused-vars": "off",
     "react-hooks/exhaustive-deps": "off",
-    "no-console": ["error", { "allow": ["error"] }],
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "error"
+        ]
+      }
+    ],
     "no-unused-labels": "off",
   }
 }
