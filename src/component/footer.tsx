@@ -1,78 +1,96 @@
-'use client'
+'use client';
 
-import React from 'react'
-import Link from 'next/link'
-import { FaFacebook, FaDiscord } from 'react-icons/fa'
-import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
+import React from 'react';
+import Link from 'next/link';
+import { FaFacebook, FaDiscord } from 'react-icons/fa';
 import useTrans from '@/hooks/useTrans';
-
-const balooFont = Baloo_Bhai_2({
-    subsets: ['vietnamese'],
-    weight: ['800'],
-});
 
 export default function Footer() {
     const { trans } = useTrans();
+    
     return (
-        <section id='footer' className='text-black py-8 w-full border-t border-gray-300 border-solid'>
-            <div className='w-full px-10'> 
-                <div className='flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0'>
-                    <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                        <div className="flex flex-row justify-center items-center mb-5 gap-4">
-                            <div className=''>
-                                <img src="/image/XHCN_icon.png" alt="XHCN Logo" width={50} height={50} />
+        <footer className="mx-6 mt-8 mb-8 p-8 rounded-[32px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-black">
+            <div className="w-full"> 
+                <div className="flex flex-col lg:flex-row justify-between items-stretch gap-8">
+                    
+                    {/* Brand & Contacts */}
+                    <div className="flex flex-col justify-between gap-6 flex-1">
+                        <div>
+                            <div className="flex flex-row items-center mb-4 gap-3">
+                                <img src="/image/XHCN_icon.png" alt="XHCN Logo" width={40} height={40} />
+                                <span className="text-3xl font-extrabold tracking-tight sora-font">XHCN</span>
                             </div>
-                            <div>
-                                <span className={`${balooFont.className} text-[40px] font-bold text-black text-center`}>XHCN</span>
+                            <h3 className="text-lg font-bold mb-3 sora-font text-black">{trans.footer.contact}</h3>
+                            <div className="flex flex-col gap-1.5 text-sm text-[#2d3748] font-semibold">
+                                <span>Discord: <strong className="text-black">justhi_1203</strong> (IG: Hi_1203)</span>
+                                <span>Discord: <strong className="text-black">thewise0920</strong> (IG: Thewise209)</span>
+                                <span>Facebook: <strong className="text-black">Khanh Duy</strong> (IG: Potato211)</span>
                             </div>
                         </div>
-                        <span className={`${balooFont.className} text-[25px] font-bold mb-2`}>{trans.footer.contact} </span>
-                        <span className={`${balooFont.className} text-[16px] text-black`}>Discord: justhi_1203 (IG: Hi_1203)</span>
-                        <span className={`${balooFont.className} text-[16px] text-black`}>Discord: thewise0920 (IG: Thewise209)</span>
-                        <span className={`${balooFont.className} text-[16px] text-black`}>Facebook: Khanh Duy (IG: Potato211)</span>
-                        <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                            <span className={`${balooFont.className} text-lg font-bold mb-2`}>{trans.footer.contactUs} </span>
-                            <div className='flex space-x-4'>
-                                <a href="https://www.facebook.com/khanh.duy.57514" target='_blank' aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors duration-300">
-                                    <FaFacebook size={36} />
+                        
+                        <div className="flex flex-col gap-2">
+                            <h4 className="text-sm font-extrabold sora-font text-[#2d3748]">{trans.footer.contactUs}</h4>
+                            <div className="flex space-x-3">
+                                <a 
+                                    href="https://www.facebook.com/khanh.duy.57514" 
+                                    target="_blank" 
+                                    rel="noreferrer" 
+                                    aria-label="Facebook" 
+                                    className="text-black hover:text-[#ebbea7] transition-colors duration-300"
+                                >
+                                    <FaFacebook size={28} />
                                 </a>
-                                <a href="https://discord.gg/Xe6Hg7aW" aria-label="Discord" className="text-gray-400 hover:text-white transition-colors duration-300">
-                                    <FaDiscord size={36} />
+                                <a 
+                                    href="https://discord.gg/Xe6Hg7aW" 
+                                    aria-label="Discord" 
+                                    className="text-black hover:text-[#ebbea7] transition-colors duration-300"
+                                >
+                                    <FaDiscord size={28} />
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <div className='flex flex-col items-center md:items-start text-center md:text-left'>
-                        <span className={`${balooFont.className} text-[30px] font-bold`}>{trans.footer.directory}</span>
-                        <Link href="/home" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            {trans.sidebar.home}
-                        </Link>
-                        <Link href="/teammate" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            {trans.sidebar.team}
-                        </Link>
-                        <Link href="/videos" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            {trans.sidebar.video}
-                        </Link>
-                        <Link href="/build" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            {trans.sidebar.builds}
-                        </Link>
-                        <Link href="/aboutus" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            {trans.sidebar.aboutUs}
-                        </Link>
-                        <Link href="/settings" className={`${balooFont.className} text-[20px] !text-black !font-medium hover:text-white transition-colors duration-300`}>
-                            {trans.sidebar.settings}
-                        </Link>
+                    {/* Directory Links */}
+                    <div className="flex flex-col gap-3 min-w-[200px]">
+                        <span className="text-xl font-extrabold sora-font tracking-tight mb-2 border-b-2 border-black pb-1">
+                            {trans.footer.directory}
+                        </span>
+                        <div className="flex flex-col gap-2">
+                            {[
+                                { href: "/home", label: trans.sidebar.home },
+                                { href: "/teammate", label: trans.sidebar.team },
+                                { href: "/videos", label: trans.sidebar.video },
+                                { href: "/build", label: trans.sidebar.builds },
+                                { href: "/aboutus", label: trans.sidebar.aboutUs },
+                                { href: "/settings", label: trans.sidebar.settings },
+                            ].map(item => (
+                                <Link 
+                                    key={item.href}
+                                    href={item.href} 
+                                    className="text-[15px] font-bold text-black hover:text-[#ebbea7] transition-colors duration-200"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
 
-                    <img src='/image/image_build.png' className='rounded-2xl' alt='' width={600} height={600} />
+                    {/* Graphic/Banner */}
+                    <div className="flex items-center justify-center lg:justify-end max-w-md">
+                        <img 
+                            src="/image/image_build.png" 
+                            className="rounded-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] object-cover w-full h-48 lg:h-56" 
+                            alt="Guild Banner" 
+                        />
+                    </div>
                 </div>
 
-                {/* Bản quyền */}
-                <div className={`${balooFont.className} mt-8 pt-8 w-full border-t border-gray-700 text-center text-[25px] text-black font-bold`}>
+                {/* Copyright */}
+                <div className="mt-8 pt-6 w-full border-t-2 border-black text-center text-sm text-[#2d3748] font-bold sora-font">
                     {trans.footer.copyright.replace('{year}', new Date().getFullYear().toString())}
                 </div>
             </div>
-        </section>
+        </footer>
     );
 }

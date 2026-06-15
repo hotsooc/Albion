@@ -27,6 +27,11 @@ export const VnScript = {
         warning: 'Cảnh báo',
         info: 'Thông tin'
     },
+    theme: {
+        original: 'Giao diện gốc',
+        celestial: 'Bầu trời & Vàng',
+        emerald: 'Sương mù & Ngọc bích'
+    },
     login: {
         title: 'Chào mừng bạn tới với XHCN',
         user: 'Người dùng',
@@ -103,6 +108,7 @@ export const VnScript = {
         author: 'Tác giả:',
         notFound: 'Video không tồn tại.',
         untitled: 'Không có tiêu đề',
+        noDescription: 'Không có mô tả',
         unknownAuthor: 'Không rõ tác giả'
     },
     comment: {

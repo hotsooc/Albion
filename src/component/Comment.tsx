@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, message, Input } from 'antd';
+import { Avatar, Button, App, Input } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import CommentItem from './CommentItem';
@@ -11,6 +11,7 @@ import useTrans from '@/hooks/useTrans';
 const { TextArea } = Input;
 
 const CommentSection = ({ videoId }: { videoId: string }) => {
+    const { message } = App.useApp();
     const { trans } = useTrans();
     const [comments, setComments] = useState<any[]>([]);
     const [value, setValue] = useState('');

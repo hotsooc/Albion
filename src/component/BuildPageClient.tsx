@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, Transition } from 'framer-motion';
 import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
-import { Baloo_2 } from 'next/font/google';
 import useTrans from '@/hooks/useTrans';
 
 const dataSets = {
@@ -31,11 +30,6 @@ const dataSets = {
     Tomes: dataSet20,
 };
 
-const balooFont = Baloo_2({
-    subsets: ['vietnamese'],
-    weight: ['800'],
-});
-
 const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -47,7 +41,7 @@ const containerVariants = {
 };
 
 const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 15, opacity: 0 },
     visible: {
         y: 0,
         opacity: 1,
@@ -55,12 +49,12 @@ const itemVariants = {
 };
 
 const detailVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 0.5,
+            duration: 0.4,
             ease: "easeOut",
         } as Transition,
     },
@@ -163,43 +157,52 @@ export default function BuildPageClient() {
     };
 
     return (
-        <section className='grid grid-cols-[1fr_5fr] bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] h-auto p-4 rounded-xl shadow-xl gap-4 ml-1 mr-10'>
-            <div className='flex flex-col gap-4'>
-                <div className="flex items-center bg-white rounded-full w-full overflow-hidden shadow-sm px-4">
+        <section className="grid grid-cols-1 lg:grid-cols-[1.2fr_3.8fr] h-auto gap-6 ml-1 mr-6 transition-all duration-300 text-black">
+            {/* Left Filter & Search Bar */}
+            <div className="flex flex-col gap-5 border-2 border-black rounded-[32px] p-5 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-center rounded-full w-full overflow-hidden border-2 border-black bg-white px-4 transition-all duration-300 focus-within:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                     <SearchOutlined className="text-black text-lg mr-2" />
                     <Input
                         placeholder={trans.common.searchPlaceholder}
                         value={inputValue}
                         onChange={handleSearch}
-                        className="!border-none !shadow-none bg-transparent flex-grow h-10 focus:ring-0"
+                        className="!border-none !shadow-none bg-transparent flex-grow h-11 focus:ring-0 !text-black"
                     />
                     {inputValue && (
                         <Button
                             type="text"
                             icon={<CloseCircleOutlined />}
                             onClick={handleClearSearch}
-                            className="!text-black"
+                            className="!text-black hover:!text-red-500"
                         />
                     )}
                 </div>
 
-                <div className='grid grid-cols-1 gap-3'>
+                <div className="grid grid-cols-1 gap-2.5">
                     <motion.div
-                        className='flex flex-col gap-3 overflow-y-auto max-h-[470px] no-scrollbar'
+                        className="flex flex-col gap-2 overflow-y-auto max-h-[500px] pr-1"
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
                     >
                         {!inputValue && buttonsToDisplay.map((label) => {
                             const data = dataSets[label as keyof typeof dataSets];
+                            const isActive = activeButton === label;
                             return (
                                 <motion.div key={label} variants={itemVariants}>
-                                    <Button
+                                    <button
                                         onClick={() => handleToggleDataSet(data, label)}
-                                        className={`!rounded-md custom-button w-full !text-lg !font-medium !bg-sky-200 !text-blue !border-none ${activeButton === label ? '!bg-sky-500 !text-white' : ''}`}
+                                        className={`w-full py-3 px-4 rounded-full border-2 border-black text-left font-bold sora-font tracking-tight transition-all duration-200 cursor-pointer ${
+                                            isActive 
+                                                ? 'bg-[#ebc7b5] text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
+                                                : 'bg-white hover:bg-[#fcf8f2] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
+                                        }`}
                                     >
-                                        {getButtonLabel(label)}
-                                    </Button>
+                                        <div className="flex justify-between items-center w-full">
+                                            <span>{getButtonLabel(label)}</span>
+                                            {isActive && <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full">active</span>}
+                                        </div>
+                                    </button>
                                 </motion.div>
                             );
                         })}
@@ -207,92 +210,131 @@ export default function BuildPageClient() {
                 </div>
 
                 {showResults && searchResults.length > 0 && (
-                    <div className='w-full overflow-y-auto max-h-[500px]'>
+                    <div className="w-full overflow-y-auto max-h-[500px] border-t-2 border-black pt-4 mt-2">
                         <motion.div
-                            className='grid grid-cols-1 gap-3 text-black text-center'
+                            className="flex flex-col gap-2"
                             variants={containerVariants}
                             initial="hidden"
                             animate="visible"
                         >
-                            {searchResults.map((item) => (
-                                <motion.div key={item.id} variants={itemVariants}>
-                                    <button
-                                        onClick={() => handleItemClick(item)}
-                                        className="p-2 border rounded-md w-full hover:bg-gray-200"
-                                    >
-                                        {(trans.items as any)[item.id]?.name || item.name}
-                                    </button>
-                                </motion.div>
-                            ))}
+                            {searchResults.map((item) => {
+                                const isCurrent = selectedItem?.id === item.id;
+                                return (
+                                    <motion.div key={item.id} variants={itemVariants}>
+                                        <button
+                                            onClick={() => handleItemClick(item)}
+                                            className={`py-2 px-4 border-2 border-black rounded-full w-full text-center font-bold text-sm transition-all duration-200 cursor-pointer ${
+                                                isCurrent 
+                                                    ? 'bg-[#ebc7b5] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' 
+                                                    : 'bg-white hover:bg-[#fcf8f2] text-black hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]'
+                                            }`}
+                                        >
+                                            {(trans.items as any)[item.id]?.name || item.name}
+                                        </button>
+                                    </motion.div>
+                                );
+                            })}
                         </motion.div>
                     </div>
                 )}
             </div>
 
-            <div className='flex flex-col gap-4 p-4 border-none rounded-lg bg-[#E4FFFE] shadow-xl'>
+            {/* Right Details Panel */}
+            <div className="flex flex-col gap-5 p-6 rounded-[32px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-black">
                 {selectedItem ? (
                     <motion.div
                         key={selectedItem.id}
                         variants={detailVariants}
                         initial="hidden"
                         animate="visible"
+                        className="flex flex-col h-full justify-between gap-6"
                     >
-                        <span className={`${balooFont.className} text-[30px] flex justify-center mb-2 text-center`}>{trans.build.guide}</span>
-                        <div className='grid grid-cols-[1fr_4fr] gap-5'>
-                            <div className='bg-white rounded-xl flex flex-col py-4 px-3 h-[470px] shadow-2xl'>
-                                <h3 className={`${balooFont.className} text-center text-[24px] text-black`}>~ {trans.common.detail} ~ </h3>
-                                <p className={`${balooFont.className} text-xl text-black`}>{trans.common.name}: {(trans.items as any)[selectedItem.id]?.name || selectedItem.name}</p>
-                                <p className={`${balooFont.className} text-xl text-black whitespace-pre-line`}>{trans.common.detailLabel} {(trans.items as any)[selectedItem.id]?.detail || selectedItem.detail}</p>
-                                <p className={`${balooFont.className} text-xl text-black`}>{trans.build.pov}</p>
-                            </div>
-                            <div>
-                                <div className='flex flex-row justify-center gap-4'>
+                        <div>
+                            <span className="text-3xl font-extrabold flex justify-center mb-6 text-center sora-font tracking-tight">
+                                {trans.build.guide}
+                            </span>
+                            
+                            <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.5fr] gap-6">
+                                {/* Details Text Card */}
+                                <div className="rounded-2xl border-2 border-black p-5 bg-[#fcf8f2] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-start">
+                                    <h3 className="text-center font-extrabold text-xl mb-4 border-b-2 border-black pb-2 sora-font">
+                                        ~ {trans.common.detail} ~
+                                    </h3>
+                                    <div className="flex flex-col gap-3 text-sm">
+                                        <p className="leading-relaxed">
+                                            <strong className="text-black font-extrabold sora-font">{trans.common.name}:</strong> <br />
+                                            {(trans.items as any)[selectedItem.id]?.name || selectedItem.name}
+                                        </p>
+                                        <p className="leading-relaxed whitespace-pre-line">
+                                            <strong className="text-black font-extrabold sora-font">{trans.common.detailLabel}</strong> <br />
+                                            {(trans.items as any)[selectedItem.id]?.detail || selectedItem.detail}
+                                        </p>
+                                        <p className="leading-relaxed">
+                                            <strong className="text-black font-extrabold sora-font">{trans.build.pov}</strong>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Images Section */}
+                                <div className="flex flex-col md:flex-row gap-4 justify-center items-stretch">
                                     {selectedItem.image && (
-                                        <div className='bg-white rounded-xl p-4 shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>{trans.build.hellgate}</span>
+                                        <div className="rounded-2xl border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
+                                            <span className="sora-font text-center text-black text-[16px] font-extrabold mb-3">{trans.build.hellgate}</span>
                                             <img
                                                 src={selectedItem.image}
                                                 alt={`${selectedItem.name} image 1`}
-                                                className='w-100 h-100 object-contain !rounded-xl'
+                                                className="w-full h-auto object-contain rounded-xl border border-gray-100 max-h-[300px]"
                                             />
                                         </div>
                                     )}
                                     {selectedItem.image2 && (
-                                        <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>{trans.build.corrupted}</span>
+                                        <div className="rounded-2xl border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
+                                            <span className="sora-font text-center text-black text-[16px] font-extrabold mb-3">{trans.build.corrupted}</span>
                                             <img
                                                 src={selectedItem.image2}
                                                 alt={`${selectedItem.name} image 2`}
-                                                className='w-100 h-100 object-contain !rounded-xl'
+                                                className="w-full h-auto object-contain rounded-xl border border-gray-100 max-h-[300px]"
                                             />
                                         </div>
                                     )}
                                     {selectedItem.image3 && (
-                                        <div className='bg-white rounded-xl p-4 h-[470px] shadow-2xl'>
-                                            <span className={`${balooFont.className} flex justify-center text-center text-black text-[24px] font-bold`}>{trans.build.openworld}</span>
+                                        <div className="rounded-2xl border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
+                                            <span className="sora-font text-center text-black text-[16px] font-extrabold mb-3">{trans.build.openworld}</span>
                                             <img
                                                 src={selectedItem.image3}
                                                 alt={`${selectedItem.name} image 3`}
-                                                className='w-100 h-100 object-contain !rounded-xl'
+                                                className="w-full h-auto object-contain rounded-xl border border-gray-100 max-h-[300px]"
                                             />
                                         </div>
                                     )}
                                 </div>
                             </div>
                         </div>
-                        <div className='flex justify-center mt-5 gap-5 items-center'>
-                            <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handlePrev} disabled={searchResults.length <= 1}>
-                                <img src='/image/left-icon.png' alt='' width={20} height={20} />
-                            </Button>
-                            <span className={`${balooFont.className} text-3xl font-bold`}>~ {activeButton ? getButtonLabel(activeButton) : ''} ~</span>
-                            <Button className='!bg-transparent !border-none !p-0 !cursor-pointer' onClick={handleNext} disabled={searchResults.length <= 1}>
-                                <img src='/image/right_icon.png' alt='' width={20} height={20} />
-                            </Button>
+
+                        {/* Navigation Controllers */}
+                        <div className="flex justify-center mt-4 gap-6 items-center border-t-2 border-black pt-4">
+                            <button 
+                                className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:cursor-not-allowed transition-all" 
+                                onClick={handlePrev} 
+                                disabled={searchResults.length <= 1}
+                            >
+                                <img src="/image/left-icon.png" alt="Prev" width={16} height={16} />
+                            </button>
+                            <span className="text-xl font-bold sora-font tracking-tight">
+                                ~ {activeButton ? getButtonLabel(activeButton) : ''} ~
+                            </span>
+                            <button 
+                                className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:cursor-not-allowed transition-all" 
+                                onClick={handleNext} 
+                                disabled={searchResults.length <= 1}
+                            >
+                                <img src="/image/right_icon.png" alt="Next" width={16} height={16} />
+                            </button>
                         </div>
                     </motion.div>
                 ) : (
-                    <div className='flex justify-center items-center h-full'>
-                        <p className='text-gray-500 text-lg'>{trans.build.selectItemPrompt}</p>
+                    <div className="flex justify-center items-center h-48 lg:h-full">
+                        <p className="text-[#5d6c7b] text-base font-bold sora-font">{trans.build.selectItemPrompt}</p>
                     </div>
                 )}
             </div>

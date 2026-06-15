@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Avatar, Button, Dropdown, MenuProps, message, Input } from 'antd';
+import { Avatar, Button, Dropdown, MenuProps, Input } from 'antd';
 import { UserOutlined, MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { supabase } from '../../lib/supabase/client';

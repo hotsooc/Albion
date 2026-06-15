@@ -1,37 +1,112 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8efe5;
+  --foreground: #222222;
+
+  /* Sircle Design System Tokens */
+  --bg-panel: #f8efe5;
+  --bg-panel-solid: #ffffff;
+  --bg-column: #fcf8f2;
+  --bg-card: #ffffff;
+  --border-color: #000000;
+  --shadow-glow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --text-primary: #000000;
+  --text-secondary: #5d6c7b;
+  --color-accent: #ebc7b5;
+  --color-accent-hover: #ebbea7;
+  --color-btn-upload: #ebc7b5;
+  --text-btn-upload: #000000;
+  --backdrop-blur: 0px;
+  --bg-input: #ffffff;
+  --text-input: #000000;
+  --border-input: #000000;
+
+  /* Nav/Sidebar/Header Sircle styling */
+  --bg-nav: #ffffff;
+  --border-nav: #000000;
+  --bg-active-nav: #ebc7b5;
+  --text-active-nav: #000000;
+  --bg-hover-nav: #fcf8f2;
+  --text-nav: #222222;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
   height: 100%;
   margin: 0;  
   padding: 0;  
   overflow: hidden; 
 }
 
+h1, h2, h3, h4, h5, h6, .sora-font {
+  font-family: var(--font-sora), sans-serif;
+}
+
+/* Scrollbar styled for Sircle */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ebc7b5;
+  border-radius: 9999px;
+  border: 1px solid #ffffff;
+}
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Sircle Neo-Brutalist Components */
+.sircle-card {
+  background-color: var(--bg-panel-solid);
+  border: 2px solid var(--border-color);
+  border-radius: 24px;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.sircle-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.sircle-btn {
+  background-color: var(--color-accent);
+  border: 2px solid var(--border-color);
+  border-radius: 9999px;
+  box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  color: #000000;
+  font-weight: 700;
+  padding: 8px 20px;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sircle-btn:hover {
+  background-color: var(--color-accent-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+.sircle-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 1);
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none; 
 }
+
 .no-scrollbar {
   -ms-overflow-style: none; 
   scrollbar-width: none;    
@@ -168,6 +243,41 @@ body {
     transition: background-color 0.3s ease;
 }
 
+/* Sidebar theme-aware styles */
+.sidebar-link {
+  color: var(--text-nav) !important;
+  transition: all 0.2s ease;
+}
+.sidebar-link:hover {
+  background-color: var(--bg-hover-nav) !important;
+  color: var(--text-nav) !important;
+}
+.sidebar-link-active {
+  background-color: var(--bg-active-nav) !important;
+  color: var(--text-active-nav) !important;
+}
+
 /* .anime-button:hover {
     background-color: gray;
 } */
+
+/* Ant Design Input overrides for Sircle */
+.ant-input-disabled, 
+.ant-input-password-disabled, 
+.ant-input[disabled], 
+.ant-input-affix-wrapper-disabled,
+.ant-input-affix-wrapper-disabled input {
+  background-color: #fcf8f2 !important;
+  color: #111111 !important;
+  border-color: #000000 !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+.ant-input-disabled::placeholder, 
+.ant-input[disabled]::placeholder {
+  color: #94a3b8 !important;
+}
+.ant-input-password-disabled input[disabled] {
+  color: #111111 !important;
+  background-color: transparent !important;
+}

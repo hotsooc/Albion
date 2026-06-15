@@ -19,10 +19,7 @@ type DragItem = {
 
 type DroppableSpot = DragItem | null;
 
-const balooFont = Baloo_2({
-    subsets: ['vietnamese'],
-    weight: ['800'],
-});
+// Baloo font removed
 
 type TeamData = {
   '7_cols': { [key: string]: DroppableSpot[] };
@@ -50,39 +47,53 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
      footer={null}
      onCancel={onClose}
      centered
-     width="max(1200px, 80vh)"
+     width="max(1000px, 75vh)"
      maskClosable={false}
      zIndex={100}
      destroyOnClose={true}
+     className="sircle-modal"
    >
-     <div className='grid grid-cols-[2fr_4fr] gap-8'>
-       <div>
-         <h2 className={`${balooFont.className} text-xl font-bold mb-4`}>{trans.aboutUs.detailInfo}</h2>
-         <p className={`${balooFont.className} text-lg`}>{trans.common.name}: <span className='font-semibold'>{(trans.items as any)[item.id]?.name || item.name}</span></p>
-         <p className={`${balooFont.className} text-lg`}>{trans.common.detailLabel} <span className='font-semibold whitespace-pre-line'>{(trans.items as any)[item.id]?.detail || item.detail}</span></p>
-       </div>
-       <div className='flex flex-row gap-4 mt-10'>
-         {item.image && (
-         <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-           <span>{trans.build.hellgate}</span>
-           <img src={item.image} alt='' height={450} width={300} />
-         </div>
-         )}
-         {item.image2 && (
-         <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-           <span>{trans.build.corrupted}</span>
-           <img src={item.image2} alt='' height={450} width={300} />
-         </div>
-         )}
-         {item.image3 && (
-         <div className='flex flex-col text-center border rounded-lg items-center gap-2'>
-           <span>{trans.build.openworld}</span>
-           <img src={item.image3} alt='' height={450} width={300} />
-         </div>
-         )}
-       </div>
-     </div>
-   </Modal>
+      <div className="grid grid-cols-1 md:grid-cols-[1.2fr_2.8fr] gap-6 text-black p-2">
+        <div className="flex flex-col gap-4">
+          <h2 className="text-2xl font-extrabold sora-font border-b-2 border-black pb-2 mb-2 text-black">
+            {trans.aboutUs.detailInfo}
+          </h2>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm">
+              <strong className="text-black sora-font">{trans.common.name}:</strong> <br />
+              <span className="font-extrabold text-[#ebbea7] bg-black px-3 py-1 rounded-full inline-block mt-1">
+                {(trans.items as any)[item.id]?.name || item.name}
+              </span>
+            </p>
+            <p className="text-sm leading-relaxed whitespace-pre-line">
+              <strong className="text-black sora-font">{trans.common.detailLabel}</strong> <br />
+              {(trans.items as any)[item.id]?.detail || item.detail}
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex flex-col md:flex-row gap-4 justify-center items-stretch mt-2 md:mt-10">
+          {item.image && (
+            <div className="flex flex-col text-center border-2 border-black rounded-2xl items-center gap-2 p-3 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
+              <span className="font-bold text-xs sora-font">{trans.build.hellgate}</span>
+              <img src={item.image} alt="" className="h-auto max-h-[260px] object-contain rounded-xl border border-gray-100 w-full" />
+            </div>
+          )}
+          {item.image2 && (
+            <div className="flex flex-col text-center border-2 border-black rounded-2xl items-center gap-2 p-3 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
+              <span className="font-bold text-xs sora-font">{trans.build.corrupted}</span>
+              <img src={item.image2} alt="" className="h-auto max-h-[260px] object-contain rounded-xl border border-gray-100 w-full" />
+            </div>
+          )}
+          {item.image3 && (
+            <div className="flex flex-col text-center border-2 border-black rounded-2xl items-center gap-2 p-3 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
+              <span className="font-bold text-xs sora-font">{trans.build.openworld}</span>
+              <img src={item.image3} alt="" className="h-auto max-h-[260px] object-contain rounded-xl border border-gray-100 w-full" />
+            </div>
+          )}
+        </div>
+      </div>
+    </Modal>
   );
 };
 
@@ -216,30 +227,36 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
     return () => clearTimeout(timeoutId);
  }, [allData, isLoading]);
 
- const renderColumn = (teamKey: string, columnKey: string, title: string) => {
-    const currentTeamData = allData[teamKey]?.[getColumnKey()];
-    if (!currentTeamData?.[columnKey]) return null;
-    return (
-      <div key={`${teamKey}-${columnKey}`} className='flex flex-col bg-[#e6f7ff] p-4 rounded-lg gap-2 min-h-[200px]'>
-        <h3 className='text-center font-bold text-gray-700'>{title}</h3>
-        <div className='flex flex-col gap-2'>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div key={`${teamKey}-${columnKey}-${index}`} className='bg-white p-2 rounded-lg'>
-              <DropSpotComponent
-                teamKey={teamKey}
-                columnKey={columnKey}
-                spotIndex={index}
-                item={currentTeamData[columnKey][index]}
-                onDropItem={handleDropItem}
-                onDeleteItem={handleDeleteItem}
-                onItemClick={handleItemClick}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
- };
+  const renderColumn = (teamKey: string, columnKey: string, title: string) => {
+     const currentTeamData = allData[teamKey]?.[getColumnKey()];
+     if (!currentTeamData?.[columnKey]) return null;
+     return (
+       <div 
+         key={`${teamKey}-${columnKey}`} 
+         className="flex flex-col p-4 rounded-[24px] gap-3 min-h-[200px] bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-black"
+       >
+         <h3 className="text-center font-extrabold text-black tracking-tight sora-font text-[15px] border-b border-gray-150 pb-2 mb-1">{title}</h3>
+         <div className='flex flex-col gap-2'>
+           {Array.from({ length: 5 }).map((_, index) => (
+             <div 
+               key={`${teamKey}-${columnKey}-${index}`} 
+               className='rounded-lg'
+             >
+               <DropSpotComponent
+                 teamKey={teamKey}
+                 columnKey={columnKey}
+                 spotIndex={index}
+                 item={currentTeamData[columnKey][index]}
+                 onDropItem={handleDropItem}
+                 onDeleteItem={handleDeleteItem}
+                 onItemClick={handleItemClick}
+               />
+             </div>
+           ))}
+         </div>
+       </div>
+     );
+  };
 
  const renderColumnsForView = (teamKey: string) => {
     const currentViewKey = getColumnKey();

@@ -1,4 +1,3 @@
-
 import { useDrop } from 'react-dnd';
 import { Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
@@ -35,19 +34,15 @@ export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, o
     }),
   }));
 
-  const style = {
-    border: isOver ? '2px dashed #4096ff' : '1px solid #d9d9d9',
-    opacity: isOver && !item ? 0.7 : 1,
-  };
+  const containerClass = `p-1 border-2 border-dashed rounded-2xl transition-all duration-200 ${
+    isOver ? 'border-black bg-[#ebbea7]/30 scale-[1.02]' : 'border-gray-200 bg-transparent'
+  }`;
 
   return drop(
-    <div
-      className='p-2 border border-solid rounded-lg'
-      style={style}
-    > 
+    <div className={containerClass}> 
       {item ? (
         <div
-          className='flex justify-between items-center bg-[#edebeb] p-2 rounded-lg cursor-pointer'
+          className="flex justify-between items-center bg-white border-2 border-black p-2 rounded-xl cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] transition-all duration-200 text-black font-bold text-sm"
           onClick={() => {
             if (onItemClick) {
               onItemClick(item);
@@ -58,15 +53,16 @@ export const DropSpotComponent = <T, C>({ teamKey, columnKey, spotIndex, item, o
           <Button
             type="text"
             danger
-            icon={<CloseOutlined />}
+            icon={<CloseOutlined className="text-red-500 font-bold" />}
             onClick={(e) => {
               e.stopPropagation();
               onDeleteItem(teamKey, columnKey , spotIndex);
             }}
+            className="hover:bg-red-50 !flex !items-center !justify-center !rounded-full !w-6 !h-6 !p-0"
           />
         </div>
       ) : (
-        <div className='flex min-h-[50px] text-center text-black justify-center items-center'>...</div>
+        <div className="flex min-h-[44px] text-center text-[#5d6c7b] font-extrabold justify-center items-center tracking-wider">...</div>
       )}
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Input, Button, Form, message, Modal, Avatar, Upload } from 'antd';
+import { Input, Button, Form, App, Avatar, Upload } from 'antd';
 import { supabase } from '../../../../lib/supabase/client';
 import { LockOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { User } from '@supabase/supabase-js';
@@ -15,12 +15,12 @@ type ProfileData = {
 };
 
 const Profile = () => {
+    const { message, modal } = App.useApp();
     const [loading, setLoading] = useState<boolean>(false);
     const [form] = Form.useForm();
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [userRole, setUserRole] = useState<string | null>(null);
-    const [modal, contextHolder] = Modal.useModal();
     const isDisabled = userRole !== 'admin';
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const { trans } = useTrans();
@@ -60,7 +60,6 @@ const Profile = () => {
 
     const file = info.file.originFileObj;
     
-
     setLoading(true);
     const fileExt = file.name.split('.').pop();
     const fileName = `${user.id}-${Date.now()}.${fileExt}`;
@@ -99,6 +98,7 @@ const Profile = () => {
 
     setLoading(false);
 };
+
     const handleRemoveAvatar = async () => {
         if (!user) return message.error(trans.settings.unauthenticatedError);
         setLoading(true);
@@ -175,11 +175,11 @@ const Profile = () => {
     const handleChangePassword = () => {
         let newPassword = '';
         modal.confirm({
-            title: trans.settings.changePasswordTitle,
+            title: <span className="sora-font font-extrabold text-lg">{trans.settings.changePasswordTitle}</span>,
             content: (
-                <div>
-                    <p>{trans.settings.enterNewPassword}</p>
-                    <Input.Password onChange={(e) => (newPassword = e.target.value)} />
+                <div className="mt-3">
+                    <p className="font-bold text-sm mb-2">{trans.settings.enterNewPassword}</p>
+                    <Input.Password className="border-2 border-black rounded-xl h-10" onChange={(e) => (newPassword = e.target.value)} />
                 </div>
             ),
             onOk: async () => {
@@ -190,7 +190,7 @@ const Profile = () => {
                 setLoading(true);
                 const { error } = await supabase.auth.updateUser({ password: newPassword });
                 setLoading(false);
-
+ 
                 if (error) {
                     message.error('Error: ' + error.message);
                     return Promise.reject();
@@ -207,8 +207,8 @@ const Profile = () => {
             return;
         }
         modal.confirm({
-            title: trans.settings.deleteAccountConfirm,
-            content: trans.settings.deleteAccountWarning,
+            title: <span className="sora-font font-extrabold text-lg text-red-600">{trans.settings.deleteAccountConfirm}</span>,
+            content: <p className="font-medium text-sm mt-2">{trans.settings.deleteAccountWarning}</p>,
             okText: trans.settings.deleteAccountButton,
             okType: 'danger',
             cancelText: trans.common.cancel,
@@ -236,11 +236,11 @@ const Profile = () => {
     };
     
     return (
-        <div className="bg-gradient-to-br from-[#E4FFFE] to-[#8BDDFB] p-8 rounded-xl shadow-xl max-w-screen ml-1 mr-10">
+        <div className="bg-white border-2 border-black p-8 rounded-[32px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-w-screen ml-1 mr-6 text-black transition-all duration-300">
             {userRole === 'admin' && (
-                <div className="mb-8 p-6 bg-blue-100 border border-blue-400 rounded-lg">
-                    <h3 className="text-xl font-bold text-blue-700">{trans.settings.adminDashboard}</h3>
-                    <p className="mt-2 text-blue-600">{trans.settings.adminAccess}</p>
+                <div className="mb-8 p-6 bg-[#ebc7b5]/30 border-2 border-black rounded-2xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <h3 className="text-xl font-extrabold sora-font text-black">{trans.settings.adminDashboard}</h3>
+                    <p className="mt-2 text-[#2d3748] font-bold sora-font">{trans.settings.adminAccess}</p>
                 </div>
             )}
             <Form
@@ -250,48 +250,52 @@ const Profile = () => {
                 disabled={loading}
                 className="space-y-8"
             >
-                <div className='flex justify-between items-start mb-0'>
-                    <div>
-                        <h2 className="text-xl font-bold mb-6 text-gray-800">{trans.settings.myProfile}</h2>
-                        <div className="flex w-[470px] space-x-4 gap-5">
+                {/* Profile Detail and Avatar section */}
+                <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
+                    <div className="flex-1 w-full">
+                        <h2 className="text-2xl font-extrabold mb-6 sora-font tracking-tight text-black">{trans.settings.myProfile}</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                             <Form.Item
                                 name="firstName"
-                                label={trans.settings.firstName}
-                                className="flex-1"
+                                label={<span className="font-bold text-sm text-black">{trans.settings.firstName}</span>}
                                 rules={[{ required: true, message: trans.settings.messageFirstName }]}
                             >
-                                <Input size="large" disabled={isDisabled} />
+                                <Input className="border-2 border-black rounded-xl h-11 text-black font-semibold" disabled={isDisabled} />
                             </Form.Item>
                             <Form.Item
                                 name="lastName"
-                                label={trans.settings.lastName}
-                                className="flex-1"
+                                label={<span className="font-bold text-sm text-black">{trans.settings.lastName}</span>}
                                 rules={[{ required: true, message: trans.settings.messageLastName }]}
                             >
-                                <Input size="large" disabled={isDisabled} />
+                                <Input className="border-2 border-black rounded-xl h-11 text-black font-semibold" disabled={isDisabled} />
                             </Form.Item>
                         </div>
                     </div>
-                    <div className="flex flex-rows gap-4 items-center">
+                    
+                    <div className="flex flex-row gap-5 items-center flex-shrink-0">
                         <Avatar
-                            size={120}
+                            size={100}
                             icon={<UserOutlined />}
                             src={avatarUrl || null}
-                            className="bg-[#77BFFA] border-white border-2"
+                            className="bg-[#ebc7b5] border-black border-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                         />
-                        <div className="flex flex-col mt-4 gap-5">
+                        <div className="flex flex-col gap-3">
                             <Upload
                                 showUploadList={false}
                                 onChange={handleAvatarUpload}
                             >
-                                <Button icon={<UploadOutlined />} className="!w-[200px] !border-none !bg-[#97DDD9] !h-[46px] !text-[18px] !font-bold !text-black !hover:bg-[#97DDD9]" size="large">{trans.settings.upload}</Button>
+                                <Button 
+                                    icon={<UploadOutlined />} 
+                                    className="!w-[160px] border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !h-10 !text-sm !font-bold !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] rounded-full transition-all"
+                                >
+                                    {trans.settings.upload}
+                                </Button>
                             </Upload>
                             <Button
                                 danger
                                 onClick={handleRemoveAvatar}
-                                size="large"
                                 disabled={!avatarUrl}
-                                className='!text-[18px] !w-[200px]'
+                                className="!w-[160px] !h-10 !text-sm !font-bold border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] transition-all disabled:opacity-40"
                             >
                                 {trans.settings.remove}
                             </Button>
@@ -299,45 +303,63 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="space-y-6">
-                    <h2 className="text-xl font-semibold text-gray-700">{trans.settings.accountSecurity}</h2>
-                    <Form.Item label={trans.settings.password} className="mb-0">
-                        <div className="flex items-center !justify-between !gap-5">
-                            <div className='w-auto'>
-                                <Input.Password
-                                    placeholder="••••••••"
-                                    readOnly
-                                    className="flex-1"
-                                    size="large"
-                                    iconRender={() => <LockOutlined style={{ color: '#ccc', fontSize: '16px' }} />}
-                                />
-                            </div>
-                            <Button onClick={handleChangePassword} className="ml-4 !bg-[#97DDD9] !border-none" size="large">{trans.settings.changePassword}</Button>
+                {/* Account Security */}
+                <div className="space-y-4 border-t-2 border-black pt-6">
+                    <h2 className="text-2xl font-extrabold text-black sora-font tracking-tight">{trans.settings.accountSecurity}</h2>
+                    <Form.Item label={<span className="font-bold text-sm text-black">{trans.settings.password}</span>} className="mb-0">
+                        <div className="flex flex-row items-center gap-4 max-w-xl">
+                            <Input.Password
+                                placeholder="••••••••"
+                                readOnly
+                                className="border-2 border-black rounded-xl h-11 flex-grow font-semibold text-black"
+                                iconRender={() => <LockOutlined style={{ color: '#000000', fontSize: '16px' }} />}
+                            />
+                            <Button 
+                                onClick={handleChangePassword} 
+                                className="border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] !font-bold rounded-full !h-11 transition-all flex-shrink-0"
+                            >
+                                {trans.settings.changePassword}
+                            </Button>
                         </div>
                     </Form.Item>
                 </div>
 
-                <div className="space-y-6">
-                    <h2 className="text-xl font-semibold text-gray-700">{trans.settings.supportAccess}</h2>
-                    <div className="flex justify-between items-center bg-white p-5 rounded-md border border-red-400">
+                {/* Danger Zone */}
+                <div className="space-y-4 border-t-2 border-black pt-6">
+                    <h2 className="text-2xl font-extrabold text-black sora-font tracking-tight">{trans.settings.supportAccess}</h2>
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-[#fee2e2] p-5 rounded-2xl border-2 border-red-500 shadow-[3px_3px_0px_0px_rgba(239,68,68,1)] gap-4">
                         <div className="space-y-1">
-                            <h3 className="text-red-500 font-bold text-lg">{trans.settings.deleteAccountTitle}</h3>
-                            <p className="text-sm text-gray-600">{trans.settings.deleteAccountDesc}</p>
+                            <h3 className="text-red-600 font-extrabold text-lg sora-font">{trans.settings.deleteAccountTitle}</h3>
+                            <p className="text-sm text-[#2d3748] font-bold">{trans.settings.deleteAccountDesc}</p>
                         </div>
-                        <Button danger onClick={handleDeleteAccount} size="large">{trans.settings.deleteAccountButton}</Button>
+                        <Button 
+                            danger 
+                            onClick={handleDeleteAccount} 
+                            className="border-2 border-red-600 hover:!bg-red-50 !font-bold rounded-full h-11 flex items-center shadow-[2px_2px_0px_0px_rgba(239,68,68,1)] hover:-translate-y-[1px]"
+                        >
+                            {trans.settings.deleteAccountButton}
+                        </Button>
                     </div>
                 </div>
 
-                <div className="flex justify-end space-x-4 pt-6 gap-5">
-                    <Button onClick={() => router.back()} size="large" className='!w-[91px]'>
+                {/* Action Buttons */}
+                <div className="flex justify-end gap-4 border-t-2 border-black pt-6">
+                    <Button 
+                        onClick={() => router.back()} 
+                        className="!w-[100px] border-2 border-black rounded-full hover:-translate-y-[1px] transition-all font-bold !h-11"
+                    >
                         {trans.common.cancel}
                     </Button>
-                    <Button type="primary" htmlType="submit" className='!bg-[#97DDD9] !border-none !text-black !w-[91px]' loading={loading} size="large">
+                    <Button 
+                        type="primary" 
+                        htmlType="submit" 
+                        loading={loading}
+                        className="!w-[100px] border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] rounded-full transition-all font-bold !h-11"
+                    >
                         {trans.common.save}
                     </Button>
                 </div>
             </Form>
-            {contextHolder}
         </div>
     );
 };

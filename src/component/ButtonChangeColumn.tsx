@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown } from 'antd';
 import React from 'react';
 import type { MenuProps } from 'antd';
 
@@ -31,10 +31,13 @@ export const ButtonChangeColumn = ({
         },
     ];
 
-    const menu = <Menu items={items} selectedKeys={[String(columnCount)]} />;
+    const menuProps = {
+        items,
+        selectedKeys: [String(columnCount)],
+    };
 
     return (
-        <Dropdown overlay={menu} trigger={['click']} placement="bottomLeft">
+        <Dropdown menu={menuProps} trigger={['click']} placement="bottomLeft">
             <Button className="!bg-[#97DDD9] !w-[140px] !h-[45px] !text-black !text-[24px] !font-bold hover:!bg-blue-400 !rounded-xl !justify-center !items-center">
                 Team {columnCount}
                 <img src="/image/arrow 1.png" width={30} height={30} alt="User" />

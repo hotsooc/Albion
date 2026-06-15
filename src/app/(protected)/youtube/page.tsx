@@ -21,11 +21,11 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-[#0f172a] flex flex-col items-center justify-center rounded-2xl">
+    <main className="p-8 border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-[32px] ml-1 mr-6 text-black transition-all duration-300 flex flex-col items-center justify-center">
       <div className="my-5 text-center">
-        <p className="text-4xl font-black text-white tracking-tighter">
-          Retro <span className="text-red-500">Tube</span>
-        </p>
+        <h1 className="text-4xl font-black text-black tracking-tighter sora-font">
+          Retro <span className="text-red-600">Tube</span>
+        </h1>
       </div>
 
       <YouTubeTV videoId={currentVideoId} />
@@ -37,9 +37,9 @@ export default function Home() {
             placeholder={trans.youtube.placeholder}
             value={inputUrl}
             onChange={handleUpdateVideo}
-            className="w-full px-6 py-4 bg-gray-800/50 border-2 border-gray-700 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all duration-300"
+            className="w-full px-6 py-4 bg-white border-2 border-black rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-bold sora-font"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-gray-500 group-focus-within:text-red-500 transition-colors">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-extrabold text-[#2d3748] group-focus-within:text-black transition-colors sora-font">
             LIVE PREVIEW
           </div>
         </div>

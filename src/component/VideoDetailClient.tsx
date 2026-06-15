@@ -1,18 +1,12 @@
 'use client';
 
 import React from "react";
-import ReactPlayer from "react-player";
+import dynamic from "next/dynamic";
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
 import { Button } from "antd";
 import CommentSection from '@/component/Comment';
 import { useRouter } from 'next/navigation';
-import { Baloo_2 } from "next/font/google";
-
 import useTrans from "@/hooks/useTrans";
- 
-const balooFont = Baloo_2({
-    subsets: ['vietnamese'],
-    weight: ['800'],
-});
 
 export default function VideoDetailClient({ videoData, videoId }: { videoData: any, videoId: string }) {
     const router = useRouter();
@@ -24,41 +18,53 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
     ];
 
     return (
-        <section className="bg-[#E4FFFE] w-auto p-4 shadow-xl rounded-xl mx-4 ">
+        <section className="w-auto p-6 rounded-[32px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mx-4 transition-all duration-300 text-black">
             <div>
-                <div className="flex gap-2 mb-6">
-                    <Button onClick={() => router.push('/videos')} className="!bg-[#97DDD9] !h-[46px] !font-bold !text-black !hover:bg-[#97DDD9] !rounded-xl !mr-80">
-                        <img src='/image/back_icon.png' alt="" width={20} height={20} />
-                        <span className="text-black font-bold text-[20px]">{trans.video.back}</span>
+                {/* Back button and Category Quick links */}
+                <div className="flex items-center justify-between gap-4 mb-6">
+                    <Button 
+                        onClick={() => router.push('/videos')} 
+                        className="!h-11 !px-5 !rounded-full border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] !font-bold sora-font transition-all duration-200 flex items-center gap-1.5"
+                    >
+                        <img src='/image/back_icon.png' alt="" width={16} height={16} />
+                        <span className="font-bold text-[14px]">{trans.video.back}</span>
                     </Button>
                     
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.key}
-                            onClick={() => router.push(`/videos/?tab=${tab.key}`)}
-                            className={`${balooFont.className} not-only-of-type:px-4 py-2 w-1/6 !shadow-xl !rounded-full !font-normal !text-[24px] !text-black cursor-pointer transition bg-[#8BDDFB] hover:bg-[#77BFFA]`}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
+                    <div className="flex gap-2">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.key}
+                                onClick={() => router.push(`/videos/?tab=${tab.key}`)}
+                                className="py-2 px-5 rounded-full border-2 border-black font-extrabold sora-font text-xs tracking-tight cursor-pointer transition-all duration-200 bg-white hover:bg-[#fcf8f2] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]"
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
                 
-                <div className="grid grid-cols-[4fr_2fr] gap-4 p-4">
-                    <div className="video-wrapper h-auto">
-                        <ReactPlayer
-                            src={videoData.url}
-                            controls={true}
-                            width="100%"
-                            height="100%"
-                            className="!shadow-2xl"
-                        />
+                {/* Player and Comments Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-[4fr_2fr] gap-6 p-2">
+                    <div className="flex flex-col gap-4">
+                        <div className="video-wrapper h-auto rounded-2xl overflow-hidden border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] bg-black">
+                            <ReactPlayer
+                                url={videoData.url}
+                                controls={true}
+                                width="100%"
+                                height="100%"
+                            />
+                        </div>
+                        <div className="flex flex-col ml-1">
+                            <span className="text-black text-2xl font-extrabold tracking-tight mt-2 sora-font">
+                                {videoData.title}
+                            </span>
+                            <span className="text-[#5d6c7b] text-base font-bold sora-font">
+                                {trans.video.author} {videoData.channel}
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <CommentSection videoId={videoId} />
-                    </div>
-                    <div className="flex flex-col -mt-5 ml-3">
-                        <span className="text-black text-[32px] font-bold mt-4">{videoData.title}</span>
-                        <span className="text-black text-[20px] font-medium">{trans.video.author} {videoData.channel}</span>
                     </div>
                 </div>
             </div>

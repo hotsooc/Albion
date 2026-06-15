@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Form, Input, Typography, Divider, message } from "antd";
+import { Button, Form, Input, Typography, Divider, App } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { supabase } from "../../../lib/supabase/client";
 import { Baloo_2 } from "next/font/google";
@@ -21,6 +21,7 @@ const balooFont = Baloo_2({
 });
 
 export default function LoginPage() {
+ const { message } = App.useApp();
  const [loading, setLoading] = useState(false);
  const router = useRouter();
  const { trans } = useTrans();

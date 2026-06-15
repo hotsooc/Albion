@@ -27,6 +27,11 @@ export const EnglishScript = {
         warning: 'Warning',
         info: 'Info'
     },
+    theme: {
+        original: 'Original Theme',
+        celestial: 'Sky & Gold',
+        emerald: 'Mist & Emerald'
+    },
     login: {
         title: 'Welcome to XHCN',
         user: 'User',
@@ -103,6 +108,7 @@ export const EnglishScript = {
         author: 'Author:',
         notFound: 'Video not found.',
         untitled: 'Untitled',
+        noDescription: 'No description',
         unknownAuthor: 'Unknown Author'
     },
     comment: {

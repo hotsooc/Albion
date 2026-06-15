@@ -1,20 +1,29 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Sora } from 'next/font/google';
 import 'antd/dist/reset.css';
 import './globals.css';
 import ClientLayoutWrapper from '@/component/ClientLayoutWrapper';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora',
+  weight: ['400', '500', '600', '700', '800'],
+});
 
 export const metadata: Metadata = {
-  title: 'My App',
-  description: 'Login/Logout demo with Next.js + AntD',
+  title: 'XHCN Albion Guild Companion',
+  description: 'Companion app for XHCN Guild in Albion Online',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi">
-      <body className={inter.className}>
+    <html lang="vi" className={`${inter.variable} ${sora.variable}`}>
+      <body className="font-sans antialiased">
         <ClientLayoutWrapper>
           {children}
         </ClientLayoutWrapper>
@@ -22,3 +31,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+

@@ -2,19 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Baloo_2, Baloo_Bhai_2 } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { supabase } from '../../lib/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { motion, Variants } from 'framer-motion';
 import useTrans from '@/hooks/useTrans';
-
-const HEADER_HEIGHT_PX = 64; 
-
-const balooFont = Baloo_Bhai_2({
-  subsets: ['vietnamese'],
-  weight: ['800'],
-});
 
 const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: () => void }) => { 
   const pathname = usePathname();
@@ -45,54 +37,47 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
   const linkVariants: Variants = {
     initial: { scale: 1, x: 0 },
     hover: {
-      scale: 1.05,
-      x: isOpen ? 5 : 0,
+      scale: 1.02,
+      x: isOpen ? 4 : 0,
       transition: {
-        type: "spring",
-        stiffness: 300,
+        type: 'spring',
+        stiffness: 400,
+        damping: 15
       },
     },
-    tap: { scale: 0.95 },
+    tap: { scale: 0.98 },
   };
   
-  const sidebarWidthClass = isOpen ? "w-60" : "w-30 ml-5";
+  const sidebarWidthClass = isOpen ? "w-64" : "w-24";
   
   const NavLabelAndIcon = (
-    <div className='flex flex-row justify-center items-center mt-10 gap-2'>
-      {/* <span className="text-[25px] text-black">{'<'}</span>  */}
-      <span className={`${balooFont.className} text-[25px] ml-5 font-bold text-black`}>{trans.sidebar.navigation}</span>
+    <div className='flex flex-row justify-center items-center gap-2'>
+      <span className="sora-font text-lg font-extrabold text-black tracking-tight">{trans.sidebar.navigation}</span>
     </div>
   );
-  const MenuIcon = <span className='text-[30px] text-black'>☰</span>
+  const MenuIcon = <span className='text-2xl text-black hover:scale-110 transition-transform duration-200'>☰</span>
 
   return (
     <section 
-      className={`${sidebarWidthClass} flex flex-col items-center flex-none transition-all duration-300 ease-in-out`}
+      className={`${sidebarWidthClass} flex flex-col items-center flex-none transition-[width] duration-200 ease-out py-6 px-4`}
       style={{
-          top: `${HEADER_HEIGHT_PX}px`, 
-          height: `calc(100vh - ${HEADER_HEIGHT_PX}px)`, 
+          height: 'calc(100vh - 80px)', 
       }}
     >
-      <div 
-        className={`flex flex-row items-center pt-8 pb-4 transition-all duration-300`}
-      >
+      <div className={`flex flex-row items-center pt-2 pb-6 transition-all duration-200 ${isOpen ? '' : 'justify-center w-full'}`}>
         <button
             onClick={toggleSidebar}
-            className={`cursor-pointer transition-colors duration-200 ${isOpen ? 'justify-start px-2' : 'pt-10 justify-center'}`}
-            style={{ 
-                paddingLeft: isOpen ? '0rem' : '0rem', 
-                display: 'flex'
-            }}
+            className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
         >
             {isOpen ? NavLabelAndIcon : MenuIcon } 
         </button>
       </div>
 
       <nav 
-        className={`${!isOpen && 'overflow-hidden'}`}
+        className={`w-full ${!isOpen && 'overflow-hidden flex flex-col items-center'}`}
         style={{ flexGrow: 1 }}
       >
-        <ul>
+        <ul className="w-full flex flex-col gap-2">
           {[
             { href: "/home", icon: "/image/home _icon.png", label: trans.sidebar.home },
             { href: "/teammate", icon: "/image/team_icon.png", label: trans.sidebar.team },
@@ -102,17 +87,31 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
             { href: "/aboutus", icon: "/image/user_icon1.png", label: trans.sidebar.aboutUs },
             { href: "/settings", icon: "/image/settings_icon.png", label: trans.sidebar.settings },
           ].map((item) => (
-            <li key={item.href} className="mb-2">
-              <motion.div variants={linkVariants} initial="initial" whileHover="hover" whileTap="tap">
+            <li key={item.href} className="w-full">
+              <motion.div 
+                variants={linkVariants} 
+                initial="initial" 
+                whileHover="hover" 
+                whileTap="tap" 
+                className={`w-full flex ${isOpen ? '' : 'justify-center'}`}
+              >
                 <Link
                   href={item.href}
-                  className={`flex items-center py-2 justify-start rounded-lg text-gray-700 transition-colors duration-240 ${
-                    pathname.startsWith(item.href) ? '!bg-[#77BFFA] !text-black shadow-[0_10px_30px_rgba(0,0,0,0.3)] font-semibold' : '!text-black hover:!bg-[#8BDDFB]'
-                  } ${isOpen ? 'px-4 gap-4' : 'justify-center w-20'}`}
+                  className={`flex items-center rounded-full border-2 transition-all duration-200 ${
+                    pathname.startsWith(item.href) 
+                      ? 'bg-[#ebc7b5] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-black font-bold' 
+                      : 'bg-white hover:bg-[#fcf8f2] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-black'
+                  } ${isOpen ? 'justify-start py-2.5 px-6 gap-4 w-full' : 'justify-center w-12 h-12 p-0'}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.icon} alt={item.label} width={24} height={24} className={`${isOpen ? 'ml-5' : 'ml-[27px]'} flex-shrink-0`} />
-                  <span className={`${balooFont.className} text-[25px] font-bold whitespace-nowrap ${!isOpen && 'hidden'}`}>
+                  <img 
+                    src={item.icon} 
+                    alt={item.label} 
+                    width={20} 
+                    height={20} 
+                    className="flex-shrink-0" 
+                  />
+                  <span className={`text-[14px] tracking-tight sora-font font-bold whitespace-nowrap ${!isOpen && 'hidden'}`}>
                     {item.label}
                   </span>
                 </Link>
@@ -121,13 +120,6 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
           ))}
         </ul>
       </nav>
-
-      {isOpen && ( 
-        <div className="p-4 flex-shrink-0 mt-auto"> 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {/* <img src="/image/umaru.png" alt="Umaru-chan" width={200} height={200} className='w-full h-auto' /> */}
-        </div>
-      )}
     </section>
   );
 };
