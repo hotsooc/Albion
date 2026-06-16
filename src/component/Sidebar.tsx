@@ -111,7 +111,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean, toggleSidebar: ()
                     height={20} 
                     className="flex-shrink-0" 
                   />
-                  <span className={`text-[14px] tracking-tight sora-font font-bold whitespace-nowrap ${!isOpen && 'hidden'}`}>
+                  <span className={`text-[14px] text-black tracking-tight sora-font font-bold whitespace-nowrap ${!isOpen && 'hidden'}`}>
                     {item.label}
                   </span>
                 </Link>
