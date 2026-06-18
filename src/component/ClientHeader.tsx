@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { ChevronDownIcon, Sun, Moon } from 'lucide-react';
+import { ChevronDownIcon, Sun, Moon, Home, Users, Film, Wrench, User as UserIcon, Settings, LogOut } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import useTrans from '@/hooks/useTrans';
 
@@ -21,16 +21,17 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   const router = useRouter();
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { changeLanguage, lang, trans } = useTrans();
   const { theme, setTheme } = useTheme();
 
   const categories = [
-    { name: trans.sidebar.home, icon: <img src="/image/home _icon.png" alt="" width={24} height={24} />, path: '/home'},
-    { name: trans.sidebar.team, icon: <img src="/image/team_icon.png" alt="" width={24} height={24} />, path: '/teammate' },
-    { name: trans.sidebar.video, icon: <img src="/image/video_icon.png" alt="" width={24} height={24} />, path: '/videos' },
-    { name: trans.sidebar.builds, icon: <img src="/image/build_icon.png" alt="" width={24} height={24} />, path: '/build' },
-    { name: trans.sidebar.aboutUs, icon: <img src="/image/user_icon1.png" alt="" width={24} height={24} />, path: '/aboutus' },
-    { name: trans.sidebar.settings, icon: <img src="/image/settings_icon.png" alt="" width={24} height={24} />, path: '/settings' },
+    { name: trans.sidebar.home, icon: <Home size={20} className="text-[var(--text-primary)]" />, path: '/home'},
+    { name: trans.sidebar.team, icon: <Users size={20} className="text-[var(--text-primary)]" />, path: '/teammate' },
+    { name: trans.sidebar.video, icon: <Film size={20} className="text-[var(--text-primary)]" />, path: '/videos' },
+    { name: trans.sidebar.builds, icon: <Wrench size={20} className="text-[var(--text-primary)]" />, path: '/build' },
+    { name: trans.sidebar.aboutUs, icon: <UserIcon size={20} className="text-[var(--text-primary)]" />, path: '/aboutus' },
+    { name: trans.sidebar.settings, icon: <Settings size={20} className="text-[var(--text-primary)]" />, path: '/settings' },
   ];
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   };
 
   const menuItems: MenuProps['items'] = [
-    { key: 'logout', label: trans.common.logout, icon: <img src='/image/logout.png' alt='' width={24} height={24} /> },
+    { key: 'logout', label: trans.common.logout, icon: <LogOut size={20} className="text-[var(--text-primary)]" /> },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
@@ -94,7 +95,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     const flagSource = flagMap[language] || flagMap['vi'];
     return (
       <div className='flex items-center gap-2'>
-        {flagSource.text}
+        <span className="hidden md:inline">{flagSource.text}</span>
         <Image src={flagSource.src} alt={flagSource.text} width={size} height={size} />
       </div>
     );
@@ -149,18 +150,19 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
   if (!user) return null;
 
   return (
-    <header className="p-4 flex items-center justify-between mt-4 mx-6 rounded-3xl border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] transition-all duration-300 text-[var(--text-primary)] theme-transition">
-      <div className="flex flex-row justify-center items-center gap-4 ml-4">
+    <header className="p-3 md:p-4 flex flex-col gap-2 mt-3 md:mt-4 mx-3 md:mx-6 rounded-3xl border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] transition-all duration-300 text-[var(--text-primary)] theme-transition">
+      <div className="flex items-center justify-between w-full">
+      <div className="flex flex-row justify-center items-center gap-2 md:gap-4 ml-2 md:ml-4">
         <div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/image/XHCN_icon.png" alt="XHCN Logo" width={44} height={44} />
+          <img src="/image/XHCN_icon.png" alt="XHCN Logo" width={44} height={44} className="w-9 h-9 md:w-11 md:h-11" />
         </div>
         <div>
-          <span className="text-3xl font-extrabold text-[var(--text-primary)] text-center tracking-tight sora-font">XHCN</span>
+          <span className="text-xl md:text-3xl font-extrabold text-[var(--text-primary)] text-center tracking-tight sora-font">XHCN</span>
         </div>
       </div>
 
-      <div className="flex-grow flex justify-center max-w-xl mx-8">
+      <div className="hidden md:flex flex-grow justify-center max-w-xl mx-8">
         <Dropdown
           dropdownRender={() => searchDropdownContent}
           trigger={['click']}
@@ -186,7 +188,13 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
         </Dropdown>
       </div>
 
-      <div className="flex items-center gap-3 mr-4">
+      <div className="flex items-center gap-1 md:gap-3 mr-2 md:mr-4">
+        <button
+          className="md:hidden cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-hover-nav)] border-2 border-[var(--border-color)] rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.15)] transition-all duration-200"
+          onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+        >
+          <SearchOutlined className="text-[var(--text-primary)] text-lg" />
+        </button>
         {/* Theme Toggle */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -229,12 +237,40 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/image/user_icon.png" width={22} height={22} alt="User" className="mr-1" />
-            <span className="text-[15px]" style={{ color: 'var(--text-btn-upload)' }}>
+            <span className="hidden md:inline text-[15px]" style={{ color: 'var(--text-btn-upload)' }}>
               {profile?.full_name || user?.user_metadata?.full_name || user?.email}
             </span>
           </a>
         </Dropdown>
       </div>
+      </div>
+      {isMobileSearchOpen && (
+        <div className="md:hidden w-full">
+          <Dropdown
+            dropdownRender={() => searchDropdownContent}
+            trigger={['click']}
+            placement="bottomLeft"
+            arrow
+            open={isSearchDropdownVisible}
+            onOpenChange={setIsSearchDropdownVisible}
+          >
+            <Input
+              placeholder={trans.common.searchPlaceholder}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onPressEnter={handleSearchSubmit}
+              prefix={<SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />}
+              style={{
+                backgroundColor: 'var(--bg-input)',
+                color: 'var(--text-input)',
+                borderColor: 'var(--border-color)',
+              }}
+              className="!h-11 !px-4 focus:ring-0 !flex !items-center !rounded-full w-full !cursor-pointer border-2 border-[var(--border-color)] transition-all duration-200 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.15)]"
+              onClick={() => setIsSearchDropdownVisible(true)}
+            />
+          </Dropdown>
+        </div>
+      )}
     </header>
   );
 };

@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Avatar, Card, Col, Row, App, Spin } from 'antd';
+import { Avatar, Card, Col, Row, App } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../../../lib/supabase/client';
 import useTrans from '@/hooks/useTrans';
+import { ListSkeleton } from '@/component/Skeleton';
 
 type UserProfile = {
     id: string;
@@ -45,14 +46,14 @@ const AboutUsPage = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <Spin size="large" />
+            <div className="p-8">
+                <ListSkeleton count={5} />
             </div>
         );
     }
 
     return (
-        <div className="p-8 border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-[32px] ml-1 mr-6 text-[var(--text-primary)] transition-all duration-300 theme-transition">
+        <div className="p-8 border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-[32px] mx-1 md:mx-6 text-[var(--text-primary)] transition-all duration-300 theme-transition">
             <Row gutter={[24, 24]}>
                 {/* Users List Column */}
                 <Col xs={24} lg={10}>

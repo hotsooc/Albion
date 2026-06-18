@@ -63,7 +63,7 @@ export default function Home() {
         </div>
       )}
 
-      <section className='flex flex-col justify-start items-center w-auto rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] ml-1 mr-10'>
+      <section className='flex flex-col justify-start items-center w-auto rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] mx-2 md:mr-10'>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/image/group123.png"

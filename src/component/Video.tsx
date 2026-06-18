@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { Card, Modal, Row, Col, Spin, Input, Button, Form } from "antd";
+import { Card, Modal, Row, Col, Input, Button, Form } from "antd";
 import { UploadOutlined, SearchOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { supabase } from "../../lib/supabase/client";
@@ -9,6 +9,7 @@ import { VideoAlbion } from "@/store/video";
 import { useRouter, useSearchParams } from 'next/navigation';
 import useTrans from "@/hooks/useTrans";
 import { getYouTubeVideoId, getYouTubeThumbnail } from "@/utils/youtube";
+import { GridSkeleton } from "@/component/Skeleton";
 
 const { Meta } = Card;
 
@@ -145,7 +146,7 @@ const VideoPage = () => {
   );
 
   return (
-    <div className="p-6 w-full h-full rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-[var(--text-primary)] theme-transition $1">
+    <div className="p-4 md:p-6 w-full h-full rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-[var(--text-primary)] theme-transition $1">
       {/* Category Tabs Selection */}
       <div className="flex flex-wrap justify-center gap-3 mb-6">
         {tabs.map((tab) => {
@@ -187,9 +188,7 @@ const VideoPage = () => {
       
       {/* Videos List Grid */}
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <Spin size="large" />
-        </div>
+        <GridSkeleton count={8} />
       ) : (
         <Row gutter={[16, 16]}>
           {filteredVideos.map((video) => (

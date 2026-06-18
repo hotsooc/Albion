@@ -6,6 +6,7 @@ import { Button } from "antd";
 import CommentSection from '@/component/Comment';
 import { useRouter } from 'next/navigation';
 import useTrans from "@/hooks/useTrans";
+import { ArrowLeft } from 'lucide-react';
 
 export default function VideoDetailClient({ videoData, videoId }: { videoData: any, videoId: string }) {
     const router = useRouter();
@@ -17,7 +18,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
     ];
 
     return (
-        <section className="w-auto p-6 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] mx-4 theme-transition text-[var(--text-primary)]">
+        <section className="w-auto p-6 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] mx-2 md:mx-4 theme-transition text-[var(--text-primary)]">
             <div>
                 {/* Back button and Category Quick links */}
                 <div className="flex items-center justify-between gap-4 mb-6">
@@ -25,7 +26,7 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                         onClick={() => router.push('/videos')} 
                         className="!h-11 !px-5 !rounded-full border-2 border-[var(--border-color)] !bg-[var(--color-accent)] hover:!bg-[var(--color-accent-hover)] !text-[var(--text-btn-upload)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(120,100,240,0.15)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.25)] hover:-translate-y-[1px] active:translate-y-[1px] !font-bold sora-font transition-all duration-200 flex items-center gap-1.5 will-change-transform"
                     >
-                        <img src='/image/back_icon.png' alt="" width={16} height={16} />
+                        <ArrowLeft size={16} className="text-[var(--text-primary)]" />
                         <span className="font-bold text-[14px]">{trans.video.back}</span>
                     </Button>
                     

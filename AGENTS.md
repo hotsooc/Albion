@@ -52,6 +52,9 @@ supabase/
 - Use `theme-transition` class on container elements for smooth color transitions during theme switch.
 - Use `will-change-transform backface-visibility-hidden` on interactive elements with hover/click animations for GPU-accelerated rendering.
 - `youtube.ts` utility has `getYouTubeVideoId()` and `getYouTubeThumbnail()` — use these, don't inline YouTube regex.
+- **Icons**: Use `lucide-react` for UI icons (`Home`, `Users`, `Film`, `Wrench`, `User`, `Settings`, `LogOut`, `ChevronLeft`, `ChevronRight`, `Pencil`, `Plus`, `ArrowLeft`, `MessageSquare`, `ChevronDown`, `Sun`, `Moon`). They auto-adapt to theme via `currentColor`. Add `className="text-[var(--text-primary)]"` for theme support.
+- **Loading states**: Use the `Skeleton` component (`CardSkeleton`, `GridSkeleton`, `ListSkeleton`) instead of raw `<Spin>` or plain `<div>`.
+- **Mobile**: Sidebar uses overlay mode on `<768px` with hamburger toggle. Header search collapses to icon on mobile. Language switcher hides text on mobile.
 - Ant Design 5 with `@ant-design/compatible` compat layer; the root layout imports `antd/dist/reset.css`.
 - Both `moment` and `dayjs` are dependencies — `moment` is used in `useTrans`, `dayjs` may be unused.
 - Game rendering libraries (pixi.js, phaser, three) are in `dependencies`; they are used on specific pages (e.g. games feature).

@@ -10,6 +10,7 @@ import { motion, Variants } from 'framer-motion';
 import { supabase } from '../../../../lib/supabase/client';
 import { Database } from '../../../../lib/database.types';
 import useTrans from '@/hooks/useTrans';
+import { GridSkeleton } from '@/component/Skeleton';
 
 type TeamsListRow = Database['public']['Tables']['teams_list']['Row'];
 type TeamsListInsert = Database['public']['Tables']['teams_list']['Insert'];
@@ -147,7 +148,7 @@ export default function TeammatePage() {
   };
 
   if (isLoading) {
-    return <div className='p-8 text-center text-xl font-bold'>{trans.loading}</div>;
+    return <div className='p-8'><GridSkeleton count={3} /></div>;
   }
 
   return (
@@ -155,7 +156,7 @@ export default function TeammatePage() {
       initial="hidden"
       animate="visible"
       variants={fadeInVariants}
-      className="w-auto h-auto p-6 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ml-1 mr-6 transition-all duration-300 text-[var(--text-primary)] theme-transition"
+      className="w-auto h-auto p-4 md:p-6 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mx-1 md:mx-6 transition-all duration-300 text-[var(--text-primary)] theme-transition"
     >
       <DragDropProvider>
         <div className='flex'>
@@ -172,7 +173,7 @@ export default function TeammatePage() {
           />
         </div>
 
-        <div className='grid grid-cols-[1fr_5fr] gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-[1fr_5fr] gap-4'>
           <div className='sticky top-4 h-full'>
             <DragSourceContainer />
           </div>

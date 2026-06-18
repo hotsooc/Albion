@@ -2,11 +2,13 @@
 
 import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, Transition } from 'framer-motion';
 import { allItemsData, dataSets, ItemType } from '@/store/data';
 import useTrans from '@/hooks/useTrans';
+import { GridSkeleton } from '@/component/Skeleton';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -135,7 +137,8 @@ export default function BuildPageClient() {
     };
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-[1.2fr_3.8fr] h-auto gap-6 ml-1 mr-6 transition-all duration-300 text-[var(--text-primary)]">
+        <Suspense fallback={<GridSkeleton />}>
+        <section className="grid grid-cols-1 lg:grid-cols-[1.2fr_3.8fr] h-auto gap-4 md:gap-6 mx-1 md:mx-6 transition-all duration-300 text-[var(--text-primary)]">
             {/* Left Filter & Search Bar */}
             <div className="flex flex-col gap-5 border-2 border-[var(--border-color)] rounded-[32px] p-5 bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <div className="flex items-center rounded-full w-full overflow-hidden border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] px-4 transition-all duration-300 focus-within:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
@@ -296,7 +299,7 @@ export default function BuildPageClient() {
                                 onClick={handlePrev} 
                                 disabled={searchResults.length <= 1}
                             >
-                                <img src="/image/left-icon.png" alt="Prev" width={16} height={16} />
+                                <ChevronLeft size={16} className="text-[var(--text-primary)]" />
                             </button>
                             <span className="text-xl font-bold sora-font tracking-tight">
                                 ~ {activeButton ? getButtonLabel(activeButton) : ''} ~
@@ -306,7 +309,7 @@ export default function BuildPageClient() {
                                 onClick={handleNext} 
                                 disabled={searchResults.length <= 1}
                             >
-                                <img src="/image/right_icon.png" alt="Next" width={16} height={16} />
+                                <ChevronRight size={16} className="text-[var(--text-primary)]" />
                             </button>
                         </div>
                     </motion.div>
@@ -317,5 +320,6 @@ export default function BuildPageClient() {
                 )}
             </div>
         </section>
+        </Suspense>
     );
 }

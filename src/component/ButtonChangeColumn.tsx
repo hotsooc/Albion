@@ -2,6 +2,7 @@
 
 import { Button, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
+import { ChevronDown } from 'lucide-react';
 
 type ButtonChangeColumnProps = {
     setColumnCount: (count: number) => void;
@@ -39,7 +40,7 @@ export const ButtonChangeColumn = ({
         <Dropdown menu={menuProps} trigger={['click']} placement="bottomLeft">
             <Button className="!bg-[var(--color-accent)] !w-[140px] !h-[45px] !text-[var(--text-btn-upload)] !text-[24px] !font-bold hover:!bg-[var(--color-accent-hover)] !rounded-xl !justify-center !items-center">
                 Team {columnCount}
-                <img src="/image/arrow 1.png" width={30} height={30} alt="User" />
+                <ChevronDown size={20} className="text-[var(--text-primary)]" />
             </Button>
         </Dropdown>
     );

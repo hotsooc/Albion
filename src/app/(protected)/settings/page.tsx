@@ -237,7 +237,7 @@ const Profile = () => {
     };
     
     return (
-        <div className="bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] p-8 rounded-[32px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-w-screen ml-1 mr-6 text-[var(--text-primary)] transition-all duration-300 theme-transition">
+        <div className="bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] p-4 md:p-8 rounded-[32px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-w-screen mx-1 md:mx-6 text-[var(--text-primary)] transition-all duration-300 theme-transition">
             {userRole === 'admin' && (
                 <div className="mb-8 p-6 bg-[var(--color-accent)]/30 border-2 border-[var(--border-color)] rounded-2xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                     <h3 className="text-xl font-extrabold sora-font text-[var(--text-primary)]">{trans.settings.adminDashboard}</h3>

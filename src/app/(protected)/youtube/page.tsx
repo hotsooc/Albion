@@ -20,7 +20,7 @@ export default function Home() {
   };
 
   return (
-    <main className="p-8 border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-[32px] ml-1 mr-6 text-[var(--text-primary)] transition-all duration-300 flex flex-col items-center justify-center theme-transition">
+    <main className="p-4 md:p-8 border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-[32px] mx-1 md:mx-6 text-[var(--text-primary)] transition-all duration-300 flex flex-col items-center justify-center theme-transition">
       <div className="my-5 text-center">
         <h1 className="text-4xl font-black text-[var(--text-primary)] tracking-tighter sora-font">
           Retro <span className="text-[var(--color-danger-text)]">Tube</span>

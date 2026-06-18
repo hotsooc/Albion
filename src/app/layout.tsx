@@ -18,6 +18,27 @@ const sora = Sora({
 export const metadata: Metadata = {
   title: 'XHCN Albion Guild Companion',
   description: 'Companion app for XHCN Guild in Albion Online',
+  applicationName: 'XHCN',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'XHCN',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  themeColor: '#ebc7b5',
+  manifest: '/manifest.json',
+  keywords: ['Albion Online', 'XHCN', 'Guild', 'Companion', 'Build', 'Teammate', 'Videos', 'Games', 'MMORPG'],
+  openGraph: {
+    title: 'XHCN Albion Guild Companion',
+    description: 'Companion app for XHCN Guild in Albion Online',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

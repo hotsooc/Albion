@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import VideoPage from '@/component/Video';
 import { motion, Variants } from 'framer-motion';
 import useTrans from '@/hooks/useTrans';
+import { GridSkeleton } from '@/component/Skeleton';
 
 const contentSwirlVariants: Variants = {
   hidden: {
@@ -46,7 +47,7 @@ export default function VideosPage() {
         variants={contentSwirlVariants}
         style={{ position: 'relative', width: '100%', height: '100%' }}
       >
-        <Suspense fallback={<div>{trans.common.loading}</div>}>
+        <Suspense fallback={<GridSkeleton count={8} />}>
           <VideoPage />
         </Suspense>
       </motion.div>

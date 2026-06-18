@@ -7,6 +7,7 @@ import { supabase } from '../../lib/supabase/client';
 import CommentItem from './CommentItem';
 
 import useTrans from '@/hooks/useTrans';
+import { MessageSquare } from 'lucide-react';
 
 const { TextArea } = Input;
 
@@ -127,7 +128,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
     return (
         <div className="flex flex-col min-h-[400px] p-4 rounded-lg bg-[var(--bg-panel-solid)] shadow-xl w-full max-w-2xl mx-auto border border-[var(--border-color)] theme-transition">
             <div className='flex gap-3 mb-4 w-full'>
-                <img src='/image/message 1.png' alt='' width={30} height={15} />
+                <MessageSquare size={20} className="text-[var(--text-primary)]" />
                 <span className='text-gray-400 text-[20px]'>Comment</span>
             </div>
             <div className="flex-1 overflow-y-auto max-h-[350px] no-scrollbar pr-2">

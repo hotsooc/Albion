@@ -5,6 +5,7 @@ import Link from 'next/link';
 import BuildPageClient from '@/component/BuildPageClient';
 import { Baloo_2 } from 'next/font/google';
 import useTrans from '@/hooks/useTrans';
+import { GridSkeleton } from '@/component/Skeleton';
 
 const balooFont = Baloo_2({
     subsets: ['vietnamese'],
@@ -25,11 +26,11 @@ export default function BuildPage({ searchParams }: { searchParams: { [key: stri
         const albionImage = isAnime ? '/image/albionIcon.png' : '/image/albion-icon.png';
 
         return (
-            <div className='flex justify-center items-center w-full h-full pl-1 pr-10'>
+            <div className='flex justify-center items-center w-full h-full px-2 md:pr-10'>
                 <div className='albion-banner cursor-pointer'>
                     <img src={bannerImageSrc} alt="Albion Online Banner" className='banner-image w-screen rounded-xl' />
                     <div className='overlay-content'>
-                        <img src={albionImage} alt='Albion Online Icon' className='logo w-120 h-80 flex items-start justify-start -mt-20' />
+                        <img src={albionImage} alt='Albion Online Icon' className='logo w-120 h-80 flex items-start justify-start -mt-20 icon-invert' />
                         <span className={`${balooFont.className} flex justify-center items-center text-center ml-20 text-[40px]`}>{trans.build.title}</span>
                         <p className={`${balooFont.className} text-[24px] ml-10 text-center`}>{trans.build.subtitle}</p>
                         <div className='ml-25 flex flex-col gap-5'>
@@ -52,7 +53,7 @@ export default function BuildPage({ searchParams }: { searchParams: { [key: stri
     }
 
     return (
-        <Suspense fallback={<div>{trans.common.loading}</div>}>
+        <Suspense fallback={<GridSkeleton />}>
             <BuildPageClient />
         </Suspense>
     );

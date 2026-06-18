@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Modal, Input } from 'antd';
 import useTrans from '@/hooks/useTrans';
+import { ChevronLeft, ChevronRight, Pencil, Plus } from 'lucide-react';
 
 type TeamSelectorProps = {
   teamNames: string[];
@@ -67,7 +68,7 @@ export const TeamSelector = ({
         className="cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] transition-all will-change-transform backface-visibility-hidden" 
         onClick={handlePrevTeam}
       >
-        <img src='/image/left-icon.png' alt='Previous team' width={14} height={14} />
+        <ChevronLeft size={14} className="text-[var(--text-primary)]" />
       </button>
 
       {Array.isArray(teamNames) && teamNames.map((name, index) => {
@@ -89,7 +90,7 @@ export const TeamSelector = ({
                 onClick={(e) => { e.stopPropagation(); showEditModal(index); }}
                 title={trans.common.editTeamName}
               >
-                <img src='/image/edit_icon.png' alt='Edit' width={12} height={12} />
+                <Pencil size={12} className="text-[var(--text-primary)]" />
               </button>
             </div>
             
@@ -111,14 +112,14 @@ export const TeamSelector = ({
         onClick={showAddModal}
         title={trans.teammate.addTeam}
       >
-        <img src='/image/add_icon.png' alt='Add new team' width={18} height={18} />
+        <Plus size={18} className="text-[var(--text-primary)]" />
       </div>
 
       <button 
         className="cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] transition-all will-change-transform backface-visibility-hidden" 
         onClick={handleNextTeam}
       >
-        <img src='/image/right_icon.png' alt='Next team' width={14} height={14} />
+        <ChevronRight size={14} className="text-[var(--text-primary)]" />
       </button>
 
       <Modal

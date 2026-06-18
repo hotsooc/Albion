@@ -8,7 +8,7 @@ export default function Footer() {
     const { trans } = useTrans();
 
     return (
-        <footer className="mx-6 mt-8 mb-8 p-8 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] transition-all duration-300 text-[var(--text-primary)] theme-transition">
+        <footer className="mx-3 md:mx-6 mt-6 md:mt-8 mb-6 md:mb-8 p-4 md:p-8 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] transition-all duration-300 text-[var(--text-primary)] theme-transition">
             <div className="w-full">
                 <div className="flex flex-col lg:flex-row justify-between items-stretch gap-8">
 
