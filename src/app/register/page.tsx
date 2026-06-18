@@ -30,7 +30,7 @@ export default function SignupPage() {
   const onFinish = async (values: SignupValues) => {
   setLoading(true);
 
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email: values.email,
     password: values.password,
   });

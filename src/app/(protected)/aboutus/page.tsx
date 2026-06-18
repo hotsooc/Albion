@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Avatar, Card, Col, Row, App, Spin, Typography } from 'antd';
+import { useState, useEffect } from 'react';
+import { Avatar, Card, Col, Row, App, Spin } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../../../lib/supabase/client';
 import useTrans from '@/hooks/useTrans';
@@ -13,7 +13,7 @@ type UserProfile = {
     avatar_url: string | null;
 };
 
-const SettingPage = () => {
+const AboutUsPage = () => {
     const { message } = App.useApp();
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
@@ -150,4 +150,4 @@ const SettingPage = () => {
     );
 }
 
-export default SettingPage;
+export default AboutUsPage;

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Form, Input, Typography, Divider, App, Tooltip } from "antd";
+import { Button, Form, Input, Typography, Divider, App } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { supabase } from "../../../lib/supabase/client";
 import { Baloo_2 } from "next/font/google";
@@ -28,11 +28,11 @@ export default function LoginPage() {
 
  useEffect(() => {
   const { data: authListener } = supabase.auth.onAuthStateChange(
-   async (event, session) => {
+   async (_, session) => {
     if (session) {
      const user = session.user;
 
-     const { data: profile, error } = await supabase
+     const { error } = await supabase
       .from('profiles')
       .select('id')
       .eq('id', user.id)

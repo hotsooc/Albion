@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Avatar, Button, App, Input } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';

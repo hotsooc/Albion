@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, Dropdown } from 'antd';
-import React from 'react';
 import type { MenuProps } from 'antd';
 
 type ButtonChangeColumnProps = {

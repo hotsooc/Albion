@@ -3,31 +3,9 @@
 import { useState } from 'react';
 import { Input, Button } from 'antd';
 import { DraggableItem } from './DraggableItem';
-import { allItemsData, dataSet1, dataSet10, dataSet11, dataSet12, dataSet13, dataSet14, dataSet15, dataSet16, dataSet18, dataSet19, dataSet2, dataSet20, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8, dataSet9, ItemType } from '@/store/data';
+import { allItemsData, dataSets, ItemType } from '@/store/data';
 import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import useTrans from '@/hooks/useTrans';
-
-const dataSets = {
-  Sword: dataSet7,
-  Axe: dataSet8,
-  Mace: dataSet9,
-  Hammer: dataSet10,
-  'War Gloves': dataSet11,
-  Bow: dataSet1,
-  Dagger: dataSet2,
-  Spear: dataSet3,
-  'Quarterstaves': dataSet4,
-  'Shapeshifter Staves': dataSet5,
-  'Nature Staves': dataSet6,
-  'Fire Staves': dataSet12,
-  'Holy Staves': dataSet13,
-  'Arcane Staves': dataSet14,
-  'Frost Staves': dataSet15,
-  'Cursed Staves': dataSet16,
-  Shields: dataSet18,
-  Torches: dataSet19,
-  Tomes: dataSet20,
-};
 
 export const DragSourceContainer = () => {
   const [inputValue, setInputValue] = useState('');

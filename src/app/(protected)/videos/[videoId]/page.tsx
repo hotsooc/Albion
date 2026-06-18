@@ -1,12 +1,6 @@
 import VideoDetailClient from '@/component/VideoDetailClient';
-import { supabase } from '../../../../../lib/supabase/client';
-
-const getYouTubeVideoId = (url: string | null) => {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
+import { createClient } from '../../../../../lib/supabase/server';
+import { getYouTubeVideoId } from '@/utils/youtube';
 
 const fetchYouTubeMetadata = async (videoId: string) => {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -14,6 +8,7 @@ const fetchYouTubeMetadata = async (videoId: string) => {
   const res = await fetch(`${baseUrl}/api/youtube-metadata?videoId=${videoId}`);
   
   if (!res.ok) {
+    console.error('YouTube metadata fetch failed:', res.status);
   }
   return res.json();
 };
@@ -25,6 +20,7 @@ export default async function VideoDetailPage({
 }) {
   const { videoId } = params;
 
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('videos')
     .select('url')

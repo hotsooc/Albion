@@ -6,7 +6,6 @@ import { allItemsData, ItemType } from '@/store/data';
 import { Modal } from 'antd';
 import { Database } from '../../lib/database.types';
 import { supabase } from '../../lib/supabase/client';
-import { Baloo_2 } from 'next/font/google';
 import useTrans from '@/hooks/useTrans';
 type DragItem = {
  id: string;
@@ -179,7 +178,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
 
  useEffect(() => {
     const fetchData = async () => {
-      const { data: existingData, error: fetchError } = await supabase
+      const { data: existingData } = await supabase
         .from('teams_data')
         .select('data')
         .eq('id', 1)

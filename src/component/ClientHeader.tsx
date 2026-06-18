@@ -6,7 +6,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client'; 
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { Baloo_Bhai_2 } from 'next/font/google';
 import { ChevronDownIcon } from 'lucide-react';
 import useTrans from '@/hooks/useTrans';
 
@@ -46,7 +45,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
         return;
       }
       
-      const { data: profileData, error: profileError } = await supabase
+      const { data: profileData } = await supabase
         .from('profiles')
         .select('full_name')
         .eq('id', user.id)

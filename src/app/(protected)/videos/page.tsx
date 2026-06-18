@@ -2,7 +2,6 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import VideoPage from '@/component/Video';
-import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import useTrans from '@/hooks/useTrans';
 

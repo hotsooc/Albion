@@ -1,22 +1,21 @@
 "use client";
 import YouTubeTV from '@/component/retroTV';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useTrans from '@/hooks/useTrans';
+import { getYouTubeVideoId } from '@/utils/youtube';
 
 export default function Home() {
   const [inputUrl, setInputUrl] = useState('');
   const [currentVideoId, setCurrentVideoId] = useState('');
   const { trans } = useTrans();
 
-  const handleUpdateVideo = (e: any) => {
+  const handleUpdateVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputUrl(value);
 
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = value.match(regExp);
-    
-    if (match && match[2].length === 11) {
-      setCurrentVideoId(match[2]);
+    const videoId = getYouTubeVideoId(value);
+    if (videoId) {
+      setCurrentVideoId(videoId);
     }
   };
 

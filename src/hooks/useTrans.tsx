@@ -24,7 +24,7 @@ function getTrans(locale: string) {
 
 export const TransProvider = ({ children }: { children: ReactNode }) => {
     const [lang, setLang] = useState<Language>('vi');
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [_, setIsLoaded] = useState(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {

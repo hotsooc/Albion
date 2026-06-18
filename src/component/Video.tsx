@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Modal, Row, Col, Spin, Input, Button, Form } from "antd";
 import { UploadOutlined, SearchOutlined } from "@ant-design/icons";
 import Image from "next/image";
@@ -8,19 +8,9 @@ import { supabase } from "../../lib/supabase/client";
 import { VideoAlbion } from "@/store/video";
 import { useRouter, useSearchParams } from 'next/navigation';
 import useTrans from "@/hooks/useTrans";
+import { getYouTubeVideoId, getYouTubeThumbnail } from "@/utils/youtube";
 
 const { Meta } = Card;
-
-const getYouTubeVideoId = (url: string | null) => {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
-
-const getYouTubeThumbnail = (videoId: string | null) => {
-  return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "/placeholder.jpg";
-};
 
 type SupabaseVideo = {
   id: string;

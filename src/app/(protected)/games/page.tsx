@@ -2,7 +2,7 @@
 
 import PacmanGame from '@/component/games/Packman';
 import SnakeGame from '@/component/games/Snake';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useTrans from '@/hooks/useTrans';
 
 type GameType = 'list' | 'snake' | 'pacman';

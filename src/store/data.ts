@@ -120,12 +120,12 @@ export const dataSet9: ItemType[] = [
 export const dataSet10: ItemType[] = [
   { id: '73', name: 'Hammer', detail: '', image: '', image2: '', image3: '' },
   { id: '74', name: 'Polehammer', detail: 'CC theo đường thẳng tầm xa, đi chung với team có MistPiercer', image: '', image2: '', image3: '' },
-  { id: '75', name: 'Great Hammer	', detail: 'Thường dùng đánh Hellgate, Avalon', image: '/asset/Hammer/GreatHammer/hellgate.png', image2: '/asset/Hammer/GreatHammer/corrupted.png', image3: '/asset/Hammer/GreatHammer/openworld.png' },
+  { id: '75', name: 'Great Hammer', detail: 'Thường dùng đánh Hellgate, Avalon', image: '/asset/Hammer/GreatHammer/hellgate.png', image2: '/asset/Hammer/GreatHammer/corrupted.png', image3: '/asset/Hammer/GreatHammer/openworld.png' },
   { id: '76', name: 'Tombhammer', detail: 'Khả năng CC tầm xa, cũng phù hợp team có MistPierce', image: '', image2: '', image3: '/asset/Hammer/Tombhammer/openworld.png' },
   { id: '77', name: 'Forge Hammers', detail: 'Thường dùng trong Hellgate, gây áp lực cho hàng sau', image: '/asset/Hammer/ForgeHammers/hellgate.png', image2: '', image3: '' },
   { id: '78', name: 'Grovekeeper', detail: '', image: '', image2: '', image3: '' },
   { id: '79', name: 'Hand of Justice', detail: '', image: '', image2: '', image3: '' },
-  { id: '80', name: 'Truebolt Hammer ', detail: '', image: '', image2: '', image3: '' },
+  { id: '80', name: 'Truebolt Hammer', detail: '', image: '', image2: '', image3: '' },
 ];
 
 export const dataSet11: ItemType[] = [
@@ -245,3 +245,25 @@ export const allItemsData: ItemType[] = [
   ...dataSet19,
   ...dataSet20,
 ];
+
+export const dataSets: Record<string, ItemType[]> = {
+    Sword: dataSet7,
+    Axe: dataSet8,
+    Mace: dataSet9,
+    Hammer: dataSet10,
+    'War Gloves': dataSet11,
+    Bow: dataSet1,
+    Dagger: dataSet2,
+    Spear: dataSet3,
+    'Quarterstaves': dataSet4,
+    'Shapeshifter Staves': dataSet5,
+    'Nature Staves': dataSet6,
+    'Fire Staves': dataSet12,
+    'Holy Staves': dataSet13,
+    'Arcane Staves': dataSet14,
+    'Frost Staves': dataSet15,
+    'Cursed Staves': dataSet16,
+    Shields: dataSet18,
+    Torches: dataSet19,
+    Tomes: dataSet20,
+};

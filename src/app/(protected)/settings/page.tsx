@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input, Button, Form, App, Avatar, Upload } from 'antd';
 import { supabase } from '../../../../lib/supabase/client';
@@ -65,7 +65,7 @@ const Profile = () => {
     const fileName = `${user.id}-${Date.now()}.${fileExt}`;
     const filePath = `avatars/${fileName}`; 
 
-    const { data, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, {
             cacheControl: '3600',
@@ -103,7 +103,8 @@ const Profile = () => {
         if (!user) return message.error(trans.settings.unauthenticatedError);
         setLoading(true);
         
-        const avatarPath = (avatarUrl as String).split('public/avatars/')[1];
+        if (!avatarUrl) return;
+        const avatarPath = avatarUrl.split('public/avatars/')[1];
     
         const { error: deleteError } = await supabase.storage
             .from('avatars')

@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { FaFacebook, FaDiscord } from 'react-icons/fa';
 import useTrans from '@/hooks/useTrans';
@@ -68,7 +67,7 @@ export default function Footer() {
                                 <Link 
                                     key={item.href}
                                     href={item.href} 
-                                    className="text-[15px] text-black! font-bold text-black hover:text-[#ebbea7] transition-colors duration-200"
+                                    className="text-[15px] font-bold text-black! hover:text-[#ebbea7] transition-colors duration-200"
                                 >
                                     {item.label}
                                 </Link>

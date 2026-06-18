@@ -28,13 +28,11 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getSession();
-
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const protectedRoutes = ['/home', '/teammate', '/build', '/video', '/settings', '/aboutus']; 
+  const protectedRoutes = ['/home', '/teammate', '/build', '/videos', '/settings', '/aboutus', '/games', '/youtube']; 
 
   if (!session && protectedRoutes.includes(request.nextUrl.pathname)) {
     const absoluteURL = new URL('/login', request.nextUrl.origin);
