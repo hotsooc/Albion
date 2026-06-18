@@ -70,23 +70,23 @@ export const DragSourceContainer = () => {
   const showResults = inputValue || activeButton;
 
   return (
-    <div className='flex flex-col gap-4 text-black'>
+    <div className='flex flex-col gap-4 text-[var(--text-primary)] theme-transition'>
       <div 
-        className="flex items-center rounded-full w-full overflow-hidden border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus-within:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] px-4 transition-all duration-300"
+        className="flex items-center rounded-full w-full overflow-hidden border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus-within:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] px-4 transition-all duration-300"
       >
-        <SearchOutlined className="text-black text-lg mr-2" />
+        <SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />
         <Input
           placeholder={trans.common.searchPlaceholder}
           value={inputValue}
           onChange={handleSearch}
-          className="!border-none !shadow-none bg-transparent flex-grow h-11 focus:ring-0 !text-black"
+          className="!border-none !shadow-none bg-transparent flex-grow h-11 focus:ring-0 !text-[var(--text-primary)]"
         />
         {inputValue && (
           <Button
             type="text"
             icon={<CloseCircleOutlined />}
             onClick={handleClearSearch}
-            className="!text-black hover:!text-red-500"
+            className="!text-[var(--text-primary)] hover:!text-red-500"
           />
         )}
       </div>
@@ -100,10 +100,10 @@ export const DragSourceContainer = () => {
               <button
                 key={label}
                 onClick={() => handleToggleDataSet(data, label)}
-                className={`py-3 px-4 border-2 border-black rounded-full font-bold sora-font text-sm transition-all duration-200 cursor-pointer ${
+                className={`py-3 px-4 border-2 border-[var(--border-color)] rounded-full font-bold sora-font text-sm transition-all duration-200 cursor-pointer will-change-transform backface-visibility-hidden ${
                   isActive 
-                    ? 'bg-[#ebc7b5] text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
-                    : 'bg-white hover:bg-[#fcf8f2] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
+                    ? 'bg-[var(--color-accent)] text-[var(--text-primary)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
+                    : 'bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] text-[var(--text-primary)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
                 }`}
               >
                 {getButtonLabel(label)}
@@ -114,7 +114,7 @@ export const DragSourceContainer = () => {
       </div>
 
       {showResults && searchResults.length > 0 && (
-        <div className='w-full overflow-y-auto max-h-[500px] border-t-2 border-black pt-4'>
+        <div className='w-full overflow-y-auto max-h-[500px] border-t-2 border-[var(--border-color)] pt-4'>
           <div className='flex flex-col gap-2'>
             {searchResults.map((item) => (
               <DraggableItem key={item.id} item={item} />

@@ -180,7 +180,7 @@ const Profile = () => {
             content: (
                 <div className="mt-3">
                     <p className="font-bold text-sm mb-2">{trans.settings.enterNewPassword}</p>
-                    <Input.Password className="border-2 border-black rounded-xl h-10" onChange={(e) => (newPassword = e.target.value)} />
+                    <Input.Password className="border-2 border-[var(--border-color)] rounded-xl h-10" onChange={(e) => (newPassword = e.target.value)} />
                 </div>
             ),
             onOk: async () => {
@@ -208,7 +208,7 @@ const Profile = () => {
             return;
         }
         modal.confirm({
-            title: <span className="sora-font font-extrabold text-lg text-red-600">{trans.settings.deleteAccountConfirm}</span>,
+            title: <span className="sora-font font-extrabold text-lg text-[var(--color-danger-text)]">{trans.settings.deleteAccountConfirm}</span>,
             content: <p className="font-medium text-sm mt-2">{trans.settings.deleteAccountWarning}</p>,
             okText: trans.settings.deleteAccountButton,
             okType: 'danger',
@@ -237,11 +237,11 @@ const Profile = () => {
     };
     
     return (
-        <div className="bg-white border-2 border-black p-8 rounded-[32px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-w-screen ml-1 mr-6 text-black transition-all duration-300">
+        <div className="bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] p-8 rounded-[32px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-w-screen ml-1 mr-6 text-[var(--text-primary)] transition-all duration-300 theme-transition">
             {userRole === 'admin' && (
-                <div className="mb-8 p-6 bg-[#ebc7b5]/30 border-2 border-black rounded-2xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                    <h3 className="text-xl font-extrabold sora-font text-black">{trans.settings.adminDashboard}</h3>
-                    <p className="mt-2 text-[#2d3748] font-bold sora-font">{trans.settings.adminAccess}</p>
+                <div className="mb-8 p-6 bg-[var(--color-accent)]/30 border-2 border-[var(--border-color)] rounded-2xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <h3 className="text-xl font-extrabold sora-font text-[var(--text-primary)]">{trans.settings.adminDashboard}</h3>
+                    <p className="mt-2 text-[var(--text-secondary)] font-bold sora-font">{trans.settings.adminAccess}</p>
                 </div>
             )}
             <Form
@@ -254,21 +254,21 @@ const Profile = () => {
                 {/* Profile Detail and Avatar section */}
                 <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
                     <div className="flex-1 w-full">
-                        <h2 className="text-2xl font-extrabold mb-6 sora-font tracking-tight text-black">{trans.settings.myProfile}</h2>
+                        <h2 className="text-2xl font-extrabold mb-6 sora-font tracking-tight text-[var(--text-primary)]">{trans.settings.myProfile}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                             <Form.Item
                                 name="firstName"
-                                label={<span className="font-bold text-sm text-black">{trans.settings.firstName}</span>}
+                                label={<span className="font-bold text-sm text-[var(--text-primary)]">{trans.settings.firstName}</span>}
                                 rules={[{ required: true, message: trans.settings.messageFirstName }]}
                             >
-                                <Input className="border-2 border-black rounded-xl h-11 text-black font-semibold" disabled={isDisabled} />
+                                <Input className="border-2 border-[var(--border-color)] rounded-xl h-11 text-[var(--text-primary)] font-semibold" disabled={isDisabled} />
                             </Form.Item>
                             <Form.Item
                                 name="lastName"
-                                label={<span className="font-bold text-sm text-black">{trans.settings.lastName}</span>}
+                                label={<span className="font-bold text-sm text-[var(--text-primary)]">{trans.settings.lastName}</span>}
                                 rules={[{ required: true, message: trans.settings.messageLastName }]}
                             >
-                                <Input className="border-2 border-black rounded-xl h-11 text-black font-semibold" disabled={isDisabled} />
+                                <Input className="border-2 border-[var(--border-color)] rounded-xl h-11 text-[var(--text-primary)] font-semibold" disabled={isDisabled} />
                             </Form.Item>
                         </div>
                     </div>
@@ -278,7 +278,7 @@ const Profile = () => {
                             size={100}
                             icon={<UserOutlined />}
                             src={avatarUrl || null}
-                            className="bg-[#ebc7b5] border-black border-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                            className="bg-[var(--color-accent)] border-[var(--border-color)] border-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                         />
                         <div className="flex flex-col gap-3">
                             <Upload
@@ -287,7 +287,7 @@ const Profile = () => {
                             >
                                 <Button 
                                     icon={<UploadOutlined />} 
-                                    className="!w-[160px] border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !h-10 !text-sm !font-bold !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] rounded-full transition-all"
+                                    className="!w-[160px] border-2 border-[var(--border-color)] !bg-[var(--color-accent)] hover:!bg-[var(--color-accent-hover)] !h-10 !text-sm !font-bold !text-[var(--text-primary)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] rounded-full transition-all will-change-transform backface-visibility-hidden"
                                 >
                                     {trans.settings.upload}
                                 </Button>
@@ -296,7 +296,7 @@ const Profile = () => {
                                 danger
                                 onClick={handleRemoveAvatar}
                                 disabled={!avatarUrl}
-                                className="!w-[160px] !h-10 !text-sm !font-bold border-2 border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] transition-all disabled:opacity-40"
+                                className="!w-[160px] !h-10 !text-sm !font-bold border-2 border-[var(--border-color)] rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] transition-all disabled:opacity-40 will-change-transform backface-visibility-hidden"
                             >
                                 {trans.settings.remove}
                             </Button>
@@ -305,19 +305,19 @@ const Profile = () => {
                 </div>
 
                 {/* Account Security */}
-                <div className="space-y-4 border-t-2 border-black pt-6">
-                    <h2 className="text-2xl font-extrabold text-black sora-font tracking-tight">{trans.settings.accountSecurity}</h2>
-                    <Form.Item label={<span className="font-bold text-sm text-black">{trans.settings.password}</span>} className="mb-0">
+                <div className="space-y-4 border-t-2 border-[var(--border-color)] pt-6">
+                    <h2 className="text-2xl font-extrabold text-[var(--text-primary)] sora-font tracking-tight">{trans.settings.accountSecurity}</h2>
+                    <Form.Item label={<span className="font-bold text-sm text-[var(--text-primary)]">{trans.settings.password}</span>} className="mb-0">
                         <div className="flex flex-row items-center gap-4 max-w-xl">
                             <Input.Password
                                 placeholder="••••••••"
                                 readOnly
-                                className="border-2 border-black rounded-xl h-11 flex-grow font-semibold text-black"
+                                className="border-2 border-[var(--border-color)] rounded-xl h-11 flex-grow font-semibold text-[var(--text-primary)]"
                                 iconRender={() => <LockOutlined style={{ color: '#000000', fontSize: '16px' }} />}
                             />
                             <Button 
                                 onClick={handleChangePassword} 
-                                className="border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] !font-bold rounded-full !h-11 transition-all flex-shrink-0"
+                                className="border-2 border-[var(--border-color)] !bg-[var(--color-accent)] hover:!bg-[var(--color-accent-hover)] !text-[var(--text-primary)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] !font-bold rounded-full !h-11 transition-all flex-shrink-0 will-change-transform backface-visibility-hidden"
                             >
                                 {trans.settings.changePassword}
                             </Button>
@@ -326,17 +326,17 @@ const Profile = () => {
                 </div>
 
                 {/* Danger Zone */}
-                <div className="space-y-4 border-t-2 border-black pt-6">
-                    <h2 className="text-2xl font-extrabold text-black sora-font tracking-tight">{trans.settings.supportAccess}</h2>
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-[#fee2e2] p-5 rounded-2xl border-2 border-red-500 shadow-[3px_3px_0px_0px_rgba(239,68,68,1)] gap-4">
+                <div className="space-y-4 border-t-2 border-[var(--border-color)] pt-6">
+                    <h2 className="text-2xl font-extrabold text-[var(--text-primary)] sora-font tracking-tight">{trans.settings.supportAccess}</h2>
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-[var(--color-danger-bg)] p-5 rounded-2xl border-2 border-[var(--color-danger-border)] shadow-[3px_3px_0px_0px_rgba(239,68,68,1)] gap-4">
                         <div className="space-y-1">
-                            <h3 className="text-red-600 font-extrabold text-lg sora-font">{trans.settings.deleteAccountTitle}</h3>
-                            <p className="text-sm text-[#2d3748] font-bold">{trans.settings.deleteAccountDesc}</p>
+                            <h3 className="text-[var(--color-danger-text)] font-extrabold text-lg sora-font">{trans.settings.deleteAccountTitle}</h3>
+                            <p className="text-sm text-[var(--text-secondary)] font-bold">{trans.settings.deleteAccountDesc}</p>
                         </div>
                         <Button 
                             danger 
                             onClick={handleDeleteAccount} 
-                            className="border-2 border-red-600 hover:!bg-red-50 !font-bold rounded-full h-11 flex items-center shadow-[2px_2px_0px_0px_rgba(239,68,68,1)] hover:-translate-y-[1px]"
+                            className="border-2 border-[var(--color-danger-border)] hover:!bg-red-50 !font-bold rounded-full h-11 flex items-center shadow-[2px_2px_0px_0px_rgba(239,68,68,1)] hover:-translate-y-[1px] will-change-transform backface-visibility-hidden"
                         >
                             {trans.settings.deleteAccountButton}
                         </Button>
@@ -344,10 +344,10 @@ const Profile = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-end gap-4 border-t-2 border-black pt-6">
+                <div className="flex justify-end gap-4 border-t-2 border-[var(--border-color)] pt-6">
                     <Button 
                         onClick={() => router.back()} 
-                        className="!w-[100px] border-2 border-black rounded-full hover:-translate-y-[1px] transition-all font-bold !h-11"
+                        className="!w-[100px] border-2 border-[var(--border-color)] rounded-full hover:-translate-y-[1px] transition-all font-bold !h-11 will-change-transform backface-visibility-hidden"
                     >
                         {trans.common.cancel}
                     </Button>
@@ -355,7 +355,7 @@ const Profile = () => {
                         type="primary" 
                         htmlType="submit" 
                         loading={loading}
-                        className="!w-[100px] border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] rounded-full transition-all font-bold !h-11"
+                        className="!w-[100px] border-2 border-[var(--border-color)] !bg-[var(--color-accent)] hover:!bg-[var(--color-accent-hover)] !text-[var(--text-primary)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] rounded-full transition-all font-bold !h-11"
                     >
                         {trans.common.save}
                     </Button>

@@ -135,23 +135,23 @@ export default function BuildPageClient() {
     };
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-[1.2fr_3.8fr] h-auto gap-6 ml-1 mr-6 transition-all duration-300 text-black">
+        <section className="grid grid-cols-1 lg:grid-cols-[1.2fr_3.8fr] h-auto gap-6 ml-1 mr-6 transition-all duration-300 text-[var(--text-primary)]">
             {/* Left Filter & Search Bar */}
-            <div className="flex flex-col gap-5 border-2 border-black rounded-[32px] p-5 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                <div className="flex items-center rounded-full w-full overflow-hidden border-2 border-black bg-white px-4 transition-all duration-300 focus-within:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                    <SearchOutlined className="text-black text-lg mr-2" />
+            <div className="flex flex-col gap-5 border-2 border-[var(--border-color)] rounded-[32px] p-5 bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-center rounded-full w-full overflow-hidden border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] px-4 transition-all duration-300 focus-within:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />
                     <Input
                         placeholder={trans.common.searchPlaceholder}
                         value={inputValue}
                         onChange={handleSearch}
-                        className="!border-none !shadow-none bg-transparent flex-grow h-11 focus:ring-0 !text-black"
+                        className="!border-none !shadow-none bg-transparent flex-grow h-11 focus:ring-0 !text-[var(--text-primary)]"
                     />
                     {inputValue && (
                         <Button
                             type="text"
                             icon={<CloseCircleOutlined />}
                             onClick={handleClearSearch}
-                            className="!text-black hover:!text-red-500"
+                            className="!text-[var(--text-primary)] hover:!text-red-500"
                         />
                     )}
                 </div>
@@ -170,10 +170,10 @@ export default function BuildPageClient() {
                                 <motion.div key={label} variants={itemVariants}>
                                     <button
                                         onClick={() => handleToggleDataSet(data, label)}
-                                        className={`w-full py-3 px-4 rounded-full border-2 border-black text-left font-bold sora-font tracking-tight transition-all duration-200 cursor-pointer ${
+                                        className={`w-full py-3 px-4 rounded-full border-2 border-[var(--border-color)] text-left font-bold sora-font tracking-tight transition-all duration-200 cursor-pointer ${
                                             isActive 
-                                                ? 'bg-[#ebc7b5] text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
-                                                : 'bg-white hover:bg-[#fcf8f2] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
+                                                ? 'bg-[var(--color-accent)] text-[var(--text-btn-upload)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
+                                                : 'bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] text-[var(--text-primary)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
                                         }`}
                                     >
                                         <div className="flex justify-between items-center w-full">
@@ -188,7 +188,7 @@ export default function BuildPageClient() {
                 </div>
 
                 {showResults && searchResults.length > 0 && (
-                    <div className="w-full overflow-y-auto max-h-[500px] border-t-2 border-black pt-4 mt-2">
+                    <div className="w-full overflow-y-auto max-h-[500px] border-t-2 border-[var(--border-color)] pt-4 mt-2">
                         <motion.div
                             className="flex flex-col gap-2"
                             variants={containerVariants}
@@ -201,10 +201,10 @@ export default function BuildPageClient() {
                                     <motion.div key={item.id} variants={itemVariants}>
                                         <button
                                             onClick={() => handleItemClick(item)}
-                                            className={`py-2 px-4 border-2 border-black rounded-full w-full text-center font-bold text-sm transition-all duration-200 cursor-pointer ${
+                                            className={`py-2 px-4 border-2 border-[var(--border-color)] rounded-full w-full text-center font-bold text-sm transition-all duration-200 cursor-pointer ${
                                                 isCurrent 
-                                                    ? 'bg-[#ebc7b5] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' 
-                                                    : 'bg-white hover:bg-[#fcf8f2] text-black hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]'
+                                                    ? 'bg-[var(--color-accent)] text-[var(--text-btn-upload)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' 
+                                                    : 'bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] text-[var(--text-primary)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]'
                                             }`}
                                         >
                                             {(trans.items as any)[item.id]?.name || item.name}
@@ -218,7 +218,7 @@ export default function BuildPageClient() {
             </div>
 
             {/* Right Details Panel */}
-            <div className="flex flex-col gap-5 p-6 rounded-[32px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-black">
+            <div className="flex flex-col gap-5 p-6 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-[var(--text-primary)]">
                 {selectedItem ? (
                     <motion.div
                         key={selectedItem.id}
@@ -234,21 +234,21 @@ export default function BuildPageClient() {
                             
                             <div className="grid grid-cols-1 lg:grid-cols-[1fr_2.5fr] gap-6">
                                 {/* Details Text Card */}
-                                <div className="rounded-2xl border-2 border-black p-5 bg-[#fcf8f2] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-start">
-                                    <h3 className="text-center font-extrabold text-xl mb-4 border-b-2 border-black pb-2 sora-font">
+                                <div className="rounded-2xl border-2 border-[var(--border-color)] p-5 bg-[var(--bg-column)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-start">
+                                    <h3 className="text-center font-extrabold text-xl mb-4 border-b-2 border-[var(--border-color)] pb-2 sora-font">
                                         ~ {trans.common.detail} ~
                                     </h3>
                                     <div className="flex flex-col gap-3 text-sm">
                                         <p className="leading-relaxed">
-                                            <strong className="text-black font-extrabold sora-font">{trans.common.name}:</strong> <br />
+                                            <strong className="text-[var(--text-primary)] font-extrabold sora-font">{trans.common.name}:</strong> <br />
                                             {(trans.items as any)[selectedItem.id]?.name || selectedItem.name}
                                         </p>
                                         <p className="leading-relaxed whitespace-pre-line">
-                                            <strong className="text-black font-extrabold sora-font">{trans.common.detailLabel}</strong> <br />
+                                            <strong className="text-[var(--text-primary)] font-extrabold sora-font">{trans.common.detailLabel}</strong> <br />
                                             {(trans.items as any)[selectedItem.id]?.detail || selectedItem.detail}
                                         </p>
                                         <p className="leading-relaxed">
-                                            <strong className="text-black font-extrabold sora-font">{trans.build.pov}</strong>
+                                            <strong className="text-[var(--text-primary)] font-extrabold sora-font">{trans.build.pov}</strong>
                                         </p>
                                     </div>
                                 </div>
@@ -256,8 +256,8 @@ export default function BuildPageClient() {
                                 {/* Images Section */}
                                 <div className="flex flex-col md:flex-row gap-4 justify-center items-stretch">
                                     {selectedItem.image && (
-                                        <div className="rounded-2xl border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
-                                            <span className="sora-font text-center text-black text-[16px] font-extrabold mb-3">{trans.build.hellgate}</span>
+                                        <div className="rounded-2xl border-2 border-[var(--border-color)] p-4 bg-[var(--bg-panel-solid)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
+                                            <span className="sora-font text-center text-[var(--text-primary)] text-[16px] font-extrabold mb-3">{trans.build.hellgate}</span>
                                             <img
                                                 src={selectedItem.image}
                                                 alt={`${selectedItem.name} image 1`}
@@ -266,8 +266,8 @@ export default function BuildPageClient() {
                                         </div>
                                     )}
                                     {selectedItem.image2 && (
-                                        <div className="rounded-2xl border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
-                                            <span className="sora-font text-center text-black text-[16px] font-extrabold mb-3">{trans.build.corrupted}</span>
+                                        <div className="rounded-2xl border-2 border-[var(--border-color)] p-4 bg-[var(--bg-panel-solid)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
+                                            <span className="sora-font text-center text-[var(--text-primary)] text-[16px] font-extrabold mb-3">{trans.build.corrupted}</span>
                                             <img
                                                 src={selectedItem.image2}
                                                 alt={`${selectedItem.name} image 2`}
@@ -276,8 +276,8 @@ export default function BuildPageClient() {
                                         </div>
                                     )}
                                     {selectedItem.image3 && (
-                                        <div className="rounded-2xl border-2 border-black p-4 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
-                                            <span className="sora-font text-center text-black text-[16px] font-extrabold mb-3">{trans.build.openworld}</span>
+                                        <div className="rounded-2xl border-2 border-[var(--border-color)] p-4 bg-[var(--bg-panel-solid)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-1 flex flex-col items-center justify-between">
+                                            <span className="sora-font text-center text-[var(--text-primary)] text-[16px] font-extrabold mb-3">{trans.build.openworld}</span>
                                             <img
                                                 src={selectedItem.image3}
                                                 alt={`${selectedItem.name} image 3`}
@@ -290,9 +290,9 @@ export default function BuildPageClient() {
                         </div>
 
                         {/* Navigation Controllers */}
-                        <div className="flex justify-center mt-4 gap-6 items-center border-t-2 border-black pt-4">
+                        <div className="flex justify-center mt-4 gap-6 items-center border-t-2 border-[var(--border-color)] pt-4">
                             <button 
-                                className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:cursor-not-allowed transition-all" 
+                                className="cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:cursor-not-allowed transition-all" 
                                 onClick={handlePrev} 
                                 disabled={searchResults.length <= 1}
                             >
@@ -302,7 +302,7 @@ export default function BuildPageClient() {
                                 ~ {activeButton ? getButtonLabel(activeButton) : ''} ~
                             </span>
                             <button 
-                                className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:cursor-not-allowed transition-all" 
+                                className="cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] rounded-full p-2.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:cursor-not-allowed transition-all" 
                                 onClick={handleNext} 
                                 disabled={searchResults.length <= 1}
                             >
@@ -312,7 +312,7 @@ export default function BuildPageClient() {
                     </motion.div>
                 ) : (
                     <div className="flex justify-center items-center h-48 lg:h-full">
-                        <p className="text-[#5d6c7b] text-base font-bold sora-font">{trans.build.selectItemPrompt}</p>
+                        <p className="text-[var(--text-secondary)] text-base font-bold sora-font">{trans.build.selectItemPrompt}</p>
                     </div>
                 )}
             </div>

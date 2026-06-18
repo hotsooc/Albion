@@ -62,9 +62,9 @@ export const TeamSelector = ({
   };
 
   return (
-    <div className='flex flex-row gap-4 w-full justify-center overflow-auto items-center p-4 text-black'>
+    <div className='flex flex-row gap-4 w-full justify-center overflow-auto items-center p-4 text-[var(--text-primary)] theme-transition'>
       <button 
-        className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] transition-all" 
+        className="cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] transition-all will-change-transform backface-visibility-hidden" 
         onClick={handlePrevTeam}
       >
         <img src='/image/left-icon.png' alt='Previous team' width={14} height={14} />
@@ -76,10 +76,10 @@ export const TeamSelector = ({
           <div
             key={index}
             onClick={() => handleToggleTeam(index)}
-            className={`text-center font-bold cursor-pointer transition-all duration-200 border-2 border-black rounded-full px-6 py-2 relative group shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] ${
+            className={`text-center font-bold cursor-pointer transition-all duration-200 border-2 border-[var(--border-color)] rounded-full px-6 py-2 relative group shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] will-change-transform backface-visibility-hidden ${
               isActive 
-                ? 'bg-[#ebc7b5] text-black font-extrabold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' 
-                : 'bg-white text-black'
+                ? 'bg-[var(--color-accent)] text-[var(--text-primary)] font-extrabold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' 
+                : 'bg-[var(--bg-panel-solid)] text-[var(--text-primary)]'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
@@ -107,7 +107,7 @@ export const TeamSelector = ({
       })}
 
       <div
-        className="text-center cursor-pointer transition-all duration-200 border-2 border-black rounded-full px-6 py-2 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] flex items-center justify-center"
+        className="text-center cursor-pointer transition-all duration-200 border-2 border-[var(--border-color)] rounded-full px-6 py-2 bg-[var(--bg-panel-solid)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] flex items-center justify-center will-change-transform backface-visibility-hidden"
         onClick={showAddModal}
         title={trans.teammate.addTeam}
       >
@@ -115,7 +115,7 @@ export const TeamSelector = ({
       </div>
 
       <button 
-        className="cursor-pointer bg-white hover:bg-[#fcf8f2] border-2 border-black rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] transition-all" 
+        className="cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] transition-all will-change-transform backface-visibility-hidden" 
         onClick={handleNextTeam}
       >
         <img src='/image/right_icon.png' alt='Next team' width={14} height={14} />
@@ -134,7 +134,7 @@ export const TeamSelector = ({
           placeholder={trans.teammate.teamName}
           value={newTeamName}
           onChange={(e) => setNewTeamName(e.target.value)}
-          className="border-2 border-black rounded-xl h-10 mt-3"
+          className="border-2 border-[var(--border-color)] rounded-xl h-10 mt-3"
         />
       </Modal>
     </div>

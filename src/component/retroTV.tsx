@@ -3,7 +3,7 @@
 const YouTubeTV = ({ videoId }: { videoId: string }) => {
   return (
     <div className="relative w-full max-w-[760px] mx-auto">
-      <div className="relative bg-[#ebc7b5] p-4 md:p-6 rounded-[2.5rem] md:rounded-[3.5rem] border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-4">
+      <div className="relative bg-[var(--color-accent)] dark:bg-[var(--bg-panel-solid)] p-4 md:p-6 rounded-[2.5rem] md:rounded-[3.5rem] border-4 border-[var(--border-color)] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(120,100,240,0.3)] flex flex-col gap-4 theme-transition">
         
         {/* Screen Container */}
         <div className="relative w-full aspect-[4/3] bg-black rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border-[8px] md:border-[12px] border-black shadow-inner">
@@ -29,17 +29,17 @@ const YouTubeTV = ({ videoId }: { videoId: string }) => {
           <div className="flex flex-col gap-1.5">
             <div className="flex gap-2 items-center">
               <div className="w-2.5 h-2.5 rounded-full bg-red-600 border-2 border-black shadow-[0_0_8px_red] animate-pulse"></div>
-              <span className="text-[10px] text-black font-extrabold font-mono uppercase tracking-tighter">Power</span>
+              <span className="text-[10px] text-[var(--text-primary)] font-extrabold font-mono uppercase tracking-tighter">Power</span>
             </div>
             <div className="w-12 h-1 bg-black rounded-full opacity-50"></div>
           </div>
           
           <div className="flex gap-4">
             <div className="flex flex-col items-center gap-1">
-              <div className="w-9 h-9 rounded-full bg-white hover:bg-[#fcf8f2] border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[9px] text-black font-extrabold cursor-pointer transition-all">VOL</div>
+              <div className="w-9 h-9 rounded-full bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.1)] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[9px] text-[var(--text-primary)] font-extrabold cursor-pointer transition-all">VOL</div>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <div className="w-9 h-9 rounded-full bg-white hover:bg-[#fcf8f2] border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[9px] text-black font-extrabold cursor-pointer transition-all">CH</div>
+              <div className="w-9 h-9 rounded-full bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] border-2 border-[var(--border-color)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.1)] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-[9px] text-[var(--text-primary)] font-extrabold cursor-pointer transition-all">CH</div>
             </div>
           </div>
         </div>

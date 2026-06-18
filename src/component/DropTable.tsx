@@ -52,20 +52,20 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
      destroyOnClose={true}
      className="sircle-modal"
    >
-      <div className="grid grid-cols-1 md:grid-cols-[1.2fr_2.8fr] gap-6 text-black p-2">
+      <div className="grid grid-cols-1 md:grid-cols-[1.2fr_2.8fr] gap-6 text-[var(--text-primary)] p-2">
         <div className="flex flex-col gap-4">
-          <h2 className="text-2xl font-extrabold sora-font border-b-2 border-black pb-2 mb-2 text-black">
+          <h2 className="text-2xl font-extrabold sora-font border-b-2 border-[var(--border-color)] pb-2 mb-2 text-[var(--text-primary)]">
             {trans.aboutUs.detailInfo}
           </h2>
           <div className="flex flex-col gap-2">
             <p className="text-sm">
-              <strong className="text-black sora-font">{trans.common.name}:</strong> <br />
-              <span className="font-extrabold text-[#ebbea7] bg-black px-3 py-1 rounded-full inline-block mt-1">
+              <strong className="text-[var(--text-primary)] sora-font">{trans.common.name}:</strong> <br />
+              <span className="font-extrabold text-[var(--color-accent)] bg-[var(--text-primary)] dark:text-[var(--color-accent)] dark:bg-[var(--color-accent)]/20 px-3 py-1 rounded-full inline-block mt-1">
                 {(trans.items as any)[item.id]?.name || item.name}
               </span>
             </p>
             <p className="text-sm leading-relaxed whitespace-pre-line">
-              <strong className="text-black sora-font">{trans.common.detailLabel}</strong> <br />
+              <strong className="text-[var(--text-primary)] sora-font">{trans.common.detailLabel}</strong> <br />
               {(trans.items as any)[item.id]?.detail || item.detail}
             </p>
           </div>
@@ -73,19 +73,19 @@ const Popup = ({ item, onClose }: { item: DragItem | null; onClose: () => void }
         
         <div className="flex flex-col md:flex-row gap-4 justify-center items-stretch mt-2 md:mt-10">
           {item.image && (
-            <div className="flex flex-col text-center border-2 border-black rounded-2xl items-center gap-2 p-3 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
+            <div className="flex flex-col text-center border-2 border-[var(--border-color)] rounded-2xl items-center gap-2 p-3 bg-[var(--bg-panel-solid)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
               <span className="font-bold text-xs sora-font">{trans.build.hellgate}</span>
               <img src={item.image} alt="" className="h-auto max-h-[260px] object-contain rounded-xl border border-gray-100 w-full" />
             </div>
           )}
           {item.image2 && (
-            <div className="flex flex-col text-center border-2 border-black rounded-2xl items-center gap-2 p-3 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
+            <div className="flex flex-col text-center border-2 border-[var(--border-color)] rounded-2xl items-center gap-2 p-3 bg-[var(--bg-panel-solid)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
               <span className="font-bold text-xs sora-font">{trans.build.corrupted}</span>
               <img src={item.image2} alt="" className="h-auto max-h-[260px] object-contain rounded-xl border border-gray-100 w-full" />
             </div>
           )}
           {item.image3 && (
-            <div className="flex flex-col text-center border-2 border-black rounded-2xl items-center gap-2 p-3 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
+            <div className="flex flex-col text-center border-2 border-[var(--border-color)] rounded-2xl items-center gap-2 p-3 bg-[var(--bg-panel-solid)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-1">
               <span className="font-bold text-xs sora-font">{trans.build.openworld}</span>
               <img src={item.image3} alt="" className="h-auto max-h-[260px] object-contain rounded-xl border border-gray-100 w-full" />
             </div>
@@ -232,9 +232,9 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
      return (
        <div 
          key={`${teamKey}-${columnKey}`} 
-         className="flex flex-col p-4 rounded-[24px] gap-3 min-h-[200px] bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-black"
+         className="flex flex-col p-4 rounded-[24px] gap-3 min-h-[200px] bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 text-[var(--text-primary)]"
        >
-         <h3 className="text-center font-extrabold text-black tracking-tight sora-font text-[15px] border-b border-gray-150 pb-2 mb-1">{title}</h3>
+         <h3 className="text-center font-extrabold text-[var(--text-primary)] tracking-tight sora-font text-[15px] border-b border-gray-150 pb-2 mb-1">{title}</h3>
          <div className='flex flex-col gap-2'>
            {Array.from({ length: 5 }).map((_, index) => (
              <div 
@@ -264,7 +264,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
     switch (columnCount) {
       case 7:
         return (
-          <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-7 gap-4 text-black'>
+          <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-7 gap-4 text-[var(--text-primary)]'>
             {renderColumn(teamKey, 'column_A', trans.teammate.roles.tank)}
             {renderColumn(teamKey, 'column_B', trans.teammate.roles.subTank)}
             {renderColumn(teamKey, 'column_C', trans.teammate.roles.flex)}
@@ -276,7 +276,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
         );
       case 5:
         return (
-          <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-5 gap-4 text-black'>
+          <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-5 gap-4 text-[var(--text-primary)]'>
             {renderColumn(teamKey, 'column_A', trans.teammate.roles.tank)}
             {renderColumn(teamKey, 'column_B', trans.teammate.roles.subTank)}
             {renderColumn(teamKey, 'column_C', trans.teammate.roles.flexCover)}
@@ -286,7 +286,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
         );
       case 2: 
         return (
-          <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-2 gap-4 text-black'>
+          <div key={`${teamKey}-${currentViewKey}`} className='grid grid-cols-2 gap-4 text-[var(--text-primary)]'>
             {renderColumn(teamKey, 'column_A', trans.teammate.roles.player1)}
             {renderColumn(teamKey, 'column_B', trans.teammate.roles.player2)}
           </div>
@@ -305,7 +305,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
  }
  
  return (
-  <div className='flex flex-col gap-4 w-full'>
+   <div className='flex flex-col gap-4 w-full theme-transition'>
    <div className='mt-0'>
     {renderColumnsForView(currentTeamKey)}
    </div>

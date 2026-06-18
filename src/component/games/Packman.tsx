@@ -301,7 +301,7 @@ export default function PacmanGame({ onGoBack }: PacmanGameProps) {
 
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', backgroundColor: 'var(--background)', minHeight: '100vh' }}>
       <h1>{trans.game.pacmanTitle}</h1>
       <div style={{ marginBottom: '10px', fontSize: '22px', fontWeight: 'bold' }}>
         {trans.game.score}: <span style={{ color: '#FFC107' }}>{score}</span> / {TOTAL_DOTS}

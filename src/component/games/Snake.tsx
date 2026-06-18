@@ -195,7 +195,7 @@ export default function SnakeGame({ onGoBack }: SnakeGameProps) {
         flexDirection: 'column', 
         alignItems: 'center', 
         padding: '20px', 
-        backgroundColor: '#f5f5f5', 
+        backgroundColor: 'var(--background)', 
         minHeight: '100vh' 
     }}>
       <h1>{trans.game.snakeTitle}</h1>

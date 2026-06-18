@@ -125,7 +125,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
     };
 
     return (
-        <div className="flex flex-col min-h-[400px] p-4 rounded-lg bg-white shadow-xl w-full max-w-2xl mx-auto">
+        <div className="flex flex-col min-h-[400px] p-4 rounded-lg bg-[var(--bg-panel-solid)] shadow-xl w-full max-w-2xl mx-auto border border-[var(--border-color)] theme-transition">
             <div className='flex gap-3 mb-4 w-full'>
                 <img src='/image/message 1.png' alt='' width={30} height={15} />
                 <span className='text-gray-400 text-[20px]'>Comment</span>
@@ -143,7 +143,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                         />
                     ))
                 ) : (
-                    <p className="text-black italic">No comments yet</p>
+                    <p className="text-[var(--text-primary)] italic">No comments yet</p>
                 )}
             </div>
 
@@ -155,7 +155,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                 />
                 <TextArea
                     rows={1}
-                    className="flex-grow rounded-full !text-black px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-grow rounded-full !text-[var(--text-primary)] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder={user ? trans.comment.placeholder : trans.comment.loginRequired}
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
@@ -171,7 +171,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                     type="primary"
                     onClick={handleSubmit}
                     disabled={!user || value.trim().length === 0}
-                    className="!bg-[#97DDD9] !text-black !border-none"
+                    className="!bg-[var(--color-accent)] !text-[var(--text-btn-upload)] !border-[var(--border-color)]"
                 >
                     {trans.comment.post}
                 </Button>

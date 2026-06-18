@@ -145,7 +145,7 @@ const VideoPage = () => {
   );
 
   return (
-    <div className="p-6 w-full h-full rounded-[32px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black transition-all duration-300">
+    <div className="p-6 w-full h-full rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-[var(--text-primary)] theme-transition $1">
       {/* Category Tabs Selection */}
       <div className="flex flex-wrap justify-center gap-3 mb-6">
         {tabs.map((tab) => {
@@ -157,10 +157,10 @@ const VideoPage = () => {
                 setActiveTab(tab.key);
                 router.push(`/videos/?tab=${tab.key}`);
               }}
-              className={`py-3 px-6 rounded-full border-2 border-black font-extrabold sora-font text-sm tracking-tight cursor-pointer transition-all duration-200 ${
+              className={`py-3 px-6 rounded-full border-2 border-[var(--border-color)] font-extrabold sora-font text-sm tracking-tight cursor-pointer transition-all duration-200 ${
                 isActive 
-                  ? 'bg-[#ebc7b5] text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
-                  : 'bg-white hover:bg-[#fcf8f2] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
+                  ? 'bg-[var(--color-accent)] text-[var(--text-btn-upload)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-y-[1px]' 
+                  : 'bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-column)] text-[var(--text-primary)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px]'
               }`}
             >
               {tab.label}
@@ -172,16 +172,16 @@ const VideoPage = () => {
       {/* Search Input Bar */}
       <div className="flex justify-center mb-6">
         <Input
-          prefix={<SearchOutlined className="text-black text-lg mr-2" />}
+          prefix={<SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />}
           placeholder={trans.common.searchPlaceholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           style={{
-            backgroundColor: '#ffffff',
-            color: '#000000',
-            borderColor: '#000000',
+            backgroundColor: 'var(--bg-input)',
+            color: 'var(--text-input)',
+            borderColor: 'var(--border-color)',
           }}
-          className="!shadow-none !h-11 px-4 !rounded-full border-2 border-black focus:border-black hover:border-black max-w-md focus:ring-0 transition-all duration-300"
+          className="!shadow-none !h-11 px-4 !rounded-full border-2 border-[var(--border-color)] focus:border-[var(--border-color)] hover:border-[var(--border-color)] max-w-md focus:ring-0 theme-transition $1"
         />
       </div>
       
@@ -196,7 +196,7 @@ const VideoPage = () => {
             <Col key={video.id} xs={24} sm={12} md={8} lg={6}>
               <Card
                 hoverable
-                className="w-full rounded-2xl border-2 border-black overflow-hidden bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[2px] transition-all duration-200"
+                className="w-full rounded-2xl border-2 border-[var(--border-color)] overflow-hidden bg-[var(--bg-panel-solid)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[2px] transition-all duration-200"
                 onClick={() => {
                   router.push(`/videos/${video.id}`);
                 }}
@@ -212,7 +212,7 @@ const VideoPage = () => {
                   </div>
                 }
               >
-                <Meta title={<span className="text-black font-extrabold sora-font text-[14px] tracking-tight">{video.name}</span>} />
+                <Meta title={<span className="text-[var(--text-primary)] font-extrabold sora-font text-[14px] tracking-tight">{video.name}</span>} />
               </Card>
             </Col>
           ))}
@@ -220,12 +220,12 @@ const VideoPage = () => {
       )}
 
       {/* Upload Button */}
-      <div className="flex gap-2 mt-6 justify-between items-center border-t-2 border-black pt-4">
+      <div className="flex gap-2 mt-6 justify-between items-center border-t-2 border-[var(--border-color)] pt-4">
         <p></p>
         <Button
           type="primary"
           icon={<UploadOutlined />}
-          className="!h-11 !px-6 !rounded-full border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] !font-bold sora-font transition-all duration-200"
+          className="!h-11 !px-6 !rounded-full border-2 border-[var(--border-color)] !bg-[var(--color-accent)] hover:!bg-[var(--color-accent-hover)] !text-[var(--text-btn-upload)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] active:translate-y-[1px] !font-bold sora-font transition-all duration-200"
           onClick={showUploadModal}
         >
           {trans.video.upload}
@@ -247,27 +247,27 @@ const VideoPage = () => {
             label={<span className="font-bold text-sm">{trans.video.titleLabel}</span>}
             rules={[{ required: true, message: trans.video.messageTitle }]}
           >
-            <Input className="border-2 border-black rounded-xl h-10" />
+            <Input className="border-2 border-[var(--border-color)] rounded-xl h-10" />
           </Form.Item>
           <Form.Item
             name="url" 
             label={<span className="font-bold text-sm">{trans.video.urlLabel}</span>}
             rules={[{ required: true, message: trans.video.messageUrl }, { type: 'url', message: trans.video.messageUrlInvalid }]}
           >
-            <Input className="border-2 border-black rounded-xl h-10" />
+            <Input className="border-2 border-[var(--border-color)] rounded-xl h-10" />
           </Form.Item>
           <Form.Item
             name="description" 
             label={<span className="font-bold text-sm">{trans.video.descLabel}</span>}
             rules={[{ required: true, message: trans.video.messageDesc }]}
           >
-            <Input.TextArea className="border-2 border-black rounded-xl" rows={4} />
+            <Input.TextArea className="border-2 border-[var(--border-color)] rounded-xl" rows={4} />
           </Form.Item>
           <Form.Item className="flex justify-end mb-0">
             <Button 
               type="primary" 
               htmlType="submit"
-              className="!h-10 !px-5 !rounded-full border-2 border-black !bg-[#ebc7b5] hover:!bg-[#ebbea7] !text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] !font-bold sora-font transition-all"
+              className="!h-10 !px-5 !rounded-full border-2 border-[var(--border-color)] !bg-[var(--color-accent)] hover:!bg-[var(--color-accent-hover)] !text-[var(--text-btn-upload)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] !font-bold sora-font transition-all"
             >
               {trans.common.submit}
             </Button>

@@ -37,7 +37,7 @@ export const ButtonChangeColumn = ({
 
     return (
         <Dropdown menu={menuProps} trigger={['click']} placement="bottomLeft">
-            <Button className="!bg-[#97DDD9] !w-[140px] !h-[45px] !text-black !text-[24px] !font-bold hover:!bg-blue-400 !rounded-xl !justify-center !items-center">
+            <Button className="!bg-[var(--color-accent)] !w-[140px] !h-[45px] !text-[var(--text-btn-upload)] !text-[24px] !font-bold hover:!bg-[var(--color-accent-hover)] !rounded-xl !justify-center !items-center">
                 Team {columnCount}
                 <img src="/image/arrow 1.png" width={30} height={30} alt="User" />
             </Button>

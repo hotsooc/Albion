@@ -24,7 +24,7 @@ src/
   hooks/                # useTrans (i18n context: vi/en via localStorage)
   store/                # Static game data (Albion Online items, videos)
   types/                # Global type declarations (e.g. vanta.d.ts)
-  utils/                # Utility hooks
+  utils/                # Utility functions (youtube.ts — YouTube URL/id helpers)
   middleware.ts          # Protects routes — redirects to /login if no session
 lib/
   supabase/
@@ -45,9 +45,13 @@ supabase/
 - **`eslint.ignoreDuringBuilds: true`** in `next.config.js` — `npm run build` skips lint. Run `npm run lint` separately to catch violations.
 - **No typecheck script**. TS is checked during `next build` only. Use editor diagnostics or run a build to verify types.
 - The `useTrans` hook reads `localStorage` on mount; it assumes `TransProvider` wraps the app. Import requires `'use client'`.
-- Supabase has **two different client packages** in use: `@supabase/ssr` (middleware, server.ts, callback) and `@supabase/auth-helpers-nextjs` (api/login and api/logout route handlers). Be consistent when adding new server-side Supabase code — prefer `@supabase/ssr`.
-- `api/login/route.ts` and `api/logout/route.ts` are currently identical (both call `signOut`). Likely a copy-paste issue in the login handler.
-- Tailwind v4: config is via CSS `@import "tailwindcss"` (no `tailwind.config.js`).
+- **Two Supabase client packages** in use: `@supabase/ssr` (middleware, server.ts, callback) and `@supabase/auth-helpers-nextjs` (unused but still in deps). Always prefer `@supabase/ssr`.
+- **Theming**: Uses `next-themes` with `data-theme` attribute strategy. Two themes (light/dark) controlled by CSS custom properties in `globals.css:3-42`. Toggle button is in `ClientHeader` via `useTheme()`. Ant Design is synced via `AntdProvider` using `darkAlgorithm`/`defaultAlgorithm`.
+  - **Hardcoded colors are banned** — always use `var(--token-name)` or `dark:` prefix for Tailwind classes. See `globals.css` for all available tokens.
+  - `@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *))` enables `dark:` prefix in Tailwind.
+- Use `theme-transition` class on container elements for smooth color transitions during theme switch.
+- Use `will-change-transform backface-visibility-hidden` on interactive elements with hover/click animations for GPU-accelerated rendering.
+- `youtube.ts` utility has `getYouTubeVideoId()` and `getYouTubeThumbnail()` — use these, don't inline YouTube regex.
 - Ant Design 5 with `@ant-design/compatible` compat layer; the root layout imports `antd/dist/reset.css`.
 - Both `moment` and `dayjs` are dependencies — `moment` is used in `useTrans`, `dayjs` may be unused.
 - Game rendering libraries (pixi.js, phaser, three) are in `dependencies`; they are used on specific pages (e.g. games feature).

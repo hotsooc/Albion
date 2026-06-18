@@ -155,7 +155,7 @@ export default function TeammatePage() {
       initial="hidden"
       animate="visible"
       variants={fadeInVariants}
-      className="w-auto h-auto p-6 rounded-[32px] border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ml-1 mr-6 transition-all duration-300 text-black"
+      className="w-auto h-auto p-6 rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ml-1 mr-6 transition-all duration-300 text-[var(--text-primary)] theme-transition"
     >
       <DragDropProvider>
         <div className='flex'>

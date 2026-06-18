@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className={`${inter.variable} ${sora.variable}`}>
+    <html lang="vi" className={`${inter.variable} ${sora.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <ClientLayoutWrapper>
           {children}
