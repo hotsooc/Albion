@@ -5,6 +5,7 @@ export type ItemType = {
   image: string;
   image2: string;
   image3: string;
+  category?: string;
 };
 
 

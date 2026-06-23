@@ -232,7 +232,41 @@ export const EnglishScript = {
         builds: 'Builds',
         aboutUs: 'About Us',
         settings: 'Settings',
-        dashboard: 'Dashboard'
+        dashboard: 'Dashboard',
+        dictionary: 'Dictionary'
+    },
+    dictionary: {
+        title: 'Albion Online Glossary',
+        subtitle: 'Learn common terms, abbreviations, and concepts used in the game.',
+        searchPlaceholder: 'Search glossary terms...',
+        filterAll: 'All',
+        filterPvp: 'PvP',
+        filterPve: 'PvE',
+        filterEconomy: 'Economy',
+        filterGeneral: 'General',
+        noResults: 'No glossary terms found matching your query.',
+        termDetails: 'Term Details',
+        categoryLabel: 'Category:',
+        definitionLabel: 'Definition:'
+    },
+    home: {
+        welcomeTitle: 'Albion Online Wiki Academy',
+        welcomeSubtitle: 'Equipment wiki, team builds coordinator, and game glossary search for XHCN guild members.',
+        categoriesTitle: 'Wiki Categories',
+        recentVideos: 'Highlighted Video',
+        newsTitle: 'Albion News & Updates',
+        cardBuildsTitle: 'Gear Wiki',
+        cardBuildsDesc: 'Look up weapon and armor statistics and find the best builds for PvP/PvE.',
+        cardTeammateTitle: 'Tactical Party',
+        cardTeammateDesc: 'Manage team compositions and player roles (Tank, DPS, Heal) for CTA.',
+        cardVideosTitle: 'Video Archives',
+        cardVideosDesc: 'Watch the best guild gameplay moments and funny highlight clips.',
+        cardDictTitle: 'Glossary Dictionary',
+        cardDictDesc: 'Search for common in-game slang, abbreviations, and definitions.',
+        newsUpdate1Title: 'Patch 2.5 Balance Changes',
+        newsUpdate1Desc: 'Rebalanced Shapeshifter Staves stats and adjusted Bow weapon damage scaling.',
+        newsUpdate2Title: 'Guild CTA Schedule',
+        newsUpdate2Desc: 'Guild operations focused on capturing Black Zone castles at 12:00 and 18:00 UTC.'
     },
     footer: {
         directory: 'Directory:',

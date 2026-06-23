@@ -232,7 +232,41 @@ export const VnScript = {
         builds: 'Builds',
         aboutUs: 'Về chúng tôi',
         settings: 'Cài đặt',
-        dashboard: 'Bảng điều khiển'
+        dashboard: 'Bảng điều khiển',
+        dictionary: 'Từ điển'
+    },
+    dictionary: {
+        title: 'Từ điển Albion Online',
+        subtitle: 'Giải thích các thuật ngữ, từ viết tắt và khái niệm phổ biến trong game.',
+        searchPlaceholder: 'Tìm kiếm thuật ngữ...',
+        filterAll: 'Tất cả',
+        filterPvp: 'PvP',
+        filterPve: 'PvE',
+        filterEconomy: 'Kinh tế',
+        filterGeneral: 'Chung',
+        noResults: 'Không tìm thấy thuật ngữ nào phù hợp.',
+        termDetails: 'Chi tiết thuật ngữ',
+        categoryLabel: 'Danh mục:',
+        definitionLabel: 'Định nghĩa:'
+    },
+    home: {
+        welcomeTitle: 'Học Viện Wiki Albion Online',
+        welcomeSubtitle: 'Thư viện tra cứu trang bị, quản lý đội hình chiến sự và giải nghĩa các thuật ngữ nhanh chóng cho thành viên bang hội XHCN.',
+        categoriesTitle: 'Danh Mục Tra Cứu',
+        recentVideos: 'Video Nổi Bật',
+        newsTitle: 'Bản Tin Albion',
+        cardBuildsTitle: 'Wiki Trang bị',
+        cardBuildsDesc: 'Tra cứu thông số vũ khí, giáp, cách build đồ tối ưu cho PvP/PvE.',
+        cardTeammateTitle: 'Đội hình Chiến thuật',
+        cardTeammateDesc: 'Quản lý vai trò nhóm (Tank, DPS, Heal) chuẩn bị cho CTA.',
+        cardVideosTitle: 'Thư viện Video',
+        cardVideosDesc: 'Lưu trữ các khoảnh khắc highlight xuất sắc của bang hội.',
+        cardDictTitle: 'Từ điển thuật ngữ',
+        cardDictDesc: 'Tra cứu các từ viết tắt và khái niệm phổ biến trong game.',
+        newsUpdate1Title: 'Bản cập nhật Patch 2.5',
+        newsUpdate1Desc: 'Cân bằng lại sức mạnh của Shapeshifter Staves và điều chỉnh sát thương Bow.',
+        newsUpdate2Title: 'Hoạt động CTA Tuần mới',
+        newsUpdate2Desc: 'Bang hội tập trung chiếm lâu đài vùng Black Zone vào khung giờ 12:00 và 18:00 UTC.'
     },
     footer: {
         directory: 'Danh mục:',

@@ -115,7 +115,7 @@ type AllDataRow = Database['public']['Tables']['teams_data']['Row'];
 type AllDataUpdate = Database['public']['Tables']['teams_data']['Update'];
 
 
-export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount }: DroppableTableProps) => {
+export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount, builds }: DroppableTableProps & { builds: ItemType[] }) => {
  const [allData, setAllData] = useState<AllData>({});
  const [isLoading, setIsLoading] = useState<boolean>(true);
  const [popupItem, setPopupItem] = useState<DragItem | null>(null);
@@ -149,7 +149,7 @@ export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount
         return prevData;
       }
 
-      const completeItem = allItemsData.find((item: ItemType) => item.id === droppedItem.id);
+      const completeItem = builds.find((item: ItemType) => item.id === droppedItem.id);
       if (!completeItem) {
         return prevData;
       }

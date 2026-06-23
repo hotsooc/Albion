@@ -61,6 +61,7 @@ export default function Footer() {
                                 { href: "/teammate", label: trans.sidebar.team },
                                 { href: "/videos", label: trans.sidebar.video },
                                 { href: "/build", label: trans.sidebar.builds },
+                                { href: "/dictionary", label: trans.sidebar.dictionary },
                                 { href: "/aboutus", label: trans.sidebar.aboutUs },
                                 { href: "/settings", label: trans.sidebar.settings },
                             ].map(item => (

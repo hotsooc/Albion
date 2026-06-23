@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { supabase } from '../../lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
-import { Home, Users, Film, Wrench, User as UserIcon, Settings } from 'lucide-react';
+import { Home, Users, Film, Wrench, User as UserIcon, Settings, BookOpen } from 'lucide-react';
 import useTrans from '@/hooks/useTrans';
 
 const Sidebar = ({
@@ -54,21 +54,23 @@ const Sidebar = ({
   const MenuIcon = <span className='text-2xl text-[var(--text-primary)] hover:scale-110 transition-transform duration-200'>☰</span>;
 
   const iconMap: Record<string, React.ReactNode> = {
-    "/home":     <Home size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
-    "/teammate": <Users size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
-    "/videos":   <Film size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
-    "/youtube":  <Film size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
-    "/build":    <Wrench size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
-    "/aboutus":  <UserIcon size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
-    "/settings": <Settings size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/home":       <Home size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/teammate":   <Users size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/videos":     <Film size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    // "/youtube":    <Film size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/build":      <Wrench size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/dictionary": <BookOpen size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/aboutus":    <UserIcon size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
+    "/settings":   <Settings size={20} className="text-[var(--text-primary)] flex-shrink-0" />,
   };
 
   const navItems = [
     { href: "/home", label: trans.sidebar.home },
     { href: "/teammate", label: trans.sidebar.team },
     { href: "/videos", label: trans.sidebar.video },
-    { href: "/youtube", label: trans.sidebar.retroTV },
+    // { href: "/youtube", label: trans.sidebar.retroTV },
     { href: "/build", label: trans.sidebar.builds },
+    { href: "/dictionary", label: trans.sidebar.dictionary },
     { href: "/aboutus", label: trans.sidebar.aboutUs },
     { href: "/settings", label: trans.sidebar.settings },
   ];

@@ -7,11 +7,37 @@ import { allItemsData, dataSets, ItemType } from '@/store/data';
 import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import useTrans from '@/hooks/useTrans';
 
-export const DragSourceContainer = () => {
+export const DragSourceContainer = ({ builds }: { builds: ItemType[] }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState<ItemType[]>([]);
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const { trans } = useTrans();
+
+  const categoriesOrder = [
+    'Sword', 'Axe', 'Mace', 'Hammer', 'War Gloves',
+    'Bow', 'Dagger', 'Spear', 'Quarterstaves',
+    'Shapeshifter Staves', 'Nature Staves', 'Fire Staves',
+    'Holy Staves', 'Arcane Staves', 'Frost Staves',
+    'Cursed Staves', 'Shields', 'Torches', 'Tomes'
+  ];
+
+  // Group builds into sets dynamically
+  const getDynamicDataSets = () => {
+    const dynamicSets: Record<string, ItemType[]> = {};
+    categoriesOrder.forEach(cat => {
+      dynamicSets[cat] = [];
+    });
+    builds.forEach(item => {
+      const cat = item.category || 'Unknown';
+      if (!dynamicSets[cat]) {
+        dynamicSets[cat] = [];
+      }
+      dynamicSets[cat].push(item);
+    });
+    return dynamicSets;
+  };
+
+  const dynamicDataSets = getDynamicDataSets();
 
   const getButtonLabel = (key: string) => {
     const mapping: { [key: string]: string } = {
@@ -42,7 +68,7 @@ export const DragSourceContainer = () => {
     const value = e.target.value;
     setInputValue(value);
     setActiveButton(null);
-    const filteredData = allItemsData.filter(item =>
+    const filteredData = builds.filter(item =>
       item.name.toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredData);
@@ -66,7 +92,7 @@ export const DragSourceContainer = () => {
     setActiveButton(null);
   };
 
-  const buttonsToDisplay = activeButton ? [activeButton] : Object.keys(dataSets);
+  const buttonsToDisplay = activeButton ? [activeButton] : categoriesOrder;
   const showResults = inputValue || activeButton;
 
   return (
@@ -94,7 +120,7 @@ export const DragSourceContainer = () => {
       <div className='grid grid-cols-1 gap-2.5'>
         <div className='flex flex-col gap-2 overflow-y-auto max-h-[470px] no-scrollbar pr-1'>
           {!inputValue && buttonsToDisplay.map((label) => {
-            const data = dataSets[label as keyof typeof dataSets];
+            const data = dynamicDataSets[label] || [];
             const isActive = activeButton === label;
             return (
               <button

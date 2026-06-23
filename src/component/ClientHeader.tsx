@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { ChevronDownIcon, Sun, Moon, Home, Users, Film, Wrench, User as UserIcon, Settings, LogOut } from 'lucide-react';
+import { ChevronDownIcon, Sun, Moon, Home, Users, Film, Wrench, User as UserIcon, Settings, LogOut, BookOpen } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import useTrans from '@/hooks/useTrans';
 
@@ -30,6 +30,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     { name: trans.sidebar.team, icon: <Users size={20} className="text-[var(--text-primary)]" />, path: '/teammate' },
     { name: trans.sidebar.video, icon: <Film size={20} className="text-[var(--text-primary)]" />, path: '/videos' },
     { name: trans.sidebar.builds, icon: <Wrench size={20} className="text-[var(--text-primary)]" />, path: '/build' },
+    { name: trans.sidebar.dictionary, icon: <BookOpen size={20} className="text-[var(--text-primary)]" />, path: '/dictionary' },
     { name: trans.sidebar.aboutUs, icon: <UserIcon size={20} className="text-[var(--text-primary)]" />, path: '/aboutus' },
     { name: trans.sidebar.settings, icon: <Settings size={20} className="text-[var(--text-primary)]" />, path: '/settings' },
   ];
