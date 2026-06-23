@@ -1,14 +1,28 @@
 'use client';
 
+import React from 'react';
 import dynamic from "next/dynamic";
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as React.ComponentType<{
+    src: string | null;
+    controls?: boolean;
+    width?: string | number;
+    height?: string | number;
+    className?: string;
+}>;
 import { Button } from "antd";
 import CommentSection from '@/component/Comment';
 import { useRouter } from 'next/navigation';
 import useTrans from "@/hooks/useTrans";
 import { ArrowLeft } from 'lucide-react';
 
-export default function VideoDetailClient({ videoData, videoId }: { videoData: any, videoId: string }) {
+export interface VideoData {
+    url: string | null;
+    title?: string;
+    channel?: string;
+    description?: string;
+}
+
+export default function VideoDetailClient({ videoData, videoId }: { videoData: VideoData, videoId: string }) {
     const router = useRouter();
     const { trans } = useTrans();
     const tabs = [
@@ -46,21 +60,27 @@ export default function VideoDetailClient({ videoData, videoId }: { videoData: a
                 {/* Player and Comments Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-[4fr_2fr] gap-6 p-2">
                     <div className="flex flex-col gap-4">
-                        <div className="video-wrapper h-auto rounded-2xl overflow-hidden border-2 border-[var(--border-color)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(120,100,240,0.2)] bg-black">
+                        <div className="video-wrapper relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-[var(--border-color)] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(120,100,240,0.2)] bg-black">
                             <ReactPlayer
-                                url={videoData.url}
+                                src={videoData.url}
                                 controls={true}
                                 width="100%"
                                 height="100%"
+                                className="absolute top-0 left-0"
                             />
                         </div>
                         <div className="flex flex-col ml-1">
                             <span className="text-[var(--text-primary)] text-2xl font-extrabold tracking-tight mt-2 sora-font">
-                                {videoData.title}
+                                {videoData.title || trans.video.untitled}
                             </span>
                             <span className="text-[var(--text-secondary)] text-base font-bold sora-font">
-                                {trans.video.author} {videoData.channel}
+                                {trans.video.author} {videoData.channel || trans.video.unknownAuthor}
                             </span>
+                            {videoData.description && (
+                                <p className="text-[var(--text-secondary)] text-sm mt-4 whitespace-pre-wrap bg-[var(--bg-column)] p-4 rounded-xl border border-[var(--border-color)]">
+                                    {videoData.description}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <div>

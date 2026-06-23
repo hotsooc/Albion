@@ -6,7 +6,7 @@ const fetchYouTubeMetadata = async (videoId: string) => {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
   const res = await fetch(`${baseUrl}/api/youtube-metadata?videoId=${videoId}`);
-  
+
   if (!res.ok) {
     console.error('YouTube metadata fetch failed:', res.status);
   }
@@ -23,7 +23,7 @@ export default async function VideoDetailPage({
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('videos')
-    .select('url')
+    .select('*')
     .eq('id', videoId)
     .single();
 
@@ -32,11 +32,25 @@ export default async function VideoDetailPage({
   }
 
   const youtubeId = getYouTubeVideoId(data.url);
-  const metadata = youtubeId
-    ? await fetchYouTubeMetadata(youtubeId)
-    : { title: 'Untitled', channel: 'Unknown' };
+  let metadata = { title: '', channel: '' };
+  
+  if (youtubeId) {
+    try {
+      const res = await fetchYouTubeMetadata(youtubeId);
+      if (res && !res.error) {
+        metadata = res;
+      }
+    } catch (err) {
+      console.error('Error fetching YouTube metadata:', err);
+    }
+  }
 
-  const videoData = { ...data, ...metadata };
+  const videoData = {
+    ...data,
+    title: data.name || metadata.title || '',
+    channel: metadata.channel || '',
+    description: data.description || '',
+  };
 
   return <VideoDetailClient videoData={videoData} videoId={videoId} />;
 }
