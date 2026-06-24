@@ -399,11 +399,6 @@ export default function HomePage() {
             onClick={() => handleImageClick('/image/group123.png')}
             className="group cursor-pointer relative rounded-[32px] border-2 border-[var(--border-color)] p-6 bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(120,100,240,0.3)] hover:-translate-y-[2px] transition-all duration-300 overflow-hidden flex flex-col items-center justify-center gap-4"
           >
-            <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity duration-200 text-xs font-bold flex items-center gap-1">
-              <span>Bấm vào ảnh để xem toàn màn hình với hiệu ứng đám mây đặc trưng</span>
-              <ArrowRight size={14} />
-            </div>
-            
             {/* Elegant preview container */}
             <div className="relative w-full max-w-4xl aspect-[21/9] rounded-2xl overflow-hidden border-2 border-[var(--border-color)] bg-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
