@@ -10,6 +10,8 @@ import Footer from './footer';
 import { TransProvider } from '@/hooks/useTrans';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { StyleProvider } from '@/component/StyleProvider';
+import AIChatbot from '@/component/AIChatbot';
 
 export default function ClientLayoutWrapper({ children }: { children: React.ReactNode }) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +43,8 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
     if (!isMobile) {
         return (
           <ThemeProvider>
-            <AntdProvider>
+            <StyleProvider>
+              <AntdProvider>
               <TransProvider>
                 <App>
                   <div className="flex flex-col h-screen overflow-hidden bg-[var(--background)] text-[var(--foreground)] theme-transition">
@@ -58,27 +61,19 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
                           </div>
                         )}
                         <main className={`flex-grow transition-all duration-200 ${isAuthPage ? 'p-0 m-0' : 'p-6 mt-4 mb-8'}`} style={{ width: '100%' }}>
-                          <AnimatePresence mode="wait">
-                            <motion.div
-                              key={pathname}
-                              initial={{ opacity: 0, y: 12 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -12 }}
-                              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                              {children}
-                            </motion.div>
-                          </AnimatePresence>
+                          {children}
                         </main>
                       </div>
                       <div className="flex-shrink-0">
                         <Footer />
                       </div>
                     </div>
+                    {!isAuthPage && <AIChatbot />}
                   </div>
                 </App>
               </TransProvider>
-            </AntdProvider>
+              </AntdProvider>
+            </StyleProvider>
           </ThemeProvider>
         );
     }
@@ -86,7 +81,8 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
     // Mobile
     return (
       <ThemeProvider>
-        <AntdProvider>
+        <StyleProvider>
+          <AntdProvider>
           <TransProvider>
             <App>
               <div className="flex flex-col h-screen overflow-hidden bg-[var(--background)] text-[var(--foreground)] theme-transition">
@@ -98,23 +94,15 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
                   )}
                   <div className={`flex-grow ${isAuthPage ? 'min-h-screen' : ''}`}>
                     <main className={`${isAuthPage ? 'p-0 m-0' : 'px-3 py-4'}`}>
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={pathname}
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -8 }}
-                          transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          {children}
-                        </motion.div>
-                      </AnimatePresence>
+                      {children}
                     </main>
                   </div>
                   <div className="flex-shrink-0">
                     <Footer />
                   </div>
                 </div>
+
+                {!isAuthPage && <AIChatbot />}
 
                 {!isAuthPage && (
                   <Sidebar isMobile mobileOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
@@ -131,7 +119,8 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
               </div>
             </App>
           </TransProvider>
-        </AntdProvider>
+          </AntdProvider>
+        </StyleProvider>
       </ThemeProvider>
     );
 }

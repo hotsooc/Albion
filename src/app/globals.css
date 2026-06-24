@@ -365,3 +365,88 @@ body a:hover { color: var(--color-accent-hover); }
 .theme-toggle .icon-moon {
   opacity: 1; transform: rotate(0deg) scale(1);
 }
+
+/* ── Glassmorphism UI Style Overrides ── */
+
+[data-style="glass"] {
+  --shadow-glow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --bg-panel-solid: rgba(255, 255, 255, 0.4);
+  --bg-card: rgba(255, 255, 255, 0.25);
+  --border-color: rgba(255, 255, 255, 0.18);
+  --bg-input: rgba(255, 255, 255, 0.5);
+  --border-input: rgba(255, 255, 255, 0.3);
+  --bg-nav: rgba(255, 255, 255, 0.4);
+  --border-nav: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"][data-style="glass"] {
+  --shadow-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --bg-panel-solid: rgba(18, 18, 42, 0.4);
+  --bg-card: rgba(18, 18, 42, 0.25);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --bg-input: rgba(18, 18, 42, 0.5);
+  --border-input: rgba(255, 255, 255, 0.1);
+  --bg-nav: rgba(18, 18, 42, 0.4);
+  --border-nav: rgba(255, 255, 255, 0.05);
+}
+
+[data-style="glass"] header,
+[data-style="glass"] .sircle-card,
+[data-style="glass"] .sidebar-link,
+[data-style="glass"] nav section,
+[data-style="glass"] .ant-dropdown-menu,
+[data-style="glass"] .bg-\[var\(--bg-panel-solid\)\] {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+[data-style="glass"] .sircle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+}
+[data-theme="dark"][data-style="glass"] .sircle-card:hover {
+  box-shadow: 0 12px 40px 0 rgba(140, 120, 255, 0.2);
+}
+
+[data-style="glass"] .sircle-btn {
+  box-shadow: 0 4px 15px 0 rgba(31, 38, 135, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+[data-style="glass"] .sircle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.25);
+}
+[data-theme="dark"][data-style="glass"] .sircle-btn:hover {
+  box-shadow: 0 6px 20px 0 rgba(140, 120, 255, 0.3);
+}
+
+[data-style="glass"] .theme-toggle,
+[data-style="glass"] input,
+[data-style="glass"] .ant-input,
+[data-style="glass"] header > div > button {
+  border-width: 1px !important;
+}
+
+[data-style="glass"] .shadow-\[2px_2px_0px_0px_rgba\(0\,0\,0\,1\)\] {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+[data-style="glass"] .shadow-\[3px_3px_0px_0px_rgba\(0\,0\,0\,1\)\] {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08) !important;
+}
+[data-style="glass"] .shadow-\[4px_4px_0px_0px_rgba\(0\,0\,0\,1\)\] {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+}
+
+[data-theme="dark"][data-style="glass"] .shadow-\[2px_2px_0px_0px_rgba\(120\,100\,240\,0\.15\)\] {
+  box-shadow: 0 4px 12px rgba(120, 100, 240, 0.1) !important;
+}
+[data-theme="dark"][data-style="glass"] .shadow-\[3px_3px_0px_0px_rgba\(120\,100\,240\,0\.25\)\] {
+  box-shadow: 0 6px 16px rgba(120, 100, 240, 0.15) !important;
+}
+[data-theme="dark"][data-style="glass"] .shadow-\[4px_4px_0px_0px_rgba\(120\,100\,240\,0\.2\)\] {
+  box-shadow: 0 8px 24px rgba(120, 100, 240, 0.2) !important;
+}
+
+[data-style="glass"] .border-2 {
+  border-width: 1px !important;
+}

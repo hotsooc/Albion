@@ -1,39 +1,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Dropdown, MenuProps, Input, Button, Tag, Space, Image } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Dropdown, MenuProps, Image } from 'antd';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { ChevronDownIcon, Sun, Moon, Home, Users, Film, Wrench, User as UserIcon, Settings, LogOut, BookOpen } from 'lucide-react';
+import { ChevronDownIcon, Sun, Moon, Home, Users, Film, Wrench, User as UserIcon, Settings, LogOut, BookOpen, Sparkles } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import useTrans from '@/hooks/useTrans';
+import { useStyle } from '@/component/StyleProvider';
+import CommandPalette from '@/component/CommandPalette';
 
 interface ClientHeaderProps {
   onSearch: (value: string) => void;
 }
 
 const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const router = useRouter();
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { changeLanguage, lang, trans } = useTrans();
   const { theme, setTheme } = useTheme();
-
-  const categories = [
-    { name: trans.sidebar.home, icon: <Home size={20} className="text-[var(--text-primary)]" />, path: '/home'},
-    { name: trans.sidebar.team, icon: <Users size={20} className="text-[var(--text-primary)]" />, path: '/teammate' },
-    { name: trans.sidebar.video, icon: <Film size={20} className="text-[var(--text-primary)]" />, path: '/videos' },
-    { name: trans.sidebar.builds, icon: <Wrench size={20} className="text-[var(--text-primary)]" />, path: '/build' },
-    { name: trans.sidebar.dictionary, icon: <BookOpen size={20} className="text-[var(--text-primary)]" />, path: '/dictionary' },
-    { name: trans.sidebar.aboutUs, icon: <UserIcon size={20} className="text-[var(--text-primary)]" />, path: '/aboutus' },
-    { name: trans.sidebar.settings, icon: <Settings size={20} className="text-[var(--text-primary)]" />, path: '/settings' },
-  ];
+  const { style, toggleStyle } = useStyle();
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -66,26 +54,12 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     router.push('/login');
   };
 
-  const handleSearchSubmit = () => {
-    if (searchTerm) {
-      setRecentSearches(prev => [searchTerm, ...prev.filter(t => t !== searchTerm)].slice(0, 5));
-      router.push(`/build?q=${encodeURIComponent(searchTerm)}`);
-      onSearch(searchTerm);
-      setIsSearchDropdownVisible(false);
-    }
-  };
-
   const menuItems: MenuProps['items'] = [
     { key: 'logout', label: trans.common.logout, icon: <LogOut size={20} className="text-[var(--text-primary)]" /> },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'logout') handleLogout();
-  };
-
-  const handleCategoryClick = (path: string) => {
-    router.push(path);
-    setIsSearchDropdownVisible(false);
   };
 
   const RenderFlag = (language: string, size: number) => {
@@ -102,51 +76,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
     );
   };
 
-  const searchDropdownContent = (
-    <div className="bg-white dark:bg-[#1a1a30] p-4 rounded-lg shadow-lg min-w-[300px] border border-gray-200 dark:border-[#2d2d4a] theme-transition">
-      {recentSearches.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-gray-500 dark:text-[#a1a1aa] text-sm font-semibold mb-2">{trans.common.recent}</h3>
-          <Space size={[0, 8]} wrap>
-            {recentSearches.map(tag => (
-              <Tag
-                key={tag}
-                closable
-                onClose={(e) => {
-                  e.stopPropagation();
-                  setRecentSearches(recentSearches.filter(t => t !== tag));
-                }}
-                onClick={() => {
-                  setSearchTerm(tag);
-                  onSearch(tag);
-                  router.push(`/build?q=${encodeURIComponent(tag)}`);
-                  setIsSearchDropdownVisible(false);
-                }}
-                className="!bg-gray-200 dark:!bg-[#252550] !text-gray-700 dark:!text-[#e4e4e7] !rounded-md !px-3 !py-1 !cursor-pointer hover:!bg-gray-300 dark:hover:!bg-[#3d3d6e]"
-              >
-                {tag}
-              </Tag>
-            ))}
-          </Space>
-        </div>
-      )}
-      <div>
-        <h3 className="text-gray-500 dark:text-[#a1a1aa] text-sm font-semibold mb-2">{trans.common.categories}</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {categories.map(category => (
-            <Button
-              key={category.name}
-              icon={category.icon}
-              onClick={() => handleCategoryClick(category.path)}
-              className="!h-auto !py-3 !rounded-lg !text-base !flex !items-center !justify-start !gap-2 !bg-gray-100 dark:!bg-[#252550] hover:!bg-gray-200 dark:hover:!bg-[#3d3d6e] theme-transition"
-            >
-              {category.name}
-            </Button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+
 
   if (!user) return null;
 
@@ -163,39 +93,27 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
         </div>
       </div>
 
-      <div className="hidden md:flex flex-grow justify-center max-w-xl mx-8">
-        <Dropdown
-          dropdownRender={() => searchDropdownContent}
-          trigger={['click']}
-          placement="bottomLeft"
-          arrow
-          open={isSearchDropdownVisible}
-          onOpenChange={setIsSearchDropdownVisible}
-        >
-          <Input
-            placeholder={trans.common.searchPlaceholder}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onPressEnter={handleSearchSubmit}
-            prefix={<SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />}
-            style={{
-              backgroundColor: 'var(--bg-input)',
-              color: 'var(--text-input)',
-              borderColor: 'var(--border-color)',
-            }}
-            className="!h-11 !px-4 focus:ring-0 !flex !items-center !rounded-full w-full !cursor-pointer border-2 border-[var(--border-color)] transition-all duration-200 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.15)] focus-within:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:focus-within:shadow-[3px_3px_0px_0px_rgba(120,100,240,0.25)] focus-within:-translate-y-[1px]"
-            onClick={() => setIsSearchDropdownVisible(true)}
-          />
-        </Dropdown>
+      <div className="flex-grow flex justify-center max-w-xl mx-2 md:mx-8">
+        <CommandPalette />
       </div>
 
-      <div className="flex items-center gap-1 md:gap-3 mr-2 md:mr-4">
+      <div className="flex items-center gap-1 md:gap-3 mr-2 md:mr-4 flex-shrink-0">
+        {/* Style Toggle */}
         <button
-          className="md:hidden cursor-pointer bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-hover-nav)] border-2 border-[var(--border-color)] rounded-full p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.15)] transition-all duration-200"
-          onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+          onClick={toggleStyle}
+          className="theme-toggle relative"
+          aria-label="Toggle UI Style"
+          title={style === 'glass' ? 'Chuyển sang Brutalism' : 'Chuyển sang Glassmorphism'}
         >
-          <SearchOutlined className="text-[var(--text-primary)] text-lg" />
+          <Sparkles size={18} className={`transition-all duration-300 ${style === 'glass' ? 'text-purple-500' : 'text-[var(--text-nav)]'}`} />
+          {style === 'glass' && (
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-500 border border-[var(--border-color)]"></span>
+            </span>
+          )}
         </button>
+
         {/* Theme Toggle */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -245,33 +163,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
         </Dropdown>
       </div>
       </div>
-      {isMobileSearchOpen && (
-        <div className="md:hidden w-full">
-          <Dropdown
-            dropdownRender={() => searchDropdownContent}
-            trigger={['click']}
-            placement="bottomLeft"
-            arrow
-            open={isSearchDropdownVisible}
-            onOpenChange={setIsSearchDropdownVisible}
-          >
-            <Input
-              placeholder={trans.common.searchPlaceholder}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onPressEnter={handleSearchSubmit}
-              prefix={<SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />}
-              style={{
-                backgroundColor: 'var(--bg-input)',
-                color: 'var(--text-input)',
-                borderColor: 'var(--border-color)',
-              }}
-              className="!h-11 !px-4 focus:ring-0 !flex !items-center !rounded-full w-full !cursor-pointer border-2 border-[var(--border-color)] transition-all duration-200 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.15)]"
-              onClick={() => setIsSearchDropdownVisible(true)}
-            />
-          </Dropdown>
-        </div>
-      )}
     </header>
   );
 };
