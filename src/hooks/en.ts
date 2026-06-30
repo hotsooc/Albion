@@ -224,7 +224,7 @@ export const EnglishScript = {
         urlError: 'URL Error'
     },
     sidebar: {
-        navigation: 'Navigation',
+        navigation: 'Expedition Journal',
         home: 'Home',
         team: 'Team',
         video: 'Video',
@@ -233,7 +233,35 @@ export const EnglishScript = {
         aboutUs: 'About Us',
         settings: 'Settings',
         dashboard: 'Dashboard',
-        dictionary: 'Dictionary'
+        dictionary: 'Dictionary',
+        games: 'Games',
+        
+        // Chapters
+        chapter1Title: 'Chapter I: Sanctuary',
+        chapter1Subtitle: 'Sanctuary & news',
+        chapter2Title: 'Chapter II: The Arsenal',
+        chapter2Subtitle: 'Weapons & techniques',
+        chapter3Title: 'Chapter III: Alliance & CTA',
+        chapter3Subtitle: 'Find party & drill',
+        chapter4Title: 'Chapter IV: Camp & History',
+        chapter4Subtitle: 'Log & profile setup',
+
+        // Desc/Flavor text
+        homeDesc: 'Guild headquarters',
+        dictionaryDesc: 'Glossary of terms',
+        buildsDesc: 'Meta builds guide',
+        videosDesc: 'Combat chronicles',
+        youtubeDesc: 'Retro TV player',
+        teammateDesc: 'CTA squad planner',
+        gamesDesc: 'Tavern mini-games',
+        aboutUsDesc: 'Cu Do tribe history',
+        settingsDesc: 'Hero\'s profile camp',
+
+        // Parent headers
+        arsenalTitle: 'The Weapon Vault',
+        arsenalDesc: 'Gear & battle footage',
+        warbandTitle: 'Sovereign Hall',
+        warbandDesc: 'CTA & tavern fun'
     },
     dictionary: {
         title: 'Albion Online Glossary',

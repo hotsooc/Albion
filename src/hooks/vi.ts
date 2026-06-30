@@ -224,7 +224,7 @@ export const VnScript = {
         urlError: 'Lỗi URL'
     },
     sidebar: {
-        navigation: 'Điều hướng',
+        navigation: 'Nhật Ký Hành Trình',
         home: 'Trang chủ',
         team: 'Đội',
         video: 'Video',
@@ -233,7 +233,35 @@ export const VnScript = {
         aboutUs: 'Về chúng tôi',
         settings: 'Cài đặt',
         dashboard: 'Bảng điều khiển',
-        dictionary: 'Từ điển'
+        dictionary: 'Từ điển',
+        games: 'Giải trí',
+        
+        // Chapters
+        chapter1Title: 'Chương I: Khởi Hành',
+        chapter1Subtitle: 'Cập nhật bản doanh',
+        chapter2Title: 'Chương II: Binh Khí Phổ',
+        chapter2Subtitle: 'Vũ khí & kỹ thuật',
+        chapter3Title: 'Chương III: Liên Minh CTA',
+        chapter3Subtitle: 'Tìm đội & Rèn luyện',
+        chapter4Title: 'Chương IV: Sử Ký & Trại',
+        chapter4Subtitle: 'Thông tin & Thiết lập',
+
+        // Desc/Flavor text
+        homeDesc: 'Bản doanh XHCN',
+        dictionaryDesc: 'Giải mã thuật ngữ',
+        buildsDesc: 'Bí kíp Meta Builds',
+        videosDesc: 'Sử ký chiến trường',
+        youtubeDesc: 'Tivi Cổ Điển',
+        teammateDesc: 'Đội hình CTA',
+        gamesDesc: 'Quán rượu giải khuây',
+        aboutUsDesc: 'Bộ lạc Cu Đỏ',
+        settingsDesc: 'Doanh trại cá nhân',
+
+        // Parent headers
+        arsenalTitle: 'Kho Thần Khí',
+        arsenalDesc: 'Trang bị & Clip chiến sự',
+        warbandTitle: 'Sảnh Tụ Nghĩa',
+        warbandDesc: 'CTA & Mini-games'
     },
     dictionary: {
         title: 'Từ điển Albion Online',
