@@ -8,8 +8,11 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Missing board parameter' }, { status: 400 });
     }
 
+    // Làm sạch FEN string: chỉ cho phép các kí tự FEN hợp lệ
+    const sanitizedBoard = board.replace(/[^a-zA-Z0-9/\s\-]/g, '').trim();
+
     // ChessDB API endpoint
-    const url = `https://www.chessdb.cn/chessdb.php?action=querybest&board=${encodeURIComponent(board)}`;
+    const url = `https://www.chessdb.cn/chessdb.php?action=querybest&board=${encodeURIComponent(sanitizedBoard)}`;
 
     try {
         const response = await fetch(url, {
@@ -24,7 +27,7 @@ export async function GET(req: NextRequest) {
     } catch (_error) {
         // Fallback to cn domain if main is slow
         try {
-            const fallbackUrl = `https://cn.chessdb.cn/chessdb.php?action=querybest&board=${encodeURIComponent(board)}`;
+            const fallbackUrl = `https://cn.chessdb.cn/chessdb.php?action=querybest&board=${encodeURIComponent(sanitizedBoard)}`;
             const response = await fetch(fallbackUrl, { next: { revalidate: 3600 } });
             const data = await response.text();
             return NextResponse.json({ result: data });

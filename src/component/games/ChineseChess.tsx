@@ -136,6 +136,28 @@ const fetchCloudBestMove = async (fen: string): Promise<Move | null> => {
   return null;
 };
 
+const fetchPikafishBestMove = async (fen: string): Promise<Move | null> => {
+  try {
+    const res = await fetch(`/api/pikafish?board=${encodeURIComponent(fen)}&depth=8`);
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.error || 'Failed to fetch Pikafish move');
+    }
+    const data = await res.json();
+    const result: string = data.result || '';
+    
+    if (result.startsWith('move:')) {
+      const iccsMove = result.substring(5).trim();
+      if (iccsMove.length === 4) {
+        return iccsToMove(iccsMove);
+      }
+    }
+  } catch (e) {
+    console.error('Error fetching Pikafish best move:', e);
+  }
+  return null;
+};
+
 // Initial board positions
 const getInitialBoard = (): Board => {
   const b: Board = Array(10).fill(null).map(() => Array(9).fill(null));
@@ -634,9 +656,19 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
       // 1. Thử lấy nước đi tốt nhất từ Thư viện Đám mây (ChessDB Book) trước
       let bestMove = await fetchCloudBestMove(fen);
 
-      // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Minimax nội bộ
+      // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Pikafish hoặc Minimax nội bộ
       if (!bestMove) {
-        bestMove = getBestMove(board, currentPlayer, aiDifficulty);
+        if (aiDifficulty === 5) {
+          bestMove = await fetchPikafishBestMove(fen);
+          if (!bestMove) {
+            // Tự động chuyển về AI Cao thủ (Lv4) nếu không chạy được Pikafish
+            alert("⚠️ Không thể kết nối với động cơ Pikafish cục bộ. Hệ thống tự động chuyển sang chế độ AI Cao thủ (Lv4).");
+            setAiDifficulty(4);
+            bestMove = getBestMove(board, currentPlayer, 4);
+          }
+        } else {
+          bestMove = getBestMove(board, currentPlayer, aiDifficulty);
+        }
       }
 
       if (bestMove) {
@@ -821,6 +853,7 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                     { lv: 2, label: 'Tập sự (Lv2)' },
                     { lv: 3, label: 'Trung cấp (Lv3)' },
                     { lv: 4, label: 'Cao thủ (Lv4)' },
+                    { lv: 5, label: '⚡ Siêu cấp (Pikafish)' },
                   ].map(item => (
                     <button
                       key={item.lv}
@@ -829,7 +862,7 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                         aiDifficulty === item.lv
                           ? 'bg-amber-500/10 border-amber-500 text-amber-600 font-extrabold shadow-sm'
                           : 'border-transparent opacity-60 hover:bg-[var(--bg-hover-nav)]'
-                      }`}
+                      } ${item.lv === 5 ? 'col-span-2' : ''}`}
                     >
                       {item.label}
                     </button>
