@@ -141,6 +141,7 @@ export const EnglishScript = {
         selectGame: 'Choose a game to start:',
         snakeName: '🐍 Snake Game',
         pacmanName: '🟡 Pac-Man',
+        chineseChessName: '⚔️ Chinese Chess (Xiangqi)',
         demoNote: '*These are simple versions to illustrate the structure.'
     },
     youtube: {

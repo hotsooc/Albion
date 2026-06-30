@@ -141,6 +141,7 @@ export const VnScript = {
         selectGame: 'Chọn một trò chơi để bắt đầu:',
         snakeName: '🐍 Rắn Săn Mồi (Snake)',
         pacmanName: '🟡 Pac-Man',
+        chineseChessName: '⚔️ Cờ Tướng (Xiangqi)',
         demoNote: '*Đây là các phiên bản đơn giản để minh họa cấu trúc.'
     },
     youtube: {
