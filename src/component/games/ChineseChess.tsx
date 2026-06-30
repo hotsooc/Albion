@@ -71,6 +71,71 @@ const PIECE_VALUES: Record<PieceType, number> = {
   S: 100
 };
 
+const charToCol = (char: string): number => char.charCodeAt(0) - 97;
+
+const iccsToMove = (iccs: string): Move => {
+  return {
+    fromX: charToCol(iccs[0]),
+    fromY: parseInt(iccs[1], 10),
+    toX: charToCol(iccs[2]),
+    toY: parseInt(iccs[3], 10)
+  };
+};
+
+const getBoardFen = (board: Board, activePlayer: Player): string => {
+  const rows: string[] = [];
+  for (let y = 0; y < 10; y++) {
+    let emptyCount = 0;
+    let rowStr = '';
+    for (let x = 0; x < 9; x++) {
+      const piece = board[y][x];
+      if (piece === null) {
+        emptyCount++;
+      } else {
+        if (emptyCount > 0) {
+          rowStr += emptyCount;
+          emptyCount = 0;
+        }
+        const char = piece.type;
+        rowStr += piece.player === 'red' ? char : char.toLowerCase();
+      }
+    }
+    if (emptyCount > 0) {
+      rowStr += emptyCount;
+    }
+    rows.push(rowStr);
+  }
+  
+  const fenPieces = rows.join('/');
+  const activeColor = activePlayer === 'red' ? 'w' : 'b';
+  
+  return `${fenPieces} ${activeColor}`;
+};
+
+const fetchCloudBestMove = async (fen: string): Promise<Move | null> => {
+  try {
+    const res = await fetch(`/api/chessdb?board=${encodeURIComponent(fen)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const result: string = data.result || '';
+    
+    if (result.startsWith('move:')) {
+      const iccsMove = result.substring(5).trim();
+      if (iccsMove.length === 4) {
+        return iccsToMove(iccsMove);
+      }
+    } else if (result.startsWith('egtb:')) {
+      const iccsMove = result.substring(5).trim();
+      if (iccsMove.length === 4) {
+        return iccsToMove(iccsMove);
+      }
+    }
+  } catch (e) {
+    console.error('Error fetching cloud best move:', e);
+  }
+  return null;
+};
+
 // Initial board positions
 const getInitialBoard = (): Board => {
   const b: Board = Array(10).fill(null).map(() => Array(9).fill(null));
@@ -358,6 +423,15 @@ const minimax = (
   const currentPlayer = isMaximizing ? 'red' : 'black';
   const moves = getLegalMoves(board, currentPlayer);
 
+  // Sắp xếp nước đi ăn quân trước để nâng cao hiệu suất cắt tỉa Alpha-Beta
+  moves.sort((a, b) => {
+    const aDest = board[a.toY][a.toX];
+    const bDest = board[b.toY][b.toX];
+    if (aDest && !bDest) return -1;
+    if (!aDest && bDest) return 1;
+    return 0;
+  });
+
   if (moves.length === 0) {
     if (isUnderCheck(board, currentPlayer)) {
       return isMaximizing ? -200000 + (3 - depth) : 200000 - (3 - depth); // Checkmate
@@ -406,17 +480,24 @@ const minimax = (
   }
 };
 
-const getBestMove = (board: Board, player: Player): Move | null => {
+const getBestMove = (board: Board, player: Player, depth: number): Move | null => {
   const moves = getLegalMoves(board, player);
   if (moves.length === 0) return null;
 
   let bestMove: Move | null = null;
   const isMaximizing = player === 'red';
 
-  // Shuffle to avoid repeating games
+  // Trộn ngẫu nhiên để tránh các ván đấu lặp lại
   moves.sort(() => Math.random() - 0.5);
 
-  const depth = 2; // Fast and stable depth
+  // Sắp xếp nước đi ăn quân lên đầu
+  moves.sort((a, b) => {
+    const aDest = board[a.toY][a.toX];
+    const bDest = board[b.toY][b.toX];
+    if (aDest && !bDest) return -1;
+    if (!aDest && bDest) return 1;
+    return 0;
+  });
 
   if (isMaximizing) {
     let bestValue = -Infinity;
@@ -473,6 +554,12 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
   const [moveHistory, setMoveHistory] = useState<string[]>([]);
   const [isAiThinking, setIsAiThinking] = useState(false);
   const isAiThinkingRef = useRef(false);
+  const [aiDifficulty, setAiDifficulty] = useState<number>(3); // Mặc định Cấp 3 (Trung cấp)
+  const [hintMove, setHintMove] = useState<Move | null>(null);
+  const [isFetchingHint, setIsFetchingHint] = useState(false);
+  const [lastMove, setLastMove] = useState<Move | null>(null);
+  const [timeLimit, setTimeLimit] = useState<number>(0); // 0 = Không giới hạn
+  const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const resetGame = useCallback(() => {
     setBoard(getInitialBoard());
@@ -483,7 +570,10 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
     setMoveHistory([]);
     setIsAiThinking(false);
     isAiThinkingRef.current = false;
-  }, []);
+    setHintMove(null);
+    setLastMove(null);
+    setTimeLeft(timeLimit);
+  }, [timeLimit]);
 
   // Compute valid moves for currently selected piece
   const validMovesForSelected = useMemo(() => {
@@ -513,6 +603,9 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
 
     setBoard(nextBoard);
     setSelectedPiece(null);
+    setHintMove(null); // Xóa gợi ý cũ khi đi quân mới
+    setLastMove({ fromX, fromY, toX, toY }); // Lưu lại nước đi gần nhất để highlight
+    setTimeLeft(timeLimit); // Reset lại thời gian cho lượt mới
     setMoveHistory(prev => [logMessage, ...prev].slice(0, 15));
 
     const nextPlayer = currentPlayer === 'red' ? 'black' : 'red';
@@ -525,7 +618,7 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
     } else {
       setCurrentPlayer(nextPlayer);
     }
-  }, [board, currentPlayer]);
+  }, [board, currentPlayer, timeLimit]);
 
   // AI execution tick
   useEffect(() => {
@@ -533,21 +626,95 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
 
     isAiThinkingRef.current = true;
     setIsAiThinking(true);
-    const aiTimer = setTimeout(() => {
-      const bestMove = getBestMove(board, currentPlayer);
+    
+    let executeTimer: NodeJS.Timeout;
+    
+    const aiTimer = setTimeout(async () => {
+      const fen = getBoardFen(board, currentPlayer);
+      // 1. Thử lấy nước đi tốt nhất từ Thư viện Đám mây (ChessDB Book) trước
+      let bestMove = await fetchCloudBestMove(fen);
+
+      // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Minimax nội bộ
+      if (!bestMove) {
+        bestMove = getBestMove(board, currentPlayer, aiDifficulty);
+      }
+
       if (bestMove) {
-        executeMove(bestMove.fromX, bestMove.fromY, bestMove.toX, bestMove.toY);
+        // HÀNH TRÌNH CHẬM LẠI:
+        // Bước 1: Chỉ chọn quân cờ đó để thắp sáng ô nước đi
+        setSelectedPiece({ x: bestMove.fromX, y: bestMove.fromY });
+        
+        // Bước 2: Chờ 1 giây để người chơi nhìn rõ AI chọn quân nào, sau đó mới đi
+        executeTimer = setTimeout(() => {
+          if (bestMove) {
+            executeMove(bestMove.fromX, bestMove.fromY, bestMove.toX, bestMove.toY);
+          }
+          isAiThinkingRef.current = false;
+          setIsAiThinking(false);
+        }, 1000);
       } else {
         // AI has no moves, player wins
         setIsGameOver(true);
         setWinner(playerColor);
+        isAiThinkingRef.current = false;
+        setIsAiThinking(false);
       }
-      isAiThinkingRef.current = false;
-      setIsAiThinking(false);
-    }, 450); // Natural delay
+    }, 600); // Khoảng chờ ngắn ban đầu
 
-    return () => clearTimeout(aiTimer);
-  }, [board, currentPlayer, gameMode, playerColor, isGameOver, executeMove]);
+    return () => {
+      clearTimeout(aiTimer);
+      if (executeTimer) clearTimeout(executeTimer);
+    };
+  }, [board, currentPlayer, gameMode, playerColor, isGameOver, aiDifficulty, executeMove]);
+
+  // Bộ đếm ngược thời gian mỗi nước đi
+  useEffect(() => {
+    if (isGameOver || timeLimit === 0 || isAiThinking || (gameMode === 'ai' && currentPlayer !== playerColor)) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          setIsGameOver(true);
+          setWinner(currentPlayer === 'red' ? 'black' : 'red');
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [currentPlayer, isGameOver, timeLimit, isAiThinking, gameMode, playerColor]);
+
+  // Hàm chuyển đổi định dạng giây thành mm:ss
+  const formatTime = (seconds: number): string => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+
+  // Hàm lấy nước đi gợi ý từ cơ sở dữ liệu hoặc AI
+  const getHint = async () => {
+    if (isGameOver || isAiThinking || isFetchingHint) return;
+
+    setIsFetchingHint(true);
+    const fen = getBoardFen(board, currentPlayer);
+    const move = await fetchCloudBestMove(fen);
+
+    if (move) {
+      setHintMove(move);
+      // Tự động tắt gợi ý sau 4 giây
+      setTimeout(() => setHintMove(null), 4000);
+    } else {
+      // Fallback cợ chế gợi ý bằng Minimax
+      const localMove = getBestMove(board, currentPlayer, Math.max(aiDifficulty, 3));
+      if (localMove) {
+        setHintMove(localMove);
+        setTimeout(() => setHintMove(null), 4000);
+      }
+    }
+    setIsFetchingHint(false);
+  };
 
   const handleCellClick = (x: number, y: number) => {
     if (isGameOver || isAiThinking) return;
@@ -644,8 +811,63 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                   Đen (Đi sau)
                 </button>
               </div>
+
+              {/* AI Difficulty Selector */}
+              <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-[var(--border-color)]/20">
+                <span className="text-[10px] font-bold text-[var(--text-secondary)]">ĐỘ KHÓ AI:</span>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {[
+                    { lv: 1, label: 'Nhập môn (Lv1)' },
+                    { lv: 2, label: 'Tập sự (Lv2)' },
+                    { lv: 3, label: 'Trung cấp (Lv3)' },
+                    { lv: 4, label: 'Cao thủ (Lv4)' },
+                  ].map(item => (
+                    <button
+                      key={item.lv}
+                      onClick={() => setAiDifficulty(item.lv)}
+                      className={`py-1.5 px-1 text-[9px] font-bold rounded-lg border cursor-pointer transition-all ${
+                        aiDifficulty === item.lv
+                          ? 'bg-amber-500/10 border-amber-500 text-amber-600 font-extrabold shadow-sm'
+                          : 'border-transparent opacity-60 hover:bg-[var(--bg-hover-nav)]'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
+
+          {/* Time Limit Selector */}
+          <div className="bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] p-4 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.15)] flex flex-col gap-3 font-mono">
+            <h2 className="text-xs font-black tracking-widest uppercase border-b border-[var(--border-color)]/20 pb-2">
+              THỜI GIAN MỖI LƯỢT
+            </h2>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { time: 0, label: 'Vô hạn ⏱️' },
+                { time: 60, label: '1 Phút ⏱️' },
+                { time: 120, label: '2 Phút ⏱️' },
+                { time: 180, label: '3 Phút ⏱️' },
+              ].map(item => (
+                <button
+                  key={item.time}
+                  onClick={() => {
+                    setTimeLimit(item.time);
+                    setTimeLeft(item.time);
+                  }}
+                  className={`py-1.5 px-1 text-[9px] font-bold rounded-lg border cursor-pointer transition-all ${
+                    timeLimit === item.time
+                      ? 'bg-amber-500/10 border-amber-500 text-amber-600 font-extrabold shadow-sm'
+                      : 'border-transparent opacity-60 hover:bg-[var(--bg-hover-nav)]'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Turn / Status Board */}
           <div className="bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] p-4 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.15)] flex flex-col gap-2.5 font-mono">
@@ -700,11 +922,11 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
               ? `KẾT THÚC: BÊN ${winner === 'red' ? 'ĐỎ' : 'ĐEN'} THẮNG!`
               : gameMode === 'ai'
                 ? currentPlayer === playerColor
-                  ? '👉 LƯỢT CỦA BẠN (YOUR TURN) 👈'
+                  ? `👉 LƯỢT CỦA BẠN (YOUR TURN) ${timeLimit > 0 ? `| ⏱️ ${formatTime(timeLeft)}` : ''} 👈`
                   : '⏳ MÁY ĐANG SUY NGHĨ (AI THINKING...) ⏳'
                 : currentPlayer === 'red'
-                  ? '🔴 LƯỢT ĐI BÊN ĐỎ (RED\'S TURN)'
-                  : '⚫ LƯỢT ĐI BÊN ĐEN (BLACK\'S TURN)'
+                  ? `🔴 LƯỢT ĐI BÊN ĐỎ (RED\'S TURN) ${timeLimit > 0 ? `| ⏱️ ${formatTime(timeLeft)}` : ''}`
+                  : `⚫ LƯỢT ĐI BÊN ĐEN (BLACK\'S TURN) ${timeLimit > 0 ? `| ⏱️ ${formatTime(timeLeft)}` : ''}`
             }
           </div>
 
@@ -767,12 +989,32 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                       onClick={() => handleCellClick(x, y)}
                       className="absolute w-[11%] aspect-square -translate-x-1/2 -translate-y-1/2 flex items-center justify-center cursor-pointer pointer-events-auto z-10"
                     >
+                      {/* Last Move start cell highlight */}
+                      {lastMove?.fromX === x && lastMove?.fromY === y && !piece && (
+                        <div className="absolute inset-0 w-[85%] h-[85%] bg-yellow-400/20 border-2 border-dashed border-yellow-500/60 rounded-full z-0 pointer-events-none" />
+                      )}
+
+                      {/* Last Move end cell highlight */}
+                      {lastMove?.toX === x && lastMove?.toY === y && !piece && (
+                        <div className="absolute inset-0 w-[85%] h-[85%] bg-yellow-400/25 border-2 border-yellow-400/60 rounded-full z-0 pointer-events-none" />
+                      )}
+
                       {/* Pieces circles */}
                       {piece && (
                         <div className={`w-full h-full rounded-full border-2 border-black flex flex-col items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all select-none ${piece.player === 'red'
                             ? 'bg-[#ffebee] hover:bg-[#ffcdd2] text-red-700'
                             : 'bg-[#ECEFF1] hover:bg-[#CFD8DC] text-slate-800'
                           } ${isSelected ? 'ring-4 ring-amber-500 border-amber-600 translate-y-[-2px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : ''} ${isEnemyTarget ? 'ring-4 ring-red-500 border-red-600 animate-pulse' : ''
+                          } ${
+                            hintMove?.fromX === x && hintMove?.fromY === y
+                              ? 'ring-4 ring-blue-500 border-blue-600 animate-pulse translate-y-[-2px] shadow-lg'
+                              : hintMove?.toX === x && hintMove?.toY === y
+                              ? 'ring-4 ring-cyan-500 border-cyan-600 animate-pulse'
+                              : lastMove?.fromX === x && lastMove?.fromY === y
+                              ? 'ring-4 ring-yellow-400/50 border-yellow-500 shadow-md'
+                              : lastMove?.toX === x && lastMove?.toY === y
+                              ? 'ring-4 ring-yellow-400/60 border-yellow-500 shadow-md'
+                              : ''
                           }`}>
                           <span className="text-lg sm:text-2xl font-black tracking-tighter select-none font-serif leading-none mt-0.5">
                             {PIECE_LABELS[piece.player][piece.type]}
@@ -781,6 +1023,11 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                             {PIECE_NAMES_VI[piece.type]}
                           </span>
                         </div>
+                      )}
+
+                      {/* Hint destination marker (pulsing cyan ring) */}
+                      {hintMove?.toX === x && hintMove?.toY === y && !piece && (
+                        <div className="absolute w-6 h-6 bg-cyan-400/30 border-2 border-cyan-500 rounded-full animate-ping z-20" />
                       )}
 
                       {/* Move suggestions (green dots) for empty valid target cells */}
@@ -815,6 +1062,15 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
               <RotateCcw size={14} /> Chơi Lại
             </button>
           </div>
+
+          {/* Hint Button */}
+          <button
+            onClick={getHint}
+            disabled={isFetchingHint || isAiThinking || isGameOver}
+            className="w-full py-2.5 px-4 text-xs font-extrabold rounded-2xl border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] hover:bg-[var(--bg-hover-nav)] text-[var(--text-primary)] cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(120,100,240,0.15)] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-1.5 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isFetchingHint ? 'Đang tìm...' : '💡 GỢI Ý NƯỚC ĐI (HINT)'}
+          </button>
 
           {/* Live Move Log Board */}
           <div className="bg-[var(--bg-panel-solid)] border-2 border-[var(--border-color)] p-4 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.15)] flex flex-col gap-2.5 font-mono h-[260px] overflow-hidden">
