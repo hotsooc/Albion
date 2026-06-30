@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     const platformDir = platformDirName ? path.join(binDir, platformDirName) : binDir;
     
     // Tìm file chạy Pikafish
-    let runCwd = binDir; // Thư mục chứa file weights .nnue
+    let runCwd = platformDir; // Thư mục chứa file weights .nnue
     let actualExePath = '';
 
     if (fs.existsSync(platformDir)) {

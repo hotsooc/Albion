@@ -76,13 +76,26 @@ const charToCol = (char: string): number => char.charCodeAt(0) - 97;
 const iccsToMove = (iccs: string): Move => {
   return {
     fromX: charToCol(iccs[0]),
-    fromY: parseInt(iccs[1], 10),
+    fromY: 9 - parseInt(iccs[1], 10),
     toX: charToCol(iccs[2]),
-    toY: parseInt(iccs[3], 10)
+    toY: 9 - parseInt(iccs[3], 10)
   };
 };
 
 const getBoardFen = (board: Board, activePlayer: Player): string => {
+  const toUciPiece = (type: PieceType): string => {
+    const map: Record<PieceType, string> = {
+      G: 'K', // General -> King
+      A: 'A', // Advisor
+      E: 'B', // Elephant -> Bishop
+      H: 'N', // Horse -> kNight
+      R: 'R', // Rook
+      C: 'C', // Cannon
+      S: 'P'  // Soldier -> Pawn
+    };
+    return map[type] || type;
+  };
+
   const rows: string[] = [];
   for (let y = 0; y < 10; y++) {
     let emptyCount = 0;
@@ -96,7 +109,7 @@ const getBoardFen = (board: Board, activePlayer: Player): string => {
           rowStr += emptyCount;
           emptyCount = 0;
         }
-        const char = piece.type;
+        const char = toUciPiece(piece.type);
         rowStr += piece.player === 'red' ? char : char.toLowerCase();
       }
     }
