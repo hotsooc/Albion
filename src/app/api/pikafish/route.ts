@@ -4,6 +4,39 @@ import path from 'path';
 import fs from 'fs';
 import os from 'os';
 
+// Sao chép file chạy sang thư mục ghi được /tmp và gán quyền thực thi (+x) trên môi trường non-Windows
+async function prepareExecutable(srcPath: string): Promise<string> {
+    if (os.platform() === 'win32') {
+        return srcPath;
+    }
+    
+    try {
+        const tempDir = os.tmpdir();
+        const destName = `pikafish_${path.basename(srcPath)}`;
+        const destPath = path.join(tempDir, destName);
+        
+        let shouldCopy = true;
+        if (fs.existsSync(destPath)) {
+            const srcStat = fs.statSync(srcPath);
+            const destStat = fs.statSync(destPath);
+            if (srcStat.size === destStat.size) {
+                shouldCopy = false;
+            }
+        }
+        
+        if (shouldCopy) {
+            fs.copyFileSync(srcPath, destPath);
+        }
+        
+        // Luôn đảm bảo quyền thực thi 755 (chmod +x)
+        fs.chmodSync(destPath, '755');
+        return destPath;
+    } catch (err) {
+        console.error('Error preparing executable:', err);
+        return srcPath; // Fallback
+    }
+}
+
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const board = searchParams.get('board');
@@ -32,58 +65,88 @@ export async function GET(req: NextRequest) {
 
     const platformDir = platformDirName ? path.join(binDir, platformDirName) : binDir;
     
-    // Tìm file chạy Pikafish
-    let runCwd = platformDir; // Thư mục chứa file weights .nnue
-    let actualExePath = '';
+    // Tìm đường dẫn tệp weights pikafish.nnue
+    let nnuePath = path.join(platformDir, 'pikafish.nnue');
+    if (!fs.existsSync(nnuePath)) {
+        nnuePath = path.join(binDir, 'pikafish.nnue');
+    }
 
+    // Thư mục làm việc (cwd): ưu tiên thư mục chứa weights file, fallback là platformDir
+    let runCwd = platformDir;
+    if (fs.existsSync(nnuePath)) {
+        runCwd = path.dirname(nnuePath);
+    }
+
+    // Liệt kê và sắp xếp các ứng cử viên nhị phân (candidates) theo thứ tự tối ưu giảm dần
+    const candidates: string[] = [];
     if (fs.existsSync(platformDir)) {
         const files = fs.readdirSync(platformDir);
-        // Ưu tiên chọn các phiên bản tối ưu hóa cho CPU (bmi2, avx2, etc.)
-        const exeFile = files.find(f => 
-            f.toLowerCase().includes('bmi2') || 
-            f.toLowerCase().includes('avx2') || 
-            f.toLowerCase().includes('modern') || 
-            (f.toLowerCase().startsWith('pikafish') && f.endsWith('.exe')) ||
-            f.toLowerCase() === 'pikafish'
-        );
-        if (exeFile) {
-            actualExePath = path.join(platformDir, exeFile);
+        const exeFiles = files.filter(f => {
+            const lf = f.toLowerCase();
+            return lf.includes('pikafish') && !lf.endsWith('.txt') && !lf.endsWith('.md') && !lf.endsWith('.nnue');
+        });
+
+        // Sắp xếp thứ tự ưu tiên chạy (optimized -> generic)
+        const getPriority = (name: string) => {
+            const ln = name.toLowerCase();
+            if (ln.includes('bmi2')) return 5;
+            if (ln.includes('avx2')) return 4;
+            if (ln.includes('modern')) return 3;
+            if (ln === 'pikafish' || ln === 'pikafish.exe') return 1;
+            return 2;
+        };
+
+        exeFiles.sort((a, b) => getPriority(b) - getPriority(a));
+
+        for (const file of exeFiles) {
+            candidates.push(path.join(platformDir, file));
         }
     }
 
-    // Nếu không thấy trong thư mục platform, thử tìm ở root /bin
-    if (!actualExePath && fs.existsSync(binDir)) {
+    // Nếu không thấy trong platformDir, tìm trong thư mục root /bin
+    if (candidates.length === 0 && fs.existsSync(binDir)) {
         const files = fs.readdirSync(binDir);
-        const exeFile = files.find(f => 
-            (f.toLowerCase().startsWith('pikafish') && f.endsWith('.exe')) ||
-            f.toLowerCase() === 'pikafish'
-        );
-        if (exeFile) {
-            actualExePath = path.join(binDir, exeFile);
-            runCwd = binDir;
+        const exeFiles = files.filter(f => {
+            const lf = f.toLowerCase();
+            return lf.includes('pikafish') && !lf.endsWith('.txt') && !lf.endsWith('.md') && !lf.endsWith('.nnue');
+        });
+        for (const file of exeFiles) {
+            candidates.push(path.join(binDir, file));
         }
     }
 
-    if (!actualExePath) {
+    if (candidates.length === 0) {
         return NextResponse.json({ 
             error: 'Pikafish engine not found', 
             setupInstructions: 'Vui lòng tải Pikafish từ GitHub official-pikafish/Pikafish, giải nén và đặt các file vào thư mục /bin trong dự án.' 
         }, { status: 404 });
     }
 
-    try {
-        const bestMove = await runPikafishEngine(actualExePath, runCwd, sanitizedBoard, depth);
-        return NextResponse.json({ result: `move:${bestMove}` });
-    } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error executing Pikafish engine';
-        return NextResponse.json({ error: message }, { status: 500 });
+    let lastError: Error | null = null;
+    
+    // Thử khởi chạy các nhị phân theo thứ tự ưu tiên
+    for (const rawExePath of candidates) {
+        try {
+            const exePath = await prepareExecutable(rawExePath);
+            const bestMove = await runPikafishEngine(exePath, runCwd, nnuePath, sanitizedBoard, depth);
+            return NextResponse.json({ result: `move:${bestMove}` });
+        } catch (err: any) {
+            console.error(`Failed to run Pikafish with binary ${rawExePath}:`, err);
+            lastError = err instanceof Error ? err : new Error(String(err));
+            // Tiếp tục vòng lặp thử ứng cử viên khác
+        }
     }
+
+    // Nếu tất cả ứng cử viên đều thất bại
+    return NextResponse.json({ 
+        error: lastError ? lastError.message : 'All Pikafish candidates failed to execute',
+        candidatesAttempted: candidates
+    }, { status: 500 });
 }
 
-function runPikafishEngine(enginePath: string, workingDir: string, fen: string, depth: number): Promise<string> {
+function runPikafishEngine(enginePath: string, workingDir: string, nnuePath: string, fen: string, depth: number): Promise<string> {
     return new Promise((resolve, reject) => {
         // Khởi chạy tiến trình Pikafish
-        // Đặt thư mục làm việc (cwd) là workingDir (thư mục /bin nơi chứa file weights .nnue)
         const child = spawn(enginePath, [], { cwd: workingDir });
         
         let errorOutput = '';
@@ -96,6 +159,11 @@ function runPikafishEngine(enginePath: string, workingDir: string, fen: string, 
                 reject(new Error('Pikafish engine evaluation timed out'));
             }
         }, 15000);
+
+        // Tránh sập luồng khi tiến trình bị đóng trước khi kết thúc ghi dữ liệu
+        child.stdin.on('error', (err) => {
+            console.error('Pikafish stdin error:', err);
+        });
 
         child.stdout.on('data', (data) => {
             const text = data.toString();
@@ -134,6 +202,12 @@ function runPikafishEngine(enginePath: string, workingDir: string, fen: string, 
 
         // Gửi các lệnh chuẩn UCI cho engine
         child.stdin.write('uci\n');
+        
+        // Thiết lập đường dẫn tuyệt đối cho file weights NNUE
+        if (nnuePath && fs.existsSync(nnuePath)) {
+            child.stdin.write(`setoption name EvalFile value ${nnuePath}\n`);
+        }
+        
         child.stdin.write('isready\n');
         child.stdin.write(`position fen ${fen}\n`);
         child.stdin.write(`go depth ${depth}\n`);
