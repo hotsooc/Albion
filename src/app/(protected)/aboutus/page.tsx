@@ -23,23 +23,20 @@ const AboutUsPage = () => {
     const { trans } = useTrans();
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            setLoading(true);
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('id, full_name, role, avatar_url');
-
-            if (error) {
-                message.error(trans.aboutUs.loadUsersError);
-            } else {
-                if (data) {
-                     setUsers(data as UserProfile[]);
+        setLoading(true);
+        supabase
+            .from('profiles')
+            .select('id, full_name, role, avatar_url')
+            .then(({ data, error }) => {
+                if (error) {
+                    message.error(trans.aboutUs.loadUsersError);
+                } else {
+                    if (data) {
+                         setUsers(data as UserProfile[]);
+                    }
                 }
-            }
-            setLoading(false);
-        };
-
-        fetchUsers();
+                setLoading(false);
+            });
     }, [trans.aboutUs.loadUsersError]);
 
     const filteredUsers = users.filter(user => user.role === filter);
@@ -55,7 +52,6 @@ const AboutUsPage = () => {
     return (
         <div className="p-8 border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-[32px] mx-1 md:mx-6 text-[var(--text-primary)] transition-all duration-300 theme-transition">
             <Row gutter={[24, 24]}>
-                {/* Users List Column */}
                 <Col xs={24} lg={10}>
                     <Card
                         title={<span className="sora-font font-extrabold text-xl text-[var(--text-primary)]">{trans.aboutUs.manageUsers}</span>}
@@ -118,7 +114,6 @@ const AboutUsPage = () => {
                     </Card>
                 </Col>
  
-                {/* User Details Column */}
                 <Col xs={24} lg={14}>
                     <Card
                         title={<span className="sora-font font-extrabold text-xl text-[var(--text-primary)]">{trans.aboutUs.detailInfo}</span>}

@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import { dataSets } from '@/store/data';
 import { glossaryTerms } from '@/store/glossary';
 
-export async function POST(req: Request) {
-  const { messages, context } = await req.json();
-
+export function POST(req: Request) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -13,24 +11,22 @@ export async function POST(req: Request) {
     );
   }
 
-  // Hỗ trợ cấu hình Base URL tùy chọn để dùng các API miễn phí (như OpenRouter, Github Models, Groq)
-  const baseUrl = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
-  const model = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
+  return req.json().then(({ messages, context }) => {
+    const baseUrl = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1';
+    const model = process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini';
 
-  // Tạo thư mục vũ khí chuẩn từ database cục bộ để cung cấp thông tin chính xác
-  const weaponDirectory = Object.entries(dataSets)
-    .map(([category, items]) => {
-      const list = items.map(i => `${i.name} (${i.detail.replace(/\n\s*/g, ' ')})`).join('\n  * ');
-      return `Nhóm [${category}]:\n  * ${list}`;
-    })
-    .join('\n\n');
+    const weaponDirectory = Object.entries(dataSets)
+      .map(([category, items]) => {
+        const list = items.map(i => `${i.name} (${i.detail.replace(/\n\s*/g, ' ')})`).join('\n  * ');
+        return `Nhóm [${category}]:\n  * ${list}`;
+      })
+      .join('\n\n');
 
-  // Tạo danh sách từ điển thuật ngữ chuẩn
-  const dictionaryDirectory = glossaryTerms
-    .map(term => `- ${term.term} (${term.fullName}): ${term.definitionVi}`)
-    .join('\n');
+    const dictionaryDirectory = glossaryTerms
+      .map(term => `- ${term.term} (${term.fullName}): ${term.definitionVi}`)
+      .join('\n');
 
-  const systemPrompt = `Bạn là "XHCN Albion Helper" - trợ lý AI chuyên gia về Albion Online của bang hội XHCN.
+    const systemPrompt = `Bạn là "XHCN Albion Helper" - trợ lý AI chuyên gia về Albion Online của bang hội XHCN.
 Nhiệm vụ của bạn là giải đáp thắc mắc của người dùng dựa trên ngữ cảnh trang hiện tại và nguồn dữ liệu chuẩn được cung cấp dưới đây.
 
 --- QUY TẮC TRÌNH BÀY & XỬ LÝ (BẮT BUỘC) ---
@@ -51,35 +47,37 @@ ${dictionaryDirectory}
 --- NGỮ CẢNH TRANG NGƯỜI CHƠI ĐANG XEM ---
 ${context || 'Người chơi đang ở trang chủ.'}`;
 
-  // Định dạng lịch sử trò chuyện cho OpenAI API
-  const formattedMessages = [
-    { role: 'system', content: systemPrompt },
-    ...messages.map((msg: any) => ({
-      role: msg.role === 'user' ? 'user' : 'assistant',
-      content: msg.content
-    }))
-  ];
+    const formattedMessages = [
+      { role: 'system', content: systemPrompt },
+      ...messages.map((msg: any) => ({
+        role: msg.role === 'user' ? 'user' : 'assistant',
+        content: msg.content
+      }))
+    ];
 
-  const response = await fetch(`${baseUrl}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: model,
-      messages: formattedMessages,
-      temperature: 0.7
+    return fetch(`${baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: formattedMessages,
+        temperature: 0.7
+      })
     })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().catch(() => ({})).then(errData => {
+            throw new Error(errData.error?.message || `API báo lỗi HTTP ${response.status}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const replyText = data.choices[0]?.message?.content || '';
+        return NextResponse.json({ reply: replyText });
+      });
   });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error?.message || `API báo lỗi HTTP ${response.status}`);
-  }
-
-  const data = await response.json();
-  const replyText = data.choices[0]?.message?.content || '';
-
-  return NextResponse.json({ reply: replyText });
 }

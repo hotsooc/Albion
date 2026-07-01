@@ -27,32 +27,31 @@ export default function SignupPage() {
   const [form] = Form.useForm();
   const { trans } = useTrans();
 
-  const onFinish = async (values: SignupValues) => {
+  const onFinish = (values: SignupValues) => {
   setLoading(true);
 
-  const { error } = await supabase.auth.signUp({
+  supabase.auth.signUp({
     email: values.email,
     password: values.password,
-  });
-
-  setLoading(false);
-
-  if (error) {
-    alert(error.message);
-  } else {
-    alert(trans.register.signUpSuccess);
-    router.push('/login');
-  }
-};
-
-  const handleGoogleSignup = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-
+  }).then(({ error }) => {
+    setLoading(false);
     if (error) {
       alert(error.message);
+    } else {
+      alert(trans.register.signUpSuccess);
+      router.push('/login');
     }
+  });
+};
+
+  const handleGoogleSignup = () => {
+    supabase.auth.signInWithOAuth({
+      provider: 'google',
+    }).then(({ error }) => {
+      if (error) {
+        alert(error.message);
+      }
+    });
   };
 
   return (

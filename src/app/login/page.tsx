@@ -28,33 +28,36 @@ export default function LoginPage() {
 
  useEffect(() => {
   const { data: authListener } = supabase.auth.onAuthStateChange(
-   async (_, session) => {
+   (_event, session) => {
     if (session) {
      const user = session.user;
 
-     const { error } = await supabase
+     supabase
       .from('profiles')
       .select('id')
       .eq('id', user.id)
-      .single();
+      .single()
+      .then(({ error }) => {
+       if (error && error.code === 'PGRST116') {
+        const userName = user.user_metadata?.full_name || user.email;
 
-     if (error && error.code === 'PGRST116') {
-      const userName = user.user_metadata?.full_name || user.email;
-
-      const { error: createError } = await supabase
-       .from('profiles')
-       .insert({ id: user.id, full_name: userName });
-      
-      if (createError) {
-       message.error(trans.login.createProfileError);
-       return;
-      }
-     } else if (error && error.code !== 'PGRST116') {
-      message.error(trans.login.loadProfileError);
-      return;
-     }
-     
-     router.push('/home');
+        return supabase
+         .from('profiles')
+         .insert({ id: user.id, full_name: userName })
+         .then(({ error: createError }) => {
+          if (createError) {
+           message.error(trans.login.createProfileError);
+           return;
+          }
+          router.push('/home');
+         });
+       } else if (error && error.code !== 'PGRST116') {
+        message.error(trans.login.loadProfileError);
+        return;
+       } else {
+        router.push('/home');
+       }
+      });
     }
    }
   );
@@ -64,31 +67,32 @@ export default function LoginPage() {
   };
  }, [router]);
 
- const handleGoogleLogin = async () => {
+ const handleGoogleLogin = () => {
   setLoading(true);
-  const { error } = await supabase.auth.signInWithOAuth({
+  supabase.auth.signInWithOAuth({
    provider: 'google',
    options: {
     redirectTo: `${window.location.origin}/auth/callback`,
    },
+  }).then(({ error }) => {
+   if (error) {
+    setLoading(false);
+    message.error(error.message);
+   }
   });
-  if (error) {
-   setLoading(false);
-   message.error(error.message);
-  } 
  };
 
- const onFinish = async (values: LoginValues) => {
+ const onFinish = (values: LoginValues) => {
   setLoading(true);
-  const { error } = await supabase.auth.signInWithPassword({
+  supabase.auth.signInWithPassword({
    email: values.username,
    password: values.password,
+  }).then(({ error }) => {
+   setLoading(false);
+   if (error) {
+    message.error(error.message);
+   }
   });
-
-  setLoading(false);
-  if (error) {
-   message.error(error.message);
-  }
  };
 
  return (

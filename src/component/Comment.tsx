@@ -20,37 +20,42 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
     const [userRole, setUserRole] = useState<string>('user');
 
-    const fetchComments = async () => {
+    const fetchComments = () => {
         if (!videoId) return;
 
-        const { data, error } = await supabase
+        supabase
             .from('comments')
             .select('*, profiles(full_name, avatar_url)')
             .eq('video_id', videoId)
-            .order('created_at', { ascending: true });
-
-        if (error) {
-            message.error(trans.comment.loadError);
-        } else {
-            setComments(data);
-        }
+            .order('created_at', { ascending: true })
+            .then(({ data, error }) => {
+                if (error) {
+                    message.error(trans.comment.loadError);
+                } else {
+                    setComments(data);
+                }
+            });
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
+        const fetchData = () => {
+            supabase.auth.getUser().then(({ data: { user } }) => {
+                setUser(user);
 
-            if (user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('full_name, avatar_url, role')
-                    .eq('id', user.id)
-                    .single();
-                setUserAvatar(profile?.avatar_url || null);
-                setUserRole(profile?.role || 'user');
-            }
-            fetchComments();
+                if (user) {
+                    return supabase
+                        .from('profiles')
+                        .select('full_name, avatar_url, role')
+                        .eq('id', user.id)
+                        .single()
+                        .then(({ data: profile }) => {
+                            setUserAvatar(profile?.avatar_url || null);
+                            setUserRole(profile?.role || 'user');
+                        });
+                }
+            }).then(() => {
+                fetchComments();
+            });
         };
 
         if (videoId) {
@@ -58,7 +63,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
         }
     }, [videoId, trans]);
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         if (!value.trim()) {
             message.warning(trans.comment.emptyWarning);
             return;
@@ -74,51 +79,54 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             video_id: videoId,
         };
 
-        const { data, error } = await supabase
+        supabase
             .from('comments')
             .insert(newComment)
             .select('*, profiles(full_name, avatar_url)')
-            .single();
-
-        if (error) {
-            message.error(trans.comment.submitError);
-        } else {
-            if (data) {
-                setComments([...comments, data]);
-                setValue('');
-                message.success(trans.comment.submitSuccess);
-            }
-        }
+            .single()
+            .then(({ data, error }) => {
+                if (error) {
+                    message.error(trans.comment.submitError);
+                } else {
+                    if (data) {
+                        setComments([...comments, data]);
+                        setValue('');
+                        message.success(trans.comment.submitSuccess);
+                    }
+                }
+            });
     };
 
-    const handleDelete = async (commentId: string) => {
-        const { error } = await supabase
+    const handleDelete = (commentId: string) => {
+        supabase
             .from('comments')
             .delete()
-            .eq('id', commentId);
-
-        if (error) {
-            message.error(trans.comment.deleteError);
-        } else {
-            setComments(comments.filter(c => c.id !== commentId));
-            message.success(trans.comment.deleteSuccess);
-        }
+            .eq('id', commentId)
+            .then(({ error }) => {
+                if (error) {
+                    message.error(trans.comment.deleteError);
+                } else {
+                    setComments(comments.filter(c => c.id !== commentId));
+                    message.success(trans.comment.deleteSuccess);
+                }
+            });
     };
 
-    const handleUpdate = async (commentId: string, newContent: string) => {
-        const { error } = await supabase
+    const handleUpdate = (commentId: string, newContent: string) => {
+        return supabase
             .from('comments')
             .update({ content: newContent })
-            .eq('id', commentId);
-
-        if (error) {
-            message.error(trans.comment.updateError);
-            return false;
-        } else {
-            setComments(comments.map(c => c.id === commentId ? { ...c, content: newContent } : c));
-            message.success(trans.comment.updateSuccess);
-            return true;
-        }
+            .eq('id', commentId)
+            .then(({ error }) => {
+                if (error) {
+                    message.error(trans.comment.updateError);
+                    return false;
+                } else {
+                    setComments(comments.map(c => c.id === commentId ? { ...c, content: newContent } : c));
+                    message.success(trans.comment.updateSuccess);
+                    return true;
+                }
+            });
     };
 
     return (
@@ -136,7 +144,7 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
                             currentUser={user}
                             userRole={userRole}
                             onDelete={handleDelete}
-                            onUpdate={handleUpdate} // Sửa ở đây
+                            onUpdate={handleUpdate}
                         />
                     ))
                 ) : (

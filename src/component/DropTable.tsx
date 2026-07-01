@@ -172,46 +172,48 @@ export const DroppableTable = ({ teamKeys, teamNames: _teamNames, openTeamIndex,
  };
 
  useEffect(() => {
-    const fetchData = async () => {
-      const { data: existingData } = await supabase
+    const fetchData = () => {
+      supabase
         .from('teams_data')
         .select('data')
         .eq('id', 1)
-        .single();
+        .single()
+        .then(({ data: existingData }) => {
+          const supabaseData = (existingData?.data || {}) as AllData;
+          const updatedData: AllData = {};
+          
+          teamKeys.forEach(key => {
+            updatedData[key] = supabaseData[key] || getInitialTeamData();
+          });
 
-      const supabaseData = (existingData?.data || {}) as AllData;
-      const updatedData: AllData = {};
-      
-      teamKeys.forEach(key => {
-        updatedData[key] = supabaseData[key] || getInitialTeamData();
-      });
-
-      Object.keys(supabaseData).forEach(key => {
-        if (!teamKeys.includes(key)) {
-          delete supabaseData[key];
-        }
-      });
-      
-      setAllData(updatedData);
-      setIsLoading(false);
+          Object.keys(supabaseData).forEach(key => {
+            if (!teamKeys.includes(key)) {
+              delete supabaseData[key];
+            }
+          });
+          
+          setAllData(updatedData);
+          setIsLoading(false);
+        });
     };
     fetchData();
  }, [teamKeys]);
 
  useEffect(() => {
-    const saveToSupabase = async () => {
+    const saveToSupabase = () => {
       if (isLoading || Object.keys(allData).length === 0) return;
 
       const updatePayload = { data: allData };
       
-      const { error } = await supabase
+      supabase
         .from('teams_data')
         .update(updatePayload)
-        .eq('id', 1);
-
-      if (error) {
-      } else {
-      }
+        .eq('id', 1)
+        .then(({ error }) => {
+          if (error) {
+          } else {
+          }
+        });
     };
 
     const timeoutId = setTimeout(() => {

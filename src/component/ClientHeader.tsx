@@ -31,27 +31,30 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch: _onSearch }) => {
   }, []);
 
   useEffect(() => {
-    const getProfile = async () => {
+    const getProfile = () => {
       if (!user) {
         setProfile(null);
         return;
       }
-      const { data: profileData } = await supabase
+      supabase
         .from('profiles')
         .select('full_name')
         .eq('id', user.id)
-        .single();
-      if (profileData) {
-        setProfile(profileData);
-      }
+        .single()
+        .then(({ data: profileData }) => {
+          if (profileData) {
+            setProfile(profileData);
+          }
+        });
     };
     getProfile();
   }, [user]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    router.push('/login');
+  const handleLogout = () => {
+    supabase.auth.signOut().then(() => {
+      setUser(null);
+      router.push('/login');
+    });
   };
 
   const menuItems: MenuProps['items'] = [

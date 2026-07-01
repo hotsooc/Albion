@@ -23,7 +23,7 @@ type CommentItemProps = {
   } | null;
   userRole: string | null;
   onDelete: (commentId: string) => void;
-  onUpdate: (commentId: string, content: string) => Promise<boolean>;
+  onUpdate: (commentId: string, content: string) => PromiseLike<boolean>;
 };
 
 import useTrans from '@/hooks/useTrans';
@@ -40,16 +40,17 @@ const CommentItem = ({ comment, currentUser, userRole, onDelete, onUpdate }: Com
     setIsEditing(true);
   };
 
-  const handleBlur = async () => {
+  const handleBlur = () => {
     if (editedContent.trim() === '') {
       setEditedContent(comment.content);
       setIsEditing(false);
       return;
     }
-    const success = await onUpdate(comment.id, editedContent);
-    if (success) {
-      setIsEditing(false);
-    }
+    onUpdate(comment.id, editedContent).then(success => {
+      if (success) {
+        setIsEditing(false);
+      }
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

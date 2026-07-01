@@ -26,33 +26,33 @@ const Profile = () => {
     const { trans } = useTrans();
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
+        supabase.auth.getUser()
+            .then(({ data: { user: fetchedUser } }) => {
+                setUser(fetchedUser);
 
-            if (user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('full_name, role, avatar_url')
-                    .eq('id', user.id)
-                    .single() as { data: ProfileData, error: any };
-
-                if (profile) {
-                    setUserRole(profile.role);
-                    setAvatarUrl(profile.avatar_url);
-                    const full_name = profile.full_name || user.email || '';
-                    const [firstName, ...lastNameParts] = full_name.split(' ');
-                    const lastName = lastNameParts.join(' ');
-                    form.setFieldsValue({ firstName, lastName, email: user.email });
-                } else {
-                    message.error(trans.settings.fetchProfileError);
+                if (fetchedUser) {
+                    return supabase
+                        .from('profiles')
+                        .select('full_name, role, avatar_url')
+                        .eq('id', fetchedUser.id)
+                        .single()
+                        .then(({ data: profile }) => {
+                            if (profile) {
+                                setUserRole(profile.role);
+                                setAvatarUrl(profile.avatar_url);
+                                const full_name = profile.full_name || fetchedUser.email || '';
+                                const [firstName, ...lastNameParts] = full_name.split(' ');
+                                const lastName = lastNameParts.join(' ');
+                                form.setFieldsValue({ firstName, lastName, email: fetchedUser.email });
+                            } else {
+                                message.error(trans.settings.fetchProfileError);
+                            }
+                        });
                 }
-            }
-        };
-        fetchUserData();
+            });
     }, [form, trans.settings.fetchProfileError]);
     
-   const handleAvatarUpload = async (info: any) => {
+   const handleAvatarUpload = (info: any) => {
     if (!user) {
         message.error(trans.settings.unauthenticatedError);
         return;
@@ -65,97 +65,101 @@ const Profile = () => {
     const fileName = `${user.id}-${Date.now()}.${fileExt}`;
     const filePath = `avatars/${fileName}`; 
 
-    const { error: uploadError } = await supabase.storage
+    supabase.storage
         .from('avatars')
         .upload(filePath, file, {
             cacheControl: '3600',
             upsert: true,
+        })
+        .then(({ error: uploadError }) => {
+            if (uploadError) {
+                message.error(`${trans.common.error}: ${uploadError.message}`);
+                return;
+            }
+            
+            const publicUrl = supabase.storage.from('avatars').getPublicUrl(filePath).data?.publicUrl;
+
+            if (publicUrl) {
+                return supabase
+                    .from('profiles')
+                    .update({ avatar_url: publicUrl })
+                    .eq('id', user.id)
+                    .then(({ error: updateError }) => {
+                        if (updateError) {
+                            message.error(`Error: ${updateError.message}`);
+                        } else {
+                            setAvatarUrl(publicUrl);
+                            message.success(trans.settings.uploadAvatarSuccess);
+                        }
+                    });
+            } else {
+                message.error(trans.settings.urlError);
+            }
+        })
+        .then(() => {
+            setLoading(false);
         });
-
-    if (uploadError) {
-        message.error(`${trans.common.error}: ${uploadError.message}`);
-        setLoading(false);
-        return;
-    }
-    
-    const publicUrl = supabase.storage.from('avatars').getPublicUrl(filePath).data?.publicUrl;
-
-    if (publicUrl) {
-        const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ avatar_url: publicUrl })
-            .eq('id', user.id);
-    
-        if (updateError) {
-            message.error(`Error: ${updateError.message}`);
-        } else {
-            setAvatarUrl(publicUrl);
-            message.success(trans.settings.uploadAvatarSuccess);
-        }
-    } else {
-        message.error(trans.settings.urlError);
-    }
-
-    setLoading(false);
 };
 
-    const handleRemoveAvatar = async () => {
+    const handleRemoveAvatar = () => {
         if (!user) return message.error(trans.settings.unauthenticatedError);
         setLoading(true);
         
         if (!avatarUrl) return;
         const avatarPath = avatarUrl.split('public/avatars/')[1];
     
-        const { error: deleteError } = await supabase.storage
+        supabase.storage
             .from('avatars')
-            .remove([avatarPath]);
-    
-        if (deleteError) {
-            message.error(`Error: ${deleteError.message}`);
-            setLoading(false);
-            return;
-        }
-    
-        const { error: updateError } = await supabase
-            .from('profiles')
-            .update({ avatar_url: null })
-            .eq('id', user.id);
-    
-        if (updateError) {
-            message.error(`Error: ${updateError.message}`);
-        } else {
-            setAvatarUrl(null);
-            message.success(trans.settings.removeAvatarSuccess);
-        }
-    
-        setLoading(false);
+            .remove([avatarPath])
+            .then(({ error: deleteError }) => {
+                if (deleteError) {
+                    message.error(`Error: ${deleteError.message}`);
+                    return;
+                }
+                return supabase
+                    .from('profiles')
+                    .update({ avatar_url: null })
+                    .eq('id', user.id)
+                    .then(({ error: updateError }) => {
+                        if (updateError) {
+                            message.error(`Error: ${updateError.message}`);
+                        } else {
+                            setAvatarUrl(null);
+                            message.success(trans.settings.removeAvatarSuccess);
+                        }
+                    });
+            })
+            .then(() => {
+                setLoading(false);
+            });
     };
 
-    const updateProfile = async (fullName: string) => {
+    const updateProfile = (fullName: string) => {
         if (!user) {
             message.error(trans.settings.unauthenticatedError);
-            return;
+            return Promise.resolve();
         }
 
-        const { error: profileError } = await supabase
+        return supabase
             .from('profiles')
             .update({ full_name: fullName })
-            .eq('id', user.id);
-
-        if (profileError) {
-            throw new Error(profileError.message);
-        }
-
-        const { error: authError } = await supabase.auth.updateUser({
-            data: { full_name: fullName },
-        });
-
-        if (authError) {
-            throw new Error(authError.message);
-        }
+            .eq('id', user.id)
+            .then(({ error: profileError }) => {
+                if (profileError) {
+                    throw new Error(profileError.message);
+                }
+                return supabase.auth.updateUser({
+                    data: { full_name: fullName },
+                });
+            })
+            .then(({ error: authError }) => {
+                if (authError) {
+                    throw new Error(authError.message);
+                }
+            });
     };
 
-    const onFinish = async (values: any) => {
+    const onFinish = (values: any) => {
         if (isDisabled) {
             message.error(trans.settings.permissionDenied);
             return;
@@ -163,9 +167,10 @@ const Profile = () => {
 
         setLoading(true);
         const fullName = `${values.firstName} ${values.lastName}`.trim();
-        await updateProfile(fullName);
-        message.success(trans.settings.updateProfileSuccess);
-        setLoading(false);
+        updateProfile(fullName).then(() => {
+            message.success(trans.settings.updateProfileSuccess);
+            setLoading(false);
+        });
     };
 
     const handleChangePassword = () => {
@@ -178,26 +183,27 @@ const Profile = () => {
                     <Input.Password className="border-2 border-[var(--border-color)] rounded-xl h-10" onChange={(e) => (newPassword = e.target.value)} />
                 </div>
             ),
-            onOk: async () => {
+            onOk: () => {
                 if (!newPassword || newPassword.length < 6) {
                     message.error(trans.settings.passwordLengthError);
                     return Promise.reject();
                 }
                 setLoading(true);
-                const { error } = await supabase.auth.updateUser({ password: newPassword });
-                setLoading(false);
- 
-                if (error) {
-                    message.error('Error: ' + error.message);
-                    return Promise.reject();
-                } else {
-                    message.success(trans.settings.passwordChangeSuccess);
-                }
+                return supabase.auth.updateUser({ password: newPassword })
+                    .then(({ error }) => {
+                        setLoading(false);
+                        if (error) {
+                            message.error('Error: ' + error.message);
+                            return Promise.reject();
+                        } else {
+                            message.success(trans.settings.passwordChangeSuccess);
+                        }
+                    });
             },
         });
     };
 
-    const handleDeleteAccount = async () => {
+    const handleDeleteAccount = () => {
         if (!user || !user.id) {
             message.error(trans.settings.userNotFound);
             return;
@@ -208,20 +214,24 @@ const Profile = () => {
             okText: trans.settings.deleteAccountButton,
             okType: 'danger',
             cancelText: trans.common.cancel,
-            onOk: async () => {
+            onOk: () => {
                 setLoading(true);
-                const { error } = await supabase.functions.invoke('delete-user-account', {
+                return supabase.functions.invoke('delete-user-account', {
                     body: { userIdToDelete: user.id },
+                })
+                .then(({ error }) => {
+                    if (error) {
+                        throw error;
+                    }
+                    return supabase.auth.signOut();
+                })
+                .then(() => {
+                    message.success(trans.settings.deleteAccountSuccess);
+                    setTimeout(() => {
+                        router.push('/login');
+                    }, 1000);
+                    setLoading(false);
                 });
-                if (error) {
-                    throw error;
-                }
-                await supabase.auth.signOut();
-                message.success(trans.settings.deleteAccountSuccess);
-                setTimeout(() => {
-                    router.push('/login');
-                }, 1000);
-                setLoading(false);
             },
         });
     };
@@ -241,7 +251,6 @@ const Profile = () => {
                 disabled={loading}
                 className="space-y-8"
             >
-                {/* Profile Detail and Avatar section */}
                 <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
                     <div className="flex-1 w-full">
                         <h2 className="text-2xl font-extrabold mb-6 sora-font tracking-tight text-[var(--text-primary)]">{trans.settings.myProfile}</h2>
@@ -294,7 +303,6 @@ const Profile = () => {
                     </div>
                 </div>
 
-                {/* Account Security */}
                 <div className="space-y-4 border-t-2 border-[var(--border-color)] pt-6">
                     <h2 className="text-2xl font-extrabold text-[var(--text-primary)] sora-font tracking-tight">{trans.settings.accountSecurity}</h2>
                     <Form.Item label={<span className="font-bold text-sm text-[var(--text-primary)]">{trans.settings.password}</span>} className="mb-0">
@@ -315,7 +323,6 @@ const Profile = () => {
                     </Form.Item>
                 </div>
 
-                {/* Danger Zone */}
                 <div className="space-y-4 border-t-2 border-[var(--border-color)] pt-6">
                     <h2 className="text-2xl font-extrabold text-[var(--text-primary)] sora-font tracking-tight">{trans.settings.supportAccess}</h2>
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-[var(--color-danger-bg)] p-5 rounded-2xl border-2 border-[var(--color-danger-border)] shadow-[3px_3px_0px_0px_rgba(239,68,68,1)] gap-4">
@@ -333,7 +340,6 @@ const Profile = () => {
                     </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex justify-end gap-4 border-t-2 border-[var(--border-color)] pt-6">
                     <Button 
                         onClick={() => router.back()} 

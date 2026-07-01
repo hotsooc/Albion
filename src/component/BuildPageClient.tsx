@@ -59,69 +59,68 @@ export default function BuildPageClient() {
     const [activeButton, setActiveButton] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
     
-    // Dynamic database states
     const [buildsList, setBuildsList] = useState<ItemType[]>([]);
     const [dynamicDataSets, setDynamicDataSets] = useState<Record<string, ItemType[]>>({});
     const [isLoading, setIsLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     
-    // CRUD Modals
     const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
     const [editingBuild, setEditingBuild] = useState<ItemType | null>(null);
 
-    // Get active user role to toggle edit access
     useEffect(() => {
-        const checkUser = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session?.user) {
-                setIsAdmin(true); // Allow logged-in users to manage
-            }
+        const checkUser = () => {
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                if (session?.user) {
+                    setIsAdmin(true);
+                }
+            });
         };
         checkUser();
     }, []);
 
-    // Load builds from Supabase id: 2, auto-seed if empty
     useEffect(() => {
-        const loadBuilds = async () => {
+        const loadBuilds = () => {
             setIsLoading(true);
-            const { data, error } = await supabase
+            supabase
                 .from('teams_data')
                 .select('data')
                 .eq('id', 2)
-                .single();
+                .single()
+                .then(({ data, error }) => {
+                    if (error && error.code === 'PGRST116') {
+                        const seededBuilds = allItemsData.map(item => {
+                            let category = 'Unknown';
+                            for (const [catName, items] of Object.entries(dataSets)) {
+                                if (items.some(i => i.id === item.id)) {
+                                    category = catName;
+                                    break;
+                                }
+                            }
+                            return { ...item, category };
+                        });
 
-            if (error && error.code === 'PGRST116') {
-                // Seed initial data
-                const seededBuilds = allItemsData.map(item => {
-                    let category = 'Unknown';
-                    for (const [catName, items] of Object.entries(dataSets)) {
-                        if (items.some(i => i.id === item.id)) {
-                            category = catName;
-                            break;
-                        }
+                        const payload = { builds: seededBuilds };
+                        return supabase
+                            .from('teams_data')
+                            .insert({ id: 2, data: payload })
+                            .then(({ error: insertError }) => {
+                                if (insertError) {
+                                    console.error('Error seeding builds:', insertError);
+                                }
+                                setBuildsList(seededBuilds);
+                            });
+                    } else if (data && data.data) {
+                        const parsed = data.data as { builds: ItemType[] };
+                        setBuildsList(parsed.builds || []);
                     }
-                    return { ...item, category };
+                })
+                .then(() => {
+                    setIsLoading(false);
                 });
-
-                const payload = { builds: seededBuilds };
-                const { error: insertError } = await supabase
-                    .from('teams_data')
-                    .insert({ id: 2, data: payload });
-
-                if (insertError) {
-                    console.error('Error seeding builds:', insertError);
-                }
-                setBuildsList(seededBuilds);
-            } else if (data && data.data) {
-                const parsed = data.data as { builds: ItemType[] };
-                setBuildsList(parsed.builds || []);
-            }
-            setIsLoading(false);
         };
         loadBuilds();
     }, []);
 
-    // Regroup dynamic datasets on buildsList change
     useEffect(() => {
         const dynamicSets: Record<string, ItemType[]> = {};
         categoriesOrder.forEach(cat => {
@@ -138,7 +137,6 @@ export default function BuildPageClient() {
         setDynamicDataSets(dynamicSets);
     }, [buildsList]);
 
-    // Handle search triggers from URL params
     useEffect(() => {
         const query = searchParams.get('q');
         if (query && buildsList.length > 0) {
@@ -200,20 +198,20 @@ export default function BuildPageClient() {
         setSelectedItem(item);
     };
 
-    // Helper functions for CRUD
-    const saveBuildsToSupabase = async (newBuilds: ItemType[]) => {
-        const { error } = await supabase
+    const saveBuildsToSupabase = (newBuilds: ItemType[]) => {
+        return supabase
             .from('teams_data')
             .update({ data: { builds: newBuilds } })
-            .eq('id', 2);
-        
-        if (error) {
-            console.error('Error saving builds:', error);
-            message.error('Không thể cập nhật database.');
-            return false;
-        }
-        setBuildsList(newBuilds);
-        return true;
+            .eq('id', 2)
+            .then(({ error }) => {
+                if (error) {
+                    console.error('Error saving builds:', error);
+                    message.error('Không thể cập nhật database.');
+                    return false;
+                }
+                setBuildsList(newBuilds);
+                return true;
+            });
     };
 
     const handleOpenAddModal = () => {
@@ -253,7 +251,7 @@ export default function BuildPageClient() {
         return `https://render.albiononline.com/v1/item/${trimmed.toUpperCase()}.png`;
     };
 
-    const handleSaveBuild = async (values: any) => {
+    const handleSaveBuild = (values: any) => {
         const formattedBuild: ItemType = {
             id: editingBuild ? editingBuild.id : `custom_${Date.now()}`,
             name: values.name,
@@ -273,22 +271,22 @@ export default function BuildPageClient() {
             message.success('Thêm build mới thành công!');
         }
 
-        const success = await saveBuildsToSupabase(updatedList);
-        if (success) {
-            setIsAddEditModalOpen(false);
-            setSelectedItem(formattedBuild);
-            
-            // Refresh list display
-            if (activeButton === values.category) {
-                const dynamicSets = getDynamicSets(updatedList);
-                setSearchResults(dynamicSets[values.category] || []);
-            } else if (inputValue) {
-                const filtered = updatedList.filter(item =>
-                    item.name.toLowerCase().includes(inputValue.toLowerCase())
-                );
-                setSearchResults(filtered);
+        saveBuildsToSupabase(updatedList).then(success => {
+            if (success) {
+                setIsAddEditModalOpen(false);
+                setSelectedItem(formattedBuild);
+                
+                if (activeButton === values.category) {
+                    const dynamicSets = getDynamicSets(updatedList);
+                    setSearchResults(dynamicSets[values.category] || []);
+                } else if (inputValue) {
+                    const filtered = updatedList.filter(item =>
+                        item.name.toLowerCase().includes(inputValue.toLowerCase())
+                    );
+                    setSearchResults(filtered);
+                }
             }
-        }
+        });
     };
 
     const getDynamicSets = (list: ItemType[]) => {
@@ -303,29 +301,30 @@ export default function BuildPageClient() {
         return dynamicSets;
     };
 
-    const handleDeleteBuild = async (item: ItemType) => {
+    const handleDeleteBuild = (item: ItemType) => {
         Modal.confirm({
             title: `Xác nhận xóa build`,
             content: `Bạn có chắc chắn muốn xóa build "${item.name}"?`,
             okText: 'Xóa',
             okType: 'danger',
             cancelText: 'Hủy',
-            onOk: async () => {
+            onOk: () => {
                 const updatedList = buildsList.filter(b => b.id !== item.id);
-                const success = await saveBuildsToSupabase(updatedList);
-                if (success) {
-                    message.success('Xóa build thành công!');
-                    setSelectedItem(null);
-                    if (activeButton === item.category) {
-                        const dynamicSets = getDynamicSets(updatedList);
-                        setSearchResults(dynamicSets[item.category] || []);
-                    } else if (inputValue) {
-                        const filtered = updatedList.filter(b =>
-                            b.name.toLowerCase().includes(inputValue.toLowerCase())
-                        );
-                        setSearchResults(filtered);
+                return saveBuildsToSupabase(updatedList).then(success => {
+                    if (success) {
+                        message.success('Xóa build thành công!');
+                        setSelectedItem(null);
+                        if (activeButton === item.category) {
+                            const dynamicSets = getDynamicSets(updatedList);
+                            setSearchResults(dynamicSets[item.category] || []);
+                        } else if (inputValue) {
+                            const filtered = updatedList.filter(b =>
+                                b.name.toLowerCase().includes(inputValue.toLowerCase())
+                            );
+                            setSearchResults(filtered);
+                        }
                     }
-                }
+                });
             }
         });
     };

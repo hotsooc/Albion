@@ -57,44 +57,47 @@ const VideoPage = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    const fetchVideos = async () => {
+    const fetchVideos = () => {
       setLoading(true);
-      const { data, error } = await supabase
+      supabase
         .from('videos')
         .select('*')
-        .eq('category', activeTab);
-
-      if (error || !data || data.length === 0) {
-        const fallbackVideos = (VideoAlbion as any)[activeTab] || [];
-        const dataWithThumbnails: VideoWithThumbnailType[] = fallbackVideos.map((video: any) => {
-          const videoId = getYouTubeVideoId(video.url);
-          const thumbnail = getYouTubeThumbnail(videoId);
-          return {
-            id: video.id.toString(),
-            name: video.name,
-            url: video.url || '',
-            description: video.description,
-            category: activeTab,
-            thumbnail: thumbnail,
-          };
+        .eq('category', activeTab)
+        .then(({ data, error }) => {
+          if (error || !data || data.length === 0) {
+            const fallbackVideos = (VideoAlbion as any)[activeTab] || [];
+            const dataWithThumbnails: VideoWithThumbnailType[] = fallbackVideos.map((video: any) => {
+              const videoId = getYouTubeVideoId(video.url);
+              const thumbnail = getYouTubeThumbnail(videoId);
+              return {
+                id: video.id.toString(),
+                name: video.name,
+                url: video.url || '',
+                description: video.description,
+                category: activeTab,
+                thumbnail: thumbnail,
+              };
+            });
+            setVideosWithThumbnails(dataWithThumbnails);
+          } else {
+            const dataWithThumbnails: VideoWithThumbnailType[] = data.map((video: SupabaseVideo) => {
+              const videoId = getYouTubeVideoId(video.url);
+              const thumbnail = getYouTubeThumbnail(videoId);
+              return {
+                id: video.id,
+                name: video.name || trans.video.untitled,
+                url: video.url || '',
+                description: video.description || trans.video.noDescription,
+                category: video.category || trans.video.general,
+                thumbnail: thumbnail,
+              };
+            });
+            setVideosWithThumbnails(dataWithThumbnails);
+          }
+        })
+        .then(() => {
+          setLoading(false);
         });
-        setVideosWithThumbnails(dataWithThumbnails);
-      } else {
-        const dataWithThumbnails: VideoWithThumbnailType[] = data.map((video: SupabaseVideo) => {
-          const videoId = getYouTubeVideoId(video.url);
-          const thumbnail = getYouTubeThumbnail(videoId);
-          return {
-            id: video.id,
-            name: video.name || trans.video.untitled,
-            url: video.url || '',
-            description: video.description || trans.video.noDescription,
-            category: video.category || trans.video.general,
-            thumbnail: thumbnail,
-          };
-        });
-        setVideosWithThumbnails(dataWithThumbnails);
-      }
-      setLoading(false);
     };
 
     fetchVideos();
@@ -106,8 +109,8 @@ const VideoPage = () => {
     form.resetFields();
   };
 
-  const handleUploadSubmit = async (values: { name: string; url: string; description: string }) => {
-    const { data, error } = await supabase
+  const handleUploadSubmit = (values: { name: string; url: string; description: string }) => {
+    supabase
       .from('videos')
       .insert({
         name: values.name,
@@ -115,30 +118,31 @@ const VideoPage = () => {
         description: values.description,
         category: activeTab
       })
-      .select();
+      .select()
+      .then(({ data, error }) => {
+        if (error) {
+          return;
+        }
+        
+        if (data && data.length > 0) {
+          const newVideo = data[0] as SupabaseVideo;
+          const videoId = getYouTubeVideoId(newVideo.url);
+          const thumbnail = getYouTubeThumbnail(videoId);
 
-    if (error) {
-      return;
-    }
-    
-    if (data && data.length > 0) {
-      const newVideo = data[0] as SupabaseVideo;
-      const videoId = getYouTubeVideoId(newVideo.url);
-      const thumbnail = getYouTubeThumbnail(videoId);
+          const newVideoWithThumbnail: VideoWithThumbnailType = {
+            id: newVideo.id,
+            name: newVideo.name || trans.video.untitled,
+            url: newVideo.url || '',
+            description: newVideo.description || trans.video.noDescription,
+            category: newVideo.category || trans.video.general,
+            thumbnail: thumbnail
+          };
 
-      const newVideoWithThumbnail: VideoWithThumbnailType = {
-        id: newVideo.id,
-        name: newVideo.name || trans.video.untitled,
-        url: newVideo.url || '',
-        description: newVideo.description || trans.video.noDescription,
-        category: newVideo.category || trans.video.general,
-        thumbnail: thumbnail
-      };
+          setVideosWithThumbnails(prevVideos => [...prevVideos, newVideoWithThumbnail]);
+        }
 
-      setVideosWithThumbnails(prevVideos => [...prevVideos, newVideoWithThumbnail]);
-    }
-
-    handleUploadCancel();
+        handleUploadCancel();
+      });
   };
 
   const filteredVideos = videosWithThumbnails.filter((video) =>

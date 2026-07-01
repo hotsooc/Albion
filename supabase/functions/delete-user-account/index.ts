@@ -7,7 +7,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve((req) => {
   // Xử lý yêu cầu preflight OPTIONS
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -28,36 +28,36 @@ serve(async (req) => {
     Deno.env.get('SUPABASE_URL') ?? '',
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
   );
-  
-  const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token);
-  
-  if (userError || !user) {
-    return new Response(JSON.stringify({ error: 'Không thể xác thực người dùng.' }), {
-      status: 401,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+
+  return supabaseClient.auth.getUser(token).then(({ data: { user }, error: userError }) => {
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Không thể xác thực người dùng.' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    return req.json().then(({ userIdToDelete }) => {
+      if (user.id !== userIdToDelete) {
+        return new Response(JSON.stringify({ error: 'Bạn không có quyền xóa tài khoản này.' }), {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      return supabaseClient.auth.admin.deleteUser(user.id).then(({ error }) => {
+        if (error) {
+          return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
+        return new Response(JSON.stringify({ message: 'Tài khoản đã được xóa thành công.' }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      });
     });
-  }
-
-  const { userIdToDelete } = await req.json();
-
-  if (user.id !== userIdToDelete) {
-    return new Response(JSON.stringify({ error: 'Bạn không có quyền xóa tài khoản này.' }), {
-      status: 403,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
-
-  const { error } = await supabaseClient.auth.admin.deleteUser(user.id);
-
-  if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
-
-  return new Response(JSON.stringify({ message: 'Tài khoản đã được xóa thành công.' }), {
-    status: 200,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 });

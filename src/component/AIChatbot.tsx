@@ -16,12 +16,10 @@ export default function AIChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  // Clean chat history when page changes (so context matches new page)
   useEffect(() => {
     setMessages([
       { 
@@ -41,23 +39,20 @@ export default function AIChatbot() {
     return 'Trang chủ';
   };
 
-  // Helper to extract page context from DOM
   const getDOMContext = () => {
     const mainElement = document.querySelector('main');
     if (!mainElement) return `Người dùng đang xem trang: ${pathname}`;
 
-    // Get headings to understand page state
     const headings = Array.from(mainElement.querySelectorAll('h1, h2, h3'))
       .map(h => h.textContent?.trim())
       .filter(Boolean)
       .join(', ');
 
-    // Get visible text content (truncated to avoid payload limits)
     const textContent = mainElement.innerText || '';
     const cleanText = textContent
       .replace(/\s+/g, ' ')
       .trim()
-      .substring(0, 1500); // Grab first 1500 characters which is plenty of context
+      .substring(0, 1500);
 
     return `Đường dẫn trang: ${pathname} (${getPageName(pathname)})
 Tiêu đề xuất hiện: ${headings}
@@ -67,43 +62,44 @@ ${cleanText}
 ---`;
   };
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!inputValue.trim()) return;
 
     const userMessage = inputValue.trim();
     setInputValue('');
     
-    // Add user message
     const updatedMessages = [...messages, { role: 'user', content: userMessage } as ChatMessage];
     setMessages(updatedMessages);
     setIsTyping(true);
 
     const pageContext = getDOMContext();
     
-    const res = await fetch('/api/chat', {
+    fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         messages: updatedMessages,
         context: pageContext,
       }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: `Lỗi: ${data.error}` }
+        ]);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: data.reply }
+        ]);
+      }
+    })
+    .then(() => {
+      setIsTyping(false);
     });
-
-    const data = await res.json();
-
-    if (data.error) {
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: `Lỗi: ${data.error}` }
-      ]);
-    } else {
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: data.reply }
-      ]);
-    }
-    setIsTyping(false);
   };
 
   return (

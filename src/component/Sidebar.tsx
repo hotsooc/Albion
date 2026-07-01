@@ -63,9 +63,10 @@ const Sidebar = ({
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user } = {} } = await supabase.auth.getUser();
-      setUser(user || null);
+    const fetchUser = () => {
+      supabase.auth.getUser().then(({ data }) => {
+        setUser(data?.user || null);
+      });
     };
     fetchUser();
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {

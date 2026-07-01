@@ -38,69 +38,66 @@ export default function TeammatePage() {
   const {trans} = useTrans();
   
   useEffect(() => {
-    const fetchInitialData = async () => {
-      setIsLoading(true);
-
-      // 1. Fetch Teams List
-      const { data: teamData, error: teamError } = await supabase
-        .from('teams_list')
-        .select('*')
-        .eq('id', 1)
-        .single();
-
-      if (teamError && teamError.code === 'PGRST116') {
-        const initialNames = ['Anti heal', 'Balance', 'One shot'];
-        const initialKeys = ['team_1', 'team_2', 'team_3'];
-        
-        const initialData: TeamsListInsert = {
+    setIsLoading(true);
+    supabase
+      .from('teams_list')
+      .select('*')
+      .eq('id', 1)
+      .single()
+      .then(({ data: teamData, error: teamError }) => {
+        if (teamError && teamError.code === 'PGRST116') {
+          const initialNames = ['Anti heal', 'Balance', 'One shot'];
+          const initialKeys = ['team_1', 'team_2', 'team_3'];
+          const initialData: TeamsListInsert = {
             id: 1,
             team_names: initialNames,
             team_keys: initialKeys
-        };
-
-        const { error: insertError } = await supabase
-          .from('teams_list')
-          .insert(initialData);
-        
-        if (!insertError) {
-          setTeamNames(initialNames);
-          setTeamKeys(initialKeys);
+          };
+          return supabase
+            .from('teams_list')
+            .insert(initialData)
+            .then(({ error: insertError }) => {
+              if (!insertError) {
+                setTeamNames(initialNames);
+                setTeamKeys(initialKeys);
+              }
+            });
+        } else if (teamData) {
+          const teamsData = teamData as TeamsListRow;
+          setTeamNames(teamsData.team_names || []);
+          setTeamKeys(teamsData.team_keys || []);
         }
-      } else if (teamData) {
-        const teamsData = teamData as TeamsListRow;
-        setTeamNames(teamsData.team_names || []);
-        setTeamKeys(teamsData.team_keys || []);
-      }
-
-      // 2. Fetch Dynamic Builds
-      const { data: buildsData } = await supabase
-        .from('teams_data')
-        .select('data')
-        .eq('id', 2)
-        .single();
-      if (buildsData && buildsData.data) {
-        const parsed = buildsData.data as { builds: ItemType[] };
-        setBuilds(parsed.builds || allItemsData);
-      } else {
-        setBuilds(allItemsData);
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchInitialData();
+      })
+      .then(() =>
+        supabase
+          .from('teams_data')
+          .select('data')
+          .eq('id', 2)
+          .single()
+          .then(({ data: buildsData }) => {
+            if (buildsData && buildsData.data) {
+              const parsed = buildsData.data as { builds: ItemType[] };
+              setBuilds(parsed.builds || allItemsData);
+            } else {
+              setBuilds(allItemsData);
+            }
+            setIsLoading(false);
+          })
+      );
   }, []);
 
-  const saveTeamsToSupabase = async (names: string[], keys: string[]) => {
-    const { error } = await supabase
+  const saveTeamsToSupabase = (names: string[], keys: string[]) => {
+    supabase
       .from('teams_list')
       .update({ team_names: names, team_keys: keys })
-      .eq('id', 1);
-    if (error) {
-    }
+      .eq('id', 1)
+      .then(({ error }) => {
+        if (error) {
+        }
+      });
   };
 
-  const handleAddTeam = async (name: string) => {
+  const handleAddTeam = (name: string) => {
     const newTeamKey = `team_${Date.now()}`;
     const newTeamNames = [...teamNames, name];
     const newTeamKeys = [...teamKeys, newTeamKey];
@@ -108,12 +105,12 @@ export default function TeammatePage() {
     setTeamNames(newTeamNames);
     setTeamKeys(newTeamKeys);
 
-    await saveTeamsToSupabase(newTeamNames, newTeamKeys);
+    saveTeamsToSupabase(newTeamNames, newTeamKeys);
 
     setOpenTeamIndex(newTeamNames.length - 1);
   };
 
-  const handleDeleteTeam = async (index: number) => {
+  const handleDeleteTeam = (index: number) => {
     if (teamNames.length <= 1) {
       alert(trans.teammate.deleteLastError);
       return;
@@ -124,33 +121,31 @@ export default function TeammatePage() {
       const newTeamNames = teamNames.filter((_, i) => i !== index);
       const newTeamKeys = teamKeys.filter((_, i) => i !== index);
 
-      const { error: deleteError } = await supabase
+      supabase
         .from('teams_data')
         .update({ data: { [deletedTeamKey]: null } })
-        .eq('id', 1);
-
-      if (deleteError) {
-      }
-
-      setTeamNames(newTeamNames);
-      setTeamKeys(newTeamKeys);
-
-      await saveTeamsToSupabase(newTeamNames, newTeamKeys);
-
-      if (openTeamIndex === index) {
-        setOpenTeamIndex(0);
-      } else if (openTeamIndex > index) {
-        setOpenTeamIndex(openTeamIndex - 1);
-      }
+        .eq('id', 1)
+        .then(({ error: deleteError }) => {
+          if (deleteError) {
+          }
+          setTeamNames(newTeamNames);
+          setTeamKeys(newTeamKeys);
+          saveTeamsToSupabase(newTeamNames, newTeamKeys);
+          if (openTeamIndex === index) {
+            setOpenTeamIndex(0);
+          } else if (openTeamIndex > index) {
+            setOpenTeamIndex(openTeamIndex - 1);
+          }
+        });
     }
   };
 
-  const handleEditTeam = async (index: number, newName: string) => {
+  const handleEditTeam = (index: number, newName: string) => {
     const newTeamNames = [...teamNames];
     newTeamNames[index] = newName;
     setTeamNames(newTeamNames);
 
-    await saveTeamsToSupabase(newTeamNames, teamKeys);
+    saveTeamsToSupabase(newTeamNames, teamKeys);
   };
 
   const handleNextTeam = () => {

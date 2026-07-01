@@ -24,17 +24,14 @@ export default function HomePage() {
   const [searchValue, setSearchValue] = useState('');
   const [highlightedVideo, setHighlightedVideo] = useState<VideoItem | null>(null);
   
-  // Real-time Albion News State
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
   const [activeNewsTab, setActiveNewsTab] = useState<'news' | 'patchnotes'>('news');
 
-  // Original Cloud Overlay States
   const [showFullImage, setShowFullImage] = useState(true);
   const [imageSrc, setImageSrc] = useState('/image/group123.png');
   const [isAnimating, setIsAnimating] = useState(true);
 
-  // Load cloud overlay anim on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsAnimating(false);
@@ -42,47 +39,43 @@ export default function HomePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Fetch highlighted video
   useEffect(() => {
-    const fetchVideo = async () => {
-      const { data: videoData, error: videoError } = await supabase
-        .from('videos')
-        .select('*')
-        .limit(1);
-
-      if (videoError) {
-        console.error('Error fetching latest video:', videoError);
-      } else if (videoData && videoData.length > 0) {
-        setHighlightedVideo(videoData[0] as VideoItem);
-      } else {
-        setHighlightedVideo({
-          id: 'default',
-          name: 'Epic Guild Fight - Highlight',
-          url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
-          description: 'Trận chiến Guild nảy lửa vùng Black Zone.',
-          category: 'Highlight'
-        });
-      }
-    };
-
-    fetchVideo();
+    supabase
+      .from('videos')
+      .select('*')
+      .limit(1)
+      .then(({ data: videoData, error: videoError }) => {
+        if (videoError) {
+          console.error('Error fetching latest video:', videoError);
+        } else if (videoData && videoData.length > 0) {
+          setHighlightedVideo(videoData[0] as VideoItem);
+        } else {
+          setHighlightedVideo({
+            id: 'default',
+            name: 'Epic Guild Fight - Highlight',
+            url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
+            description: 'Trận chiến Guild nảy lửa vùng Black Zone.',
+            category: 'Highlight'
+          });
+        }
+      });
   }, []);
 
-  // Fetch real-time Steam news based on active tab
   useEffect(() => {
-    const fetchNews = async () => {
-      setNewsLoading(true);
-      const res = await fetch(`/api/albion-news?type=${activeNewsTab}`);
-      if (res.ok) {
-        const newsData = await res.json();
-        setNewsList(newsData);
-      } else {
-        console.error('Failed to load real-time news');
-      }
-      setNewsLoading(false);
-    };
-
-    fetchNews();
+    setNewsLoading(true);
+    fetch(`/api/albion-news?type=${activeNewsTab}`)
+      .then(res => {
+        if (res.ok) {
+          return res.json().then(newsData => {
+            setNewsList(newsData);
+          });
+        } else {
+          console.error('Failed to load real-time news');
+        }
+      })
+      .then(() => {
+        setNewsLoading(false);
+      });
   }, [activeNewsTab]);
 
   const handleCloseFullImage = () => {
@@ -144,7 +137,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Original Cloud Overlay & Animations */}
       {showFullImage && (
         <div
           className={`fixed inset-0 flex justify-center items-center z-[9999] overflow-hidden bg-black ${isAnimating ? 'animate-fade-out-screen' : 'animate-fade-in-screen'}`}
@@ -175,10 +167,8 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Main Wiki Dashboard Homepage */}
       <div className="flex flex-col gap-8 w-auto mx-2 md:mr-10 transition-all duration-300 text-[var(--text-primary)]">
         
-        {/* Hero Welcome Banner */}
         <section className="relative rounded-[32px] border-2 border-[var(--border-color)] bg-[var(--bg-panel-solid)] p-6 md:p-10 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] overflow-hidden theme-transition flex flex-col items-center text-center">
           <div className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-[var(--color-accent)] opacity-10 blur-3xl pointer-events-none"></div>
           <div className="absolute -bottom-24 -right-24 w-64 h-64 rounded-full bg-[var(--color-accent)] opacity-10 blur-3xl pointer-events-none"></div>
@@ -193,7 +183,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Hero Search input */}
           <div className="w-full max-w-md mt-8 flex items-center rounded-full overflow-hidden border-2 border-[var(--border-color)] bg-[var(--bg-input)] px-4 transition-all duration-300 focus-within:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:focus-within:shadow-[2px_2px_0px_0px_rgba(120,100,240,0.2)]">
             <SearchOutlined className="text-[var(--text-primary)] text-lg mr-2" />
             <Input
@@ -213,7 +202,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Wiki Categories Grid Section */}
         <section className="flex flex-col gap-4">
           <h2 className="text-2xl font-extrabold sora-font tracking-tight ml-2">
             {trans.home.categoriesTitle}
@@ -248,10 +236,8 @@ export default function HomePage() {
           </Row>
         </section>
 
-        {/* Main Grid: Highlight Video & Real-time News split */}
         <section className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6">
           
-          {/* Highlighted Video Card */}
           <div className="flex flex-col gap-4">
             <h2 className="text-2xl font-extrabold sora-font tracking-tight ml-2 flex items-center gap-2">
               <Video size={22} />
@@ -284,7 +270,6 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* Real-time Albion News Column */}
           <div className="flex flex-col gap-4">
             <h2 className="text-2xl font-extrabold sora-font tracking-tight ml-2 flex items-center gap-2">
               <Newspaper size={22} />
@@ -293,7 +278,6 @@ export default function HomePage() {
 
             <div className="rounded-[32px] border-2 border-[var(--border-color)] p-5 bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] flex flex-col gap-4 h-full max-h-[500px] overflow-y-auto">
               
-              {/* Tab Switcher */}
               <div className="flex border-b border-[var(--border-color)] mb-2 p-1 bg-[var(--bg-column)] rounded-xl gap-2">
                 <button
                   onClick={() => setActiveNewsTab('news')}
@@ -364,7 +348,6 @@ export default function HomePage() {
 
         </section>
 
-        {/* XHCN Guild Memory Showcase Section */}
         <section className="flex flex-col gap-4">
           <h2 className="text-2xl font-extrabold sora-font tracking-tight ml-2 flex items-center gap-2">
             <ImageIcon size={22} className="text-[var(--text-primary)]" />
@@ -374,7 +357,6 @@ export default function HomePage() {
             onClick={() => handleImageClick('/image/group123.png')}
             className="group cursor-pointer relative rounded-[32px] border-2 border-[var(--border-color)] p-6 bg-[var(--bg-panel-solid)] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(120,100,240,0.2)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(120,100,240,0.3)] hover:-translate-y-[2px] transition-all duration-300 overflow-hidden flex flex-col items-center justify-center gap-4"
           >
-            {/* Elegant preview container */}
             <div className="relative w-full max-w-4xl aspect-[21/9] rounded-2xl overflow-hidden border-2 border-[var(--border-color)] bg-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -398,7 +380,6 @@ export default function HomePage() {
 
       </div>
 
-      {/* Global CSS Styles for Cloud Animations */}
       <style jsx global>{`
         @keyframes cloudBaseIn {
           0% { opacity: 0; transform: scale(0.5) translate(-50px, 50px); }
@@ -439,7 +420,7 @@ export default function HomePage() {
         .animate-cloud-fade-in-6 { animation: cloudBaseIn 2s ease-in-out forwards; animation-delay: 1s; }
         .animate-cloud-fade-out-6 { animation: cloudBaseIn 2s ease-in-out reverse forwards; animation-delay: 1s; }
         .animate-cloud-fade-in-7 { animation: cloudBaseIn 2s ease-in-out forwards; animation-delay: 1.2s; }
-        .animate-cloud-fade-out-7 { animation: cloudBaseIn 2s ease-in-out reverse forwards; animation-delay: 1.2s; }
+        .animate-cloud-fade-out-7 { animation: CloudBaseIn 2s ease-in-out reverse forwards; animation-delay: 1.2s; }
         .animate-cloud-fade-in-8 { animation: cloudBaseIn 2s ease-in-out forwards; animation-delay: 1.4s; }
         .animate-cloud-fade-out-8 { animation: cloudBaseIn 2s ease-in-out reverse forwards; animation-delay: 1.4s; }
         .animate-cloud-fade-in-9 { animation: cloudBaseIn 2s ease-in-out forwards; animation-delay: 1.6s; }

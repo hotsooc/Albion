@@ -7,36 +7,36 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve((req) => {
   // Xử lý yêu cầu preflight OPTIONS
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  const { targetUserId, newFullName } = await req.json();
+  return req.json().then(({ targetUserId, newFullName }) => {
+    // Khởi tạo client với khóa service_role
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+    );
+    
+    // Sử dụng phương thức admin để cập nhật người dùng bằng ID
+    return supabaseAdmin.auth.admin.updateUserById(targetUserId, {
+      data: {
+        full_name: newFullName,
+      },
+    }).then(({ data, error }) => {
+      if (error) {
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
 
-  // Khởi tạo client với khóa service_role
-  const supabaseAdmin = createClient(
-    Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-  );
-  
-  // Sử dụng phương thức admin để cập nhật người dùng bằng ID
-  const { data, error } = await supabaseAdmin.auth.admin.updateUserById(targetUserId, {
-    data: {
-      full_name: newFullName,
-    },
-  });
-
-  if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 400,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      return new Response(JSON.stringify({ data }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     });
-  }
-
-  return new Response(JSON.stringify({ data }), {
-    status: 200,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 });

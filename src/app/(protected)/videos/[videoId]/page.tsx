@@ -2,51 +2,55 @@ import VideoDetailClient from '@/component/VideoDetailClient';
 import { createClient } from '../../../../../lib/supabase/server';
 import { getYouTubeVideoId } from '@/utils/youtube';
 
-const fetchYouTubeMetadata = async (videoId: string) => {
+const fetchYouTubeMetadata = (videoId: string) => {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-  const res = await fetch(`${baseUrl}/api/youtube-metadata?videoId=${videoId}`);
-
-  if (!res.ok) {
-    console.error('YouTube metadata fetch failed:', res.status);
-  }
-  return res.json();
+  return fetch(`${baseUrl}/api/youtube-metadata?videoId=${videoId}`)
+    .then(res => {
+      if (!res.ok) {
+        console.error('YouTube metadata fetch failed:', res.status);
+      }
+      return res.json();
+    });
 };
 
-export default async function VideoDetailPage({
+export default function VideoDetailPage({
   params,
 }: {
   params: { videoId: string };
 }) {
   const { videoId } = params;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const supabase = createClient();
+
+  return supabase
     .from('videos')
-    .select('*')
-    .eq('id', videoId)
-    .single();
+        .select('*')
+        .eq('id', videoId)
+        .single()
+        .then(({ data, error }) => {
+          if (error || !data?.url) {
+            return <div>Video not found.</div>;
+          }
 
-  if (error || !data?.url) {
-    return <div>Video not found.</div>;
-  }
+          const youtubeId = getYouTubeVideoId(data.url);
+          const metaPromise = youtubeId
+            ? fetchYouTubeMetadata(youtubeId)
+            : Promise.resolve({ title: '', channel: '' });
 
-  const youtubeId = getYouTubeVideoId(data.url);
-  let metadata = { title: '', channel: '' };
-  
-  if (youtubeId) {
-    const res = await fetchYouTubeMetadata(youtubeId);
-    if (res && !res.error) {
-      metadata = res;
-    }
-  }
+          return metaPromise.then(metaRes => {
+            const metadata = (metaRes && !metaRes.error)
+              ? metaRes
+              : { title: '', channel: '' };
 
-  const videoData = {
-    ...data,
-    title: data.name || metadata.title || '',
-    channel: metadata.channel || '',
-    description: data.description || '',
-  };
+            const videoData = {
+              ...data,
+              title: data.name || metadata.title || '',
+              channel: metadata.channel || '',
+              description: data.description || '',
+            };
 
-  return <VideoDetailClient videoData={videoData} videoId={videoId} />;
+          return <VideoDetailClient videoData={videoData} videoId={videoId} />;
+        });
+      });
 }

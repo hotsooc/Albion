@@ -21,12 +21,10 @@ export default function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Cache data sets to speed up search
   const [builds, setBuilds] = useState<ItemType[]>([]);
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [teams, setTeams] = useState<string[]>([]);
 
-  // Listen for Ctrl+K / Cmd+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -41,44 +39,43 @@ export default function CommandPalette() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Fetch initial search data
   useEffect(() => {
     if (!isOpen) return;
 
-    const fetchData = async () => {
+    const fetchData = () => {
       setIsLoading(true);
 
-      // 1. Fetch Builds
-      const { data: buildsData } = await supabase
+      supabase
         .from('teams_data')
         .select('data')
         .eq('id', 2)
-        .single();
-      if (buildsData && buildsData.data) {
-        setBuilds((buildsData.data as any).builds || allItemsData);
-      } else {
-        setBuilds(allItemsData);
-      }
-
-      // 2. Fetch Videos
-      const { data: videosData } = await supabase
-        .from('videos')
-        .select('*');
-      if (videosData) {
-        setVideos(videosData);
-      }
-
-      // 3. Fetch Teammates (teams_list)
-      const { data: teamData } = await supabase
-        .from('teams_list')
-        .select('*')
-        .eq('id', 1)
-        .single();
-      if (teamData) {
-        setTeams(teamData.team_names || []);
-      }
-
-      setIsLoading(false);
+        .single()
+        .then(({ data: buildsData }) => {
+          if (buildsData && buildsData.data) {
+            setBuilds((buildsData.data as any).builds || allItemsData);
+          } else {
+            setBuilds(allItemsData);
+          }
+          return supabase.from('videos').select('*');
+        })
+        .then(({ data: videosData }) => {
+          if (videosData) {
+            setVideos(videosData);
+          }
+          return supabase
+            .from('teams_list')
+            .select('*')
+            .eq('id', 1)
+            .single();
+        })
+        .then(({ data: teamData }) => {
+          if (teamData) {
+            setTeams(teamData.team_names || []);
+          }
+        })
+        .then(() => {
+          setIsLoading(false);
+        });
     };
 
     fetchData();
@@ -87,7 +84,6 @@ export default function CommandPalette() {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [isOpen]);
 
-  // Handle Search Input
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -97,7 +93,6 @@ export default function CommandPalette() {
     const q = query.toLowerCase();
     const tempResults: SearchResult[] = [];
 
-    // Priority 1: Teammates (Teams list)
     teams.forEach((team, index) => {
       if (team.toLowerCase().includes(q)) {
         tempResults.push({
@@ -110,7 +105,6 @@ export default function CommandPalette() {
       }
     });
 
-    // Priority 2: Videos
     videos.forEach((video) => {
       if (
         video.name.toLowerCase().includes(q) ||
@@ -126,7 +120,6 @@ export default function CommandPalette() {
       }
     });
 
-    // Priority 3: Builds
     builds.forEach((build) => {
       if (
         build.name.toLowerCase().includes(q) ||
@@ -142,7 +135,6 @@ export default function CommandPalette() {
       }
     });
 
-    // Priority 4: Dictionary
     glossaryTerms.forEach((term) => {
       const definition = lang === 'vi' ? term.definitionVi : term.definitionEn;
       if (
@@ -164,7 +156,6 @@ export default function CommandPalette() {
     setSelectedIndex(0);
   }, [query, builds, videos, teams, lang, trans]);
 
-  // Navigate using Keyboard Arrow Keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen || results.length === 0) return;
@@ -185,7 +176,6 @@ export default function CommandPalette() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, results, selectedIndex]);
 
-  // Scroll active item into view
   useEffect(() => {
     if (resultsRef.current) {
       const activeEl = resultsRef.current.children[selectedIndex] as HTMLElement;

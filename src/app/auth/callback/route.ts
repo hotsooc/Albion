@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   const next = requestUrl.searchParams.get('next') ?? '/home';
@@ -26,15 +26,16 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      return NextResponse.redirect(new URL(next, request.url));
-    } else {
+    return supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+      if (!error) {
+        return NextResponse.redirect(new URL(next, request.url));
+      }
+
       console.error('Exchange session error:', error);
-    }
-  } else {
-    console.error('No code found in URL search params');
+      return NextResponse.redirect(new URL('/login', request.url));
+    });
   }
 
+  console.error('No code found in URL search params');
   return NextResponse.redirect(new URL('/login', request.url));
 }

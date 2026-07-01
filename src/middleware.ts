@@ -1,12 +1,11 @@
-
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { Database } from '../lib/database.types';
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const response = NextResponse.next({
     request: {
-      headers: request.headers, 
+      headers: request.headers,
     },
   });
 
@@ -28,18 +27,16 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  return supabase.auth.getSession().then(({ data: { session } }) => {
+    const protectedRoutes = ['/home', '/teammate', '/build', '/videos', '/settings', '/aboutus', '/games', '/youtube', '/dictionary'];
 
-  const protectedRoutes = ['/home', '/teammate', '/build', '/videos', '/settings', '/aboutus', '/games', '/youtube', '/dictionary']; 
+    if (!session && protectedRoutes.includes(request.nextUrl.pathname)) {
+      const absoluteURL = new URL('/login', request.nextUrl.origin);
+      return NextResponse.redirect(absoluteURL);
+    }
 
-  if (!session && protectedRoutes.includes(request.nextUrl.pathname)) {
-    const absoluteURL = new URL('/login', request.nextUrl.origin);
-    return NextResponse.redirect(absoluteURL);
-  }
-
-  return response;
+    return response;
+  });
 }
 
 export const config = {

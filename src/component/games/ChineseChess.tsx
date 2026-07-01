@@ -125,24 +125,26 @@ const getBoardFen = (board: Board, activePlayer: Player): string => {
   return `${fenPieces} ${activeColor}`;
 };
 
-const fetchCloudBestMove = async (fen: string): Promise<Move | null> => {
-  const res = await fetch(`/api/chessdb?board=${encodeURIComponent(fen)}`);
-  if (!res.ok) return null;
-  const data = await res.json();
-  const result: string = data.result || '';
-  
-  if (result.startsWith('move:')) {
-    const iccsMove = result.substring(5).trim();
-    if (iccsMove.length === 4) {
-      return iccsToMove(iccsMove);
-    }
-  } else if (result.startsWith('egtb:')) {
-    const iccsMove = result.substring(5).trim();
-    if (iccsMove.length === 4) {
-      return iccsToMove(iccsMove);
-    }
-  }
-  return null;
+const fetchCloudBestMove = (fen: string): Promise<Move | null> => {
+  return fetch(`/api/chessdb?board=${encodeURIComponent(fen)}`).then(res => {
+    if (!res.ok) return null;
+    return res.json().then(data => {
+      const result: string = data.result || '';
+      
+      if (result.startsWith('move:')) {
+        const iccsMove = result.substring(5).trim();
+        if (iccsMove.length === 4) {
+          return iccsToMove(iccsMove);
+        }
+      } else if (result.startsWith('egtb:')) {
+        const iccsMove = result.substring(5).trim();
+        if (iccsMove.length === 4) {
+          return iccsToMove(iccsMove);
+        }
+      }
+      return null;
+    });
+  });
 };
 
 // Initial board positions
@@ -757,36 +759,38 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
     
     let executeTimer: NodeJS.Timeout;
     
-    const aiTimer = setTimeout(async () => {
+    const aiTimer = setTimeout(() => {
       const fen = getBoardFen(board, currentPlayer);
       // 1. Thử lấy nước đi tốt nhất từ Thư viện Đám mây (ChessDB Book) trước
-      let bestMove = await fetchCloudBestMove(fen);
+      fetchCloudBestMove(fen).then(cloudMove => {
+        let bestMove: Move | null = cloudMove;
 
-      // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Minimax nội bộ với độ sâu tương ứng
-      if (!bestMove) {
-        bestMove = getBestMove(board, currentPlayer, aiDifficulty);
-      }
+        // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Minimax nội bộ với độ sâu tương ứng
+        if (!bestMove) {
+          bestMove = getBestMove(board, currentPlayer, aiDifficulty);
+        }
 
-      if (bestMove) {
-        // HÀNH TRÌNH CHẬM LẠI:
-        // Bước 1: Chỉ chọn quân cờ đó để thắp sáng ô nước đi
-        setSelectedPiece({ x: bestMove.fromX, y: bestMove.fromY });
-        
-        // Bước 2: Chờ 1 giây để người chơi nhìn rõ AI chọn quân nào, sau đó mới đi
-        executeTimer = setTimeout(() => {
-          if (bestMove) {
-            executeMove(bestMove.fromX, bestMove.fromY, bestMove.toX, bestMove.toY);
-          }
+        if (bestMove) {
+          // HÀNH TRÌNH CHẬM LẠI:
+          // Bước 1: Chỉ chọn quân cờ đó để thắp sáng ô nước đi
+          setSelectedPiece({ x: bestMove.fromX, y: bestMove.fromY });
+          
+          // Bước 2: Chờ 1 giây để người chơi nhìn rõ AI chọn quân nào, sau đó mới đi
+          executeTimer = setTimeout(() => {
+            if (bestMove) {
+              executeMove(bestMove.fromX, bestMove.fromY, bestMove.toX, bestMove.toY);
+            }
+            isAiThinkingRef.current = false;
+            setIsAiThinking(false);
+          }, 1000);
+        } else {
+          // AI has no moves, player wins
+          setIsGameOver(true);
+          setWinner(playerColor);
           isAiThinkingRef.current = false;
           setIsAiThinking(false);
-        }, 1000);
-      } else {
-        // AI has no moves, player wins
-        setIsGameOver(true);
-        setWinner(playerColor);
-        isAiThinkingRef.current = false;
-        setIsAiThinking(false);
-      }
+        }
+      });
     }, 600); // Khoảng chờ ngắn ban đầu
 
     return () => {
@@ -822,26 +826,26 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
   };
 
   // Hàm lấy nước đi gợi ý từ cơ sở dữ liệu hoặc AI
-  const getHint = async () => {
+  const getHint = () => {
     if (isGameOver || isAiThinking || isFetchingHint) return;
 
     setIsFetchingHint(true);
     const fen = getBoardFen(board, currentPlayer);
-    const move = await fetchCloudBestMove(fen);
-
-    if (move) {
-      setHintMove(move);
-      // Tự động tắt gợi ý sau 4 giây
-      setTimeout(() => setHintMove(null), 4000);
-    } else {
-      // Fallback cợ chế gợi ý bằng Minimax
-      const localMove = getBestMove(board, currentPlayer, Math.max(aiDifficulty, 3));
-      if (localMove) {
-        setHintMove(localMove);
+    fetchCloudBestMove(fen).then(move => {
+      if (move) {
+        setHintMove(move);
+        // Tự động tắt gợi ý sau 4 giây
         setTimeout(() => setHintMove(null), 4000);
+      } else {
+        // Fallback cợ chế gợi ý bằng Minimax
+        const localMove = getBestMove(board, currentPlayer, Math.max(aiDifficulty, 3));
+        if (localMove) {
+          setHintMove(localMove);
+          setTimeout(() => setHintMove(null), 4000);
+        }
       }
-    }
-    setIsFetchingHint(false);
+      setIsFetchingHint(false);
+    });
   };
 
   const handleCellClick = (x: number, y: number) => {
