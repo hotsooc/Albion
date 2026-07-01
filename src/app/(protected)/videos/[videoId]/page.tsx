@@ -35,13 +35,9 @@ export default async function VideoDetailPage({
   let metadata = { title: '', channel: '' };
   
   if (youtubeId) {
-    try {
-      const res = await fetchYouTubeMetadata(youtubeId);
-      if (res && !res.error) {
-        metadata = res;
-      }
-    } catch (err) {
-      console.error('Error fetching YouTube metadata:', err);
+    const res = await fetchYouTubeMetadata(youtubeId);
+    if (res && !res.error) {
+      metadata = res;
     }
   }
 

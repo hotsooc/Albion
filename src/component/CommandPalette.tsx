@@ -6,17 +6,9 @@ import { Search, Users, Film, Wrench, BookOpen, X, CornerDownLeft } from 'lucide
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase/client';
 import useTrans from '@/hooks/useTrans';
-import { glossaryTerms, GlossaryTerm } from '@/store/glossary';
+import { glossaryTerms } from '@/store/glossary';
 import { allItemsData, ItemType } from '@/store/data';
-
-interface SearchResult {
-  id: string;
-  title: string;
-  subtitle?: string;
-  type: 'teammate' | 'video' | 'build' | 'dictionary';
-  url: string;
-  extra?: any;
-}
+import type { SearchResult, VideoItem } from '@/types';
 
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +23,7 @@ export default function CommandPalette() {
 
   // Cache data sets to speed up search
   const [builds, setBuilds] = useState<ItemType[]>([]);
-  const [videos, setVideos] = useState<any[]>([]);
+  const [videos, setVideos] = useState<VideoItem[]>([]);
   const [teams, setTeams] = useState<string[]>([]);
 
   // Listen for Ctrl+K / Cmd+K
@@ -55,41 +47,38 @@ export default function CommandPalette() {
 
     const fetchData = async () => {
       setIsLoading(true);
-      try {
-        // 1. Fetch Builds
-        const { data: buildsData } = await supabase
-          .from('teams_data')
-          .select('data')
-          .eq('id', 2)
-          .single();
-        if (buildsData && buildsData.data) {
-          setBuilds((buildsData.data as any).builds || allItemsData);
-        } else {
-          setBuilds(allItemsData);
-        }
 
-        // 2. Fetch Videos
-        const { data: videosData } = await supabase
-          .from('videos')
-          .select('*');
-        if (videosData) {
-          setVideos(videosData);
-        }
-
-        // 3. Fetch Teammates (teams_list)
-        const { data: teamData } = await supabase
-          .from('teams_list')
-          .select('*')
-          .eq('id', 1)
-          .single();
-        if (teamData) {
-          setTeams(teamData.team_names || []);
-        }
-      } catch (err) {
-        console.error('Error caching command palette data:', err);
-      } finally {
-        setIsLoading(false);
+      // 1. Fetch Builds
+      const { data: buildsData } = await supabase
+        .from('teams_data')
+        .select('data')
+        .eq('id', 2)
+        .single();
+      if (buildsData && buildsData.data) {
+        setBuilds((buildsData.data as any).builds || allItemsData);
+      } else {
+        setBuilds(allItemsData);
       }
+
+      // 2. Fetch Videos
+      const { data: videosData } = await supabase
+        .from('videos')
+        .select('*');
+      if (videosData) {
+        setVideos(videosData);
+      }
+
+      // 3. Fetch Teammates (teams_list)
+      const { data: teamData } = await supabase
+        .from('teams_list')
+        .select('*')
+        .eq('id', 1)
+        .single();
+      if (teamData) {
+        setTeams(teamData.team_names || []);
+      }
+
+      setIsLoading(false);
     };
 
     fetchData();
@@ -341,7 +330,7 @@ export default function CommandPalette() {
                   // Empty State
                   <div className="flex flex-col items-center justify-center py-12 text-[var(--text-secondary)]">
                     <p className="font-extrabold sora-font text-lg mb-1">Không tìm thấy kết quả</p>
-                    <p className="text-sm">Hãy thử từ khóa khác như "Bloodletter" hoặc "ZvZ"...</p>
+                    <p className="text-sm">Hãy thử từ khóa khác như &quot;Bloodletter&quot; hoặc &quot;ZvZ&quot;...</p>
                   </div>
                 ) : (
                   // Search Results

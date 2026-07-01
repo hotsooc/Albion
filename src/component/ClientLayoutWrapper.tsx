@@ -9,7 +9,6 @@ import ThemeProvider from '@/component/ThemeProvider';
 import Footer from './footer';
 import { TransProvider } from '@/hooks/useTrans';
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
 import { StyleProvider } from '@/component/StyleProvider';
 import AIChatbot from '@/component/AIChatbot';
 

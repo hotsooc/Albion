@@ -163,14 +163,9 @@ const Profile = () => {
 
         setLoading(true);
         const fullName = `${values.firstName} ${values.lastName}`.trim();
-        try {
-            await updateProfile(fullName);
-            message.success(trans.settings.updateProfileSuccess);
-        } catch (error: any) {
-            message.error('Error: ' + error.message);
-        } finally {
-            setLoading(false);
-        }
+        await updateProfile(fullName);
+        message.success(trans.settings.updateProfileSuccess);
+        setLoading(false);
     };
 
     const handleChangePassword = () => {
@@ -215,23 +210,18 @@ const Profile = () => {
             cancelText: trans.common.cancel,
             onOk: async () => {
                 setLoading(true);
-                try {
-                    const { data, error } = await supabase.functions.invoke('delete-user-account', {
-                        body: { userIdToDelete: user.id },
-                    });
-                    if (error) {
-                        throw error;
-                    }
-                    await supabase.auth.signOut();
-                    message.success(trans.settings.deleteAccountSuccess);
-                    setTimeout(() => {
-                        router.push('/login');
-                    }, 1000);
-                } catch (err: any) {
-                    message.error('Error: ' + err.message);
-                } finally {
-                    setLoading(false);
+                const { error } = await supabase.functions.invoke('delete-user-account', {
+                    body: { userIdToDelete: user.id },
+                });
+                if (error) {
+                    throw error;
                 }
+                await supabase.auth.signOut();
+                message.success(trans.settings.deleteAccountSuccess);
+                setTimeout(() => {
+                    router.push('/login');
+                }, 1000);
+                setLoading(false);
             },
         });
     };

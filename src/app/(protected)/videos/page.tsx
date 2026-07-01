@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import VideoPage from '@/component/Video';
 import { motion, Variants } from 'framer-motion';
-import useTrans from '@/hooks/useTrans';
 import { GridSkeleton } from '@/component/Skeleton';
 
 const contentSwirlVariants: Variants = {
@@ -33,7 +32,6 @@ const contentSwirlVariants: Variants = {
 
 export default function VideosPage() {
   const [isMounted, setIsMounted] = useState(false);
-  const { trans } = useTrans();
 
   useEffect(() => {
     setIsMounted(true);

@@ -11,19 +11,15 @@ export async function GET(req: NextRequest) {
     const apiKey = process.env.YOUTUBE_API_KEY;
     const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
+    const response = await fetch(url);
+    const data = await response.json();
 
-        if (data.items.length > 0) {
-            const snippet = data.items[0].snippet;
-            const title = snippet.title;
-            const channel = snippet.channelTitle;
-            return NextResponse.json({ title, channel });
-        } else {
-            return NextResponse.json({ error: 'Video not found' }, { status: 404 });
-        }
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch YouTube data' }, { status: 500 });
+    if (data.items.length > 0) {
+        const snippet = data.items[0].snippet;
+        const title = snippet.title;
+        const channel = snippet.channelTitle;
+        return NextResponse.json({ title, channel });
+    } else {
+        return NextResponse.json({ error: 'Video not found' }, { status: 404 });
     }
 }

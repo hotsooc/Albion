@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Sora } from 'next/font/google';
 import 'antd/dist/reset.css';
 import './globals.css';
@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  themeColor: '#ebc7b5',
   manifest: '/manifest.json',
   keywords: ['Albion Online', 'XHCN', 'Guild', 'Companion', 'Build', 'Teammate', 'Videos', 'Games', 'MMORPG'],
   openGraph: {
@@ -39,6 +38,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#ebc7b5',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

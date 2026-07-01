@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Input, Button } from 'antd';
 import { DraggableItem } from './DraggableItem';
-import { allItemsData, dataSets, ItemType } from '@/store/data';
+import { ItemType } from '@/store/data';
 import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import useTrans from '@/hooks/useTrans';
 

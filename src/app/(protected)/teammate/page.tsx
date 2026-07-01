@@ -40,56 +40,52 @@ export default function TeammatePage() {
   useEffect(() => {
     const fetchInitialData = async () => {
       setIsLoading(true);
-      try {
-        // 1. Fetch Teams List
-        const { data: teamData, error: teamError } = await supabase
+
+      // 1. Fetch Teams List
+      const { data: teamData, error: teamError } = await supabase
+        .from('teams_list')
+        .select('*')
+        .eq('id', 1)
+        .single();
+
+      if (teamError && teamError.code === 'PGRST116') {
+        const initialNames = ['Anti heal', 'Balance', 'One shot'];
+        const initialKeys = ['team_1', 'team_2', 'team_3'];
+        
+        const initialData: TeamsListInsert = {
+            id: 1,
+            team_names: initialNames,
+            team_keys: initialKeys
+        };
+
+        const { error: insertError } = await supabase
           .from('teams_list')
-          .select('*')
-          .eq('id', 1)
-          .single();
-
-        if (teamError && teamError.code === 'PGRST116') {
-          const initialNames = ['Anti heal', 'Balance', 'One shot'];
-          const initialKeys = ['team_1', 'team_2', 'team_3'];
-          
-          const initialData: TeamsListInsert = {
-              id: 1,
-              team_names: initialNames,
-              team_keys: initialKeys
-          };
-
-          const { error: insertError } = await supabase
-            .from('teams_list')
-            .insert(initialData);
-          
-          if (!insertError) {
-            setTeamNames(initialNames);
-            setTeamKeys(initialKeys);
-          }
-        } else if (teamData) {
-          const teamsData = teamData as TeamsListRow;
-          setTeamNames(teamsData.team_names || []);
-          setTeamKeys(teamsData.team_keys || []);
+          .insert(initialData);
+        
+        if (!insertError) {
+          setTeamNames(initialNames);
+          setTeamKeys(initialKeys);
         }
-
-        // 2. Fetch Dynamic Builds
-        const { data: buildsData } = await supabase
-          .from('teams_data')
-          .select('data')
-          .eq('id', 2)
-          .single();
-        if (buildsData && buildsData.data) {
-          const parsed = buildsData.data as { builds: ItemType[] };
-          setBuilds(parsed.builds || allItemsData);
-        } else {
-          setBuilds(allItemsData);
-        }
-      } catch (err) {
-        console.error('Error fetching dynamic teammate data:', err);
-        setBuilds(allItemsData);
-      } finally {
-        setIsLoading(false);
+      } else if (teamData) {
+        const teamsData = teamData as TeamsListRow;
+        setTeamNames(teamsData.team_names || []);
+        setTeamKeys(teamsData.team_keys || []);
       }
+
+      // 2. Fetch Dynamic Builds
+      const { data: buildsData } = await supabase
+        .from('teams_data')
+        .select('data')
+        .eq('id', 2)
+        .single();
+      if (buildsData && buildsData.data) {
+        const parsed = buildsData.data as { builds: ItemType[] };
+        setBuilds(parsed.builds || allItemsData);
+      } else {
+        setBuilds(allItemsData);
+      }
+
+      setIsLoading(false);
     };
 
     fetchInitialData();

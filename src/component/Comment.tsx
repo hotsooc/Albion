@@ -17,7 +17,6 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
     const [comments, setComments] = useState<any[]>([]);
     const [value, setValue] = useState('');
     const [user, setUser] = useState<any>(null);
-    const [userName, setUserName] = useState<string>('Anonymous');
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
     const [userRole, setUserRole] = useState<string>('user');
 
@@ -42,18 +41,15 @@ const CommentSection = ({ videoId }: { videoId: string }) => {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
 
-            let role = 'user';
             if (user) {
                 const { data: profile } = await supabase
                     .from('profiles')
-                    .select('full_name, role, avatar_url')
+                    .select('full_name, avatar_url, role')
                     .eq('id', user.id)
                     .single();
-                setUserName(profile?.full_name || user.email || 'Anonymous');
                 setUserAvatar(profile?.avatar_url || null);
-                role = profile?.role || 'user';
+                setUserRole(profile?.role || 'user');
             }
-            setUserRole(role);
             fetchComments();
         };
 

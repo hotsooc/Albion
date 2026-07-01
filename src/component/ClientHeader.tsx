@@ -5,7 +5,7 @@ import { Dropdown, MenuProps, Image } from 'antd';
 import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { ChevronDownIcon, Sun, Moon, Home, Users, Film, Wrench, User as UserIcon, Settings, LogOut, BookOpen, Sparkles } from 'lucide-react';
+import { ChevronDownIcon, Sun, Moon, LogOut, Sparkles } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import useTrans from '@/hooks/useTrans';
 import { useStyle } from '@/component/StyleProvider';
@@ -15,7 +15,7 @@ interface ClientHeaderProps {
   onSearch: (value: string) => void;
 }
 
-const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch }) => {
+const ClientHeader: React.FC<ClientHeaderProps> = ({ onSearch: _onSearch }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const router = useRouter();

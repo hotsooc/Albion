@@ -4,7 +4,7 @@ import React from 'react';
 import ClientHeader from './ClientHeader';
 
 const AppHeader: React.FC = () => {
-    const handleSearch = (value: string) => {
+    const handleSearch = (_value: string) => {
     };
 
     return (

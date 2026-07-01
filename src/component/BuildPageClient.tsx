@@ -83,46 +83,40 @@ export default function BuildPageClient() {
     // Load builds from Supabase id: 2, auto-seed if empty
     useEffect(() => {
         const loadBuilds = async () => {
-            try {
-                setIsLoading(true);
-                const { data, error } = await supabase
-                    .from('teams_data')
-                    .select('data')
-                    .eq('id', 2)
-                    .single();
+            setIsLoading(true);
+            const { data, error } = await supabase
+                .from('teams_data')
+                .select('data')
+                .eq('id', 2)
+                .single();
 
-                if (error && error.code === 'PGRST116') {
-                    // Seed initial data
-                    const seededBuilds = allItemsData.map(item => {
-                        let category = 'Unknown';
-                        for (const [catName, items] of Object.entries(dataSets)) {
-                            if (items.some(i => i.id === item.id)) {
-                                category = catName;
-                                break;
-                            }
+            if (error && error.code === 'PGRST116') {
+                // Seed initial data
+                const seededBuilds = allItemsData.map(item => {
+                    let category = 'Unknown';
+                    for (const [catName, items] of Object.entries(dataSets)) {
+                        if (items.some(i => i.id === item.id)) {
+                            category = catName;
+                            break;
                         }
-                        return { ...item, category };
-                    });
-
-                    const payload = { builds: seededBuilds };
-                    const { error: insertError } = await supabase
-                        .from('teams_data')
-                        .insert({ id: 2, data: payload });
-
-                    if (insertError) {
-                        console.error('Error seeding builds:', insertError);
                     }
-                    setBuildsList(seededBuilds);
-                } else if (data && data.data) {
-                    const parsed = data.data as { builds: ItemType[] };
-                    setBuildsList(parsed.builds || []);
+                    return { ...item, category };
+                });
+
+                const payload = { builds: seededBuilds };
+                const { error: insertError } = await supabase
+                    .from('teams_data')
+                    .insert({ id: 2, data: payload });
+
+                if (insertError) {
+                    console.error('Error seeding builds:', insertError);
                 }
-            } catch (err) {
-                console.error(err);
-                message.error('Lỗi khi tải danh sách build.');
-            } finally {
-                setIsLoading(false);
+                setBuildsList(seededBuilds);
+            } else if (data && data.data) {
+                const parsed = data.data as { builds: ItemType[] };
+                setBuildsList(parsed.builds || []);
             }
+            setIsLoading(false);
         };
         loadBuilds();
     }, []);
@@ -260,45 +254,40 @@ export default function BuildPageClient() {
     };
 
     const handleSaveBuild = async (values: any) => {
-        try {
-            const formattedBuild: ItemType = {
-                id: editingBuild ? editingBuild.id : `custom_${Date.now()}`,
-                name: values.name,
-                category: values.category,
-                detail: values.detail,
-                image: formatImageUrl(values.image),
-                image2: formatImageUrl(values.image2),
-                image3: formatImageUrl(values.image3)
-            };
+        const formattedBuild: ItemType = {
+            id: editingBuild ? editingBuild.id : `custom_${Date.now()}`,
+            name: values.name,
+            category: values.category,
+            detail: values.detail,
+            image: formatImageUrl(values.image),
+            image2: formatImageUrl(values.image2),
+            image3: formatImageUrl(values.image3)
+        };
 
-            let updatedList = [];
-            if (editingBuild) {
-                updatedList = buildsList.map(b => b.id === editingBuild.id ? formattedBuild : b);
-                message.success('Cập nhật cấu hình build thành công!');
-            } else {
-                updatedList = [formattedBuild, ...buildsList];
-                message.success('Thêm build mới thành công!');
-            }
+        let updatedList = [];
+        if (editingBuild) {
+            updatedList = buildsList.map(b => b.id === editingBuild.id ? formattedBuild : b);
+            message.success('Cập nhật cấu hình build thành công!');
+        } else {
+            updatedList = [formattedBuild, ...buildsList];
+            message.success('Thêm build mới thành công!');
+        }
 
-            const success = await saveBuildsToSupabase(updatedList);
-            if (success) {
-                setIsAddEditModalOpen(false);
-                setSelectedItem(formattedBuild);
-                
-                // Refresh list display
-                if (activeButton === values.category) {
-                    const dynamicSets = getDynamicSets(updatedList);
-                    setSearchResults(dynamicSets[values.category] || []);
-                } else if (inputValue) {
-                    const filtered = updatedList.filter(item =>
-                        item.name.toLowerCase().includes(inputValue.toLowerCase())
-                    );
-                    setSearchResults(filtered);
-                }
+        const success = await saveBuildsToSupabase(updatedList);
+        if (success) {
+            setIsAddEditModalOpen(false);
+            setSelectedItem(formattedBuild);
+            
+            // Refresh list display
+            if (activeButton === values.category) {
+                const dynamicSets = getDynamicSets(updatedList);
+                setSearchResults(dynamicSets[values.category] || []);
+            } else if (inputValue) {
+                const filtered = updatedList.filter(item =>
+                    item.name.toLowerCase().includes(inputValue.toLowerCase())
+                );
+                setSearchResults(filtered);
             }
-        } catch (err) {
-            console.error(err);
-            message.error('Đã xảy ra lỗi.');
         }
     };
 

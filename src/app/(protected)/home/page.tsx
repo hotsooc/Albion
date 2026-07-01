@@ -6,6 +6,7 @@ import { Input, Button, Row, Col, Badge, Spin } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { supabase } from '../../../../lib/supabase/client';
 import useTrans from '@/hooks/useTrans';
+import type { VideoItem, NewsItem } from '@/types';
 import dynamic from 'next/dynamic';
 import { Wrench, Users, BookOpen, Film, Newspaper, ArrowRight, Video, Image as ImageIcon } from 'lucide-react';
 
@@ -16,23 +17,6 @@ const ReactPlayer = dynamic(() => import('react-player'), { ssr: false }) as Rea
   height?: string | number;
   className?: string;
 }>;
-
-interface VideoItem {
-  id: string;
-  name: string;
-  url: string;
-  description: string;
-  category: string;
-}
-
-interface NewsItem {
-  id: string;
-  title: string;
-  url: string;
-  date: string;
-  description: string;
-  category: 'NEWS' | 'UPDATE' | 'PATCH';
-}
 
 export default function HomePage() {
   const { trans } = useTrans();
@@ -61,27 +45,23 @@ export default function HomePage() {
   // Fetch highlighted video
   useEffect(() => {
     const fetchVideo = async () => {
-      try {
-        const { data: videoData, error: videoError } = await supabase
-          .from('videos')
-          .select('*')
-          .limit(1);
+      const { data: videoData, error: videoError } = await supabase
+        .from('videos')
+        .select('*')
+        .limit(1);
 
-        if (videoError) {
-          console.error('Error fetching latest video:', videoError);
-        } else if (videoData && videoData.length > 0) {
-          setHighlightedVideo(videoData[0] as VideoItem);
-        } else {
-          setHighlightedVideo({
-            id: 'default',
-            name: 'Epic Guild Fight - Highlight',
-            url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
-            description: 'Trận chiến Guild nảy lửa vùng Black Zone.',
-            category: 'Highlight'
-          });
-        }
-      } catch (err) {
-        console.error(err);
+      if (videoError) {
+        console.error('Error fetching latest video:', videoError);
+      } else if (videoData && videoData.length > 0) {
+        setHighlightedVideo(videoData[0] as VideoItem);
+      } else {
+        setHighlightedVideo({
+          id: 'default',
+          name: 'Epic Guild Fight - Highlight',
+          url: 'https://www.youtube.com/watch?v=dAi2Bl-kStM&feature=youtu.be',
+          description: 'Trận chiến Guild nảy lửa vùng Black Zone.',
+          category: 'Highlight'
+        });
       }
     };
 
@@ -91,20 +71,15 @@ export default function HomePage() {
   // Fetch real-time Steam news based on active tab
   useEffect(() => {
     const fetchNews = async () => {
-      try {
-        setNewsLoading(true);
-        const res = await fetch(`/api/albion-news?type=${activeNewsTab}`);
-        if (res.ok) {
-          const newsData = await res.json();
-          setNewsList(newsData);
-        } else {
-          console.error('Failed to load real-time news');
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setNewsLoading(false);
+      setNewsLoading(true);
+      const res = await fetch(`/api/albion-news?type=${activeNewsTab}`);
+      if (res.ok) {
+        const newsData = await res.json();
+        setNewsList(newsData);
+      } else {
+        console.error('Failed to load real-time news');
       }
+      setNewsLoading(false);
     };
 
     fetchNews();

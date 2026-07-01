@@ -2,25 +2,19 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Send, X, Bot, Sparkles, User, CornerDownLeft } from 'lucide-react';
+import { Send, X, Bot, Sparkles, User } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import useTrans from '@/hooks/useTrans';
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
+import type { ChatMessage } from '@/types';
 
 export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: 'Xin chào! Tôi là Albion Guide. Tôi có thể giúp gì cho bạn dựa trên thông tin trang này?' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const { trans } = useTrans();
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -81,44 +75,35 @@ ${cleanText}
     setInputValue('');
     
     // Add user message
-    const updatedMessages = [...messages, { role: 'user', content: userMessage } as Message];
+    const updatedMessages = [...messages, { role: 'user', content: userMessage } as ChatMessage];
     setMessages(updatedMessages);
     setIsTyping(true);
 
-    try {
-      const pageContext = getDOMContext();
-      
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: updatedMessages,
-          context: pageContext,
-        }),
-      });
+    const pageContext = getDOMContext();
+    
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: updatedMessages,
+        context: pageContext,
+      }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (data.error) {
-        setMessages(prev => [
-          ...prev,
-          { role: 'assistant', content: `Lỗi: ${data.error}` }
-        ]);
-      } else {
-        setMessages(prev => [
-          ...prev,
-          { role: 'assistant', content: data.reply }
-        ]);
-      }
-    } catch (err) {
-      console.error(err);
+    if (data.error) {
       setMessages(prev => [
         ...prev,
-        { role: 'assistant', content: 'Xin lỗi, tôi gặp sự cố kết nối với hệ thống AI.' }
+        { role: 'assistant', content: `Lỗi: ${data.error}` }
       ]);
-    } finally {
-      setIsTyping(false);
+    } else {
+      setMessages(prev => [
+        ...prev,
+        { role: 'assistant', content: data.reply }
+      ]);
     }
+    setIsTyping(false);
   };
 
   return (

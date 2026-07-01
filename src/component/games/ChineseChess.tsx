@@ -126,25 +126,21 @@ const getBoardFen = (board: Board, activePlayer: Player): string => {
 };
 
 const fetchCloudBestMove = async (fen: string): Promise<Move | null> => {
-  try {
-    const res = await fetch(`/api/chessdb?board=${encodeURIComponent(fen)}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    const result: string = data.result || '';
-    
-    if (result.startsWith('move:')) {
-      const iccsMove = result.substring(5).trim();
-      if (iccsMove.length === 4) {
-        return iccsToMove(iccsMove);
-      }
-    } else if (result.startsWith('egtb:')) {
-      const iccsMove = result.substring(5).trim();
-      if (iccsMove.length === 4) {
-        return iccsToMove(iccsMove);
-      }
+  const res = await fetch(`/api/chessdb?board=${encodeURIComponent(fen)}`);
+  if (!res.ok) return null;
+  const data = await res.json();
+  const result: string = data.result || '';
+  
+  if (result.startsWith('move:')) {
+    const iccsMove = result.substring(5).trim();
+    if (iccsMove.length === 4) {
+      return iccsToMove(iccsMove);
     }
-  } catch (e) {
-    console.error('Error fetching cloud best move:', e);
+  } else if (result.startsWith('egtb:')) {
+    const iccsMove = result.substring(5).trim();
+    if (iccsMove.length === 4) {
+      return iccsToMove(iccsMove);
+    }
   }
   return null;
 };

@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { DropSpotComponent } from './DropSpot';
-import { allItemsData, ItemType } from '@/store/data';
+import { ItemType } from '@/store/data';
 import { Modal } from 'antd';
-import { Database } from '../../lib/database.types';
 import { supabase } from '../../lib/supabase/client';
 import useTrans from '@/hooks/useTrans';
 type DragItem = {
@@ -111,11 +110,7 @@ const getInitialTeamData = (): TeamData => ({
   }
 });
 
-type AllDataRow = Database['public']['Tables']['teams_data']['Row'];
-type AllDataUpdate = Database['public']['Tables']['teams_data']['Update'];
-
-
-export const DroppableTable = ({ teamKeys, teamNames, openTeamIndex, columnCount, builds }: DroppableTableProps & { builds: ItemType[] }) => {
+export const DroppableTable = ({ teamKeys, teamNames: _teamNames, openTeamIndex, columnCount, builds }: DroppableTableProps & { builds: ItemType[] }) => {
  const [allData, setAllData] = useState<AllData>({});
  const [isLoading, setIsLoading] = useState<boolean>(true);
  const [popupItem, setPopupItem] = useState<DragItem | null>(null);
