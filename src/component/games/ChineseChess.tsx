@@ -826,7 +826,7 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                   : 'bg-transparent border-transparent hover:bg-[var(--bg-hover-nav)]'
                 }`}
             >
-              <Cpu size={14} /> Đấu với Máy (AI)
+              <Cpu size={14} /> Đấu với Máy (AI BOT)
             </button>
           </div>
 

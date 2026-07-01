@@ -30,6 +30,26 @@ async function prepareExecutable(srcPath: string): Promise<string> {
         
         // Luôn đảm bảo quyền thực thi 755 (chmod +x)
         fs.chmodSync(destPath, '755');
+
+        // Sao chép thư viện chia sẻ libatomic.so.1 nếu có trong thư mục nguồn (để chạy trên Vercel/Linux)
+        const srcDir = path.dirname(srcPath);
+        const libatomicSrc = path.join(srcDir, 'libatomic.so.1');
+        const libatomicDest = path.join(tempDir, 'libatomic.so.1');
+        if (fs.existsSync(libatomicSrc)) {
+            let shouldCopyLib = true;
+            if (fs.existsSync(libatomicDest)) {
+                const sStat = fs.statSync(libatomicSrc);
+                const dStat = fs.statSync(libatomicDest);
+                if (sStat.size === dStat.size) {
+                    shouldCopyLib = false;
+                }
+            }
+            if (shouldCopyLib) {
+                fs.copyFileSync(libatomicSrc, libatomicDest);
+            }
+            fs.chmodSync(libatomicDest, '755');
+        }
+        
         return destPath;
     } catch (err) {
         console.error('Error preparing executable:', err);
@@ -83,7 +103,7 @@ export async function GET(req: NextRequest) {
         const files = fs.readdirSync(platformDir);
         const exeFiles = files.filter(f => {
             const lf = f.toLowerCase();
-            return lf.includes('pikafish') && !lf.endsWith('.txt') && !lf.endsWith('.md') && !lf.endsWith('.nnue');
+            return lf.includes('pikafish') && !lf.endsWith('.txt') && !lf.endsWith('.md') && !lf.endsWith('.nnue') && !lf.endsWith('.so') && !lf.endsWith('.so.1');
         });
 
         // Sắp xếp thứ tự ưu tiên chạy (optimized -> generic)
@@ -108,7 +128,7 @@ export async function GET(req: NextRequest) {
         const files = fs.readdirSync(binDir);
         const exeFiles = files.filter(f => {
             const lf = f.toLowerCase();
-            return lf.includes('pikafish') && !lf.endsWith('.txt') && !lf.endsWith('.md') && !lf.endsWith('.nnue');
+            return lf.includes('pikafish') && !lf.endsWith('.txt') && !lf.endsWith('.md') && !lf.endsWith('.nnue') && !lf.endsWith('.so') && !lf.endsWith('.so.1');
         });
         for (const file of exeFiles) {
             candidates.push(path.join(binDir, file));
@@ -146,8 +166,15 @@ export async function GET(req: NextRequest) {
 
 function runPikafishEngine(enginePath: string, workingDir: string, nnuePath: string, fen: string, depth: number): Promise<string> {
     return new Promise((resolve, reject) => {
+        // Cấu hình biến môi trường LD_LIBRARY_PATH để chỉ đến thư mục tạm /tmp nơi chứa libatomic.so.1
+        const tempDir = os.tmpdir();
+        const env = {
+            ...process.env,
+            LD_LIBRARY_PATH: `${tempDir}:${process.env.LD_LIBRARY_PATH || ''}`
+        };
+
         // Khởi chạy tiến trình Pikafish
-        const child = spawn(enginePath, [], { cwd: workingDir });
+        const child = spawn(enginePath, [], { cwd: workingDir, env });
         
         let errorOutput = '';
         let resolved = false;
