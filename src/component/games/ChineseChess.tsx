@@ -149,28 +149,6 @@ const fetchCloudBestMove = async (fen: string): Promise<Move | null> => {
   return null;
 };
 
-const fetchPikafishBestMove = async (fen: string): Promise<Move | null> => {
-  try {
-    const res = await fetch(`/api/pikafish?board=${encodeURIComponent(fen)}&depth=8`);
-    if (!res.ok) {
-      const errData = await res.json();
-      throw new Error(errData.error || 'Failed to fetch Pikafish move');
-    }
-    const data = await res.json();
-    const result: string = data.result || '';
-    
-    if (result.startsWith('move:')) {
-      const iccsMove = result.substring(5).trim();
-      if (iccsMove.length === 4) {
-        return iccsToMove(iccsMove);
-      }
-    }
-  } catch (e) {
-    console.error('Error fetching Pikafish best move:', e);
-  }
-  return null;
-};
-
 // Initial board positions
 const getInitialBoard = (): Board => {
   const b: Board = Array(10).fill(null).map(() => Array(9).fill(null));
@@ -409,6 +387,117 @@ const getLegalMoves = (board: Board, player: Player): Move[] => {
 };
 
 // AI valuation function
+// Piece-Square Tables for RED player (y: 9 is bottom/own side, y: 0 is top/enemy side)
+// For BLACK player, we will flip the y coordinate (y_black = 9 - y_red) and negate the score.
+
+const PST_KING = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, -10, -20, -10, 0, 0, 0],
+  [0, 0, 0, 0, -10, 0, 0, 0, 0],
+  [0, 0, 0, 5, 10, 5, 0, 0, 0]
+];
+
+const PST_ADVISOR = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 10, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+const PST_ELEPHANT = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 5, 0, 0, 0, 5, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 15, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+const PST_CHARIOT = [
+  [10, 15, 10, 20, 10, 20, 10, 15, 10],
+  [15, 20, 15, 25, 20, 25, 15, 20, 15],
+  [10, 15, 10, 20, 15, 20, 10, 15, 10],
+  [10, 15, 12, 20, 18, 20, 12, 15, 10],
+  [8,  12,  8, 15, 12, 15,  8, 12,  8],
+  [6,  10,  6, 12, 10, 12,  6, 10,  6],
+  [2,   6,  2,  8,  6,  8,  2,  6,  2],
+  [0,   2,  0,  5,  2,  5,  0,  2,  0],
+  [2,   6,  2,  8,  6,  8,  2,  6,  2],
+  [5,  10,  8, 12, 10, 12,  8, 10,  5]
+];
+
+const PST_HORSE = [
+  [2,  4,  6, 10,  6, 10,  6,  4,  2],
+  [4,  8, 12, 16, 12, 16, 12,  8,  4],
+  [6, 12, 18, 22, 20, 22, 18, 12,  6],
+  [8, 14, 20, 25, 22, 25, 20, 14,  8],
+  [6, 12, 16, 20, 18, 20, 16, 12,  6],
+  [4, 10, 14, 18, 16, 18, 14, 10,  4],
+  [2,  6, 10, 12, 10, 12, 10,  6,  2],
+  [0,  4,  6,  8,  6,  8,  6,  4,  0],
+  [-2, 2,  4,  6,  4,  6,  4,  2, -2],
+  [-4, 0,  2,  4,  2,  4,  2,  0, -4]
+];
+
+const PST_CANNON = [
+  [4,  6,  4,  8, 10,  8,  4,  6,  4],
+  [6,  8,  6, 12, 15, 12,  6,  8,  6],
+  [4,  6,  4,  8, 10,  8,  4,  6,  4],
+  [2,  4,  2,  6,  8,  6,  2,  4,  2],
+  [0,  2,  0,  4,  6,  4,  0,  2,  0],
+  [-2, 0, -2,  2,  4,  2, -2,  0, -2],
+  [-2, 0, -2,  2,  4,  2, -2,  0, -2],
+  [0,  4,  2,  6,  6,  6,  2,  4,  0],
+  [2,  6,  4,  8,  8,  8,  4,  6,  2],
+  [0,  2,  0,  4,  4,  4,  0,  2,  0]
+];
+
+const PST_SOLDIER = [
+  [15, 25, 35, 40, 40, 40, 35, 25, 15],
+  [20, 30, 40, 50, 50, 50, 40, 30, 20],
+  [18, 28, 38, 45, 45, 45, 38, 28, 18],
+  [10, 18, 22, 35, 35, 35, 22, 18, 10],
+  [5,  10, 15, 25, 25, 25, 15, 10,  5],
+  [0,   0,  0,  0,  0,  0,  0,   0,  0],
+  [0,   0,  0,  0,  0,  0,  0,   0,  0],
+  [0,   0,  0,  0,  0,  0,  0,   0,  0],
+  [0,   0,  0,  0,  0,  0,  0,   0,  0],
+  [0,   0,  0,  0,  0,  0,  0,   0,  0]
+];
+
+const getPstScore = (type: PieceType, player: Player, x: number, y: number): number => {
+  let table: number[][] | null = null;
+  switch (type) {
+    case 'G': table = PST_KING; break;
+    case 'A': table = PST_ADVISOR; break;
+    case 'E': table = PST_ELEPHANT; break;
+    case 'R': table = PST_CHARIOT; break;
+    case 'H': table = PST_HORSE; break;
+    case 'C': table = PST_CANNON; break;
+    case 'S': table = PST_SOLDIER; break;
+  }
+  if (!table) return 0;
+  
+  const targetY = player === 'red' ? y : 9 - y;
+  return table[targetY][x];
+};
+
 const evaluatePosition = (board: Board): number => {
   let score = 0;
   for (let y = 0; y < 10; y++) {
@@ -416,21 +505,7 @@ const evaluatePosition = (board: Board): number => {
       const piece = board[y][x];
       if (piece) {
         let value = PIECE_VALUES[piece.type];
-
-        // Positional rewards
-        if (piece.type === 'S') {
-          if (piece.player === 'red') {
-            value += (9 - y) * 12; // reward advancing
-            if (y <= 4) value += 45; // crossed river bonus
-          } else {
-            value += y * 12;
-            if (y >= 5) value += 45;
-          }
-        } else if (piece.type === 'H' || piece.type === 'R' || piece.type === 'C') {
-          // Encourage controlling center
-          if (x >= 2 && x <= 6) value += 10;
-          if (y >= 3 && y <= 6) value += 10;
-        }
+        value += getPstScore(piece.type, piece.player, x, y);
 
         if (piece.player === 'red') {
           score += value;
@@ -443,7 +518,36 @@ const evaluatePosition = (board: Board): number => {
   return score;
 };
 
-// Minimax with Alpha-Beta Pruning
+// Hàm chấm điểm nước đi phục vụ sắp xếp nước đi trước để Alpha-Beta Pruning đạt hiệu suất cắt tỉa cao nhất (MVV-LVA)
+const scoreMove = (board: Board, move: Move, player: Player): number => {
+  let score = 0;
+  const attacker = board[move.fromY][move.fromX];
+  const victim = board[move.toY][move.toX];
+  
+  if (!attacker) return 0;
+  
+  // 1. MVV-LVA (Most Valuable Victim - Least Valuable Attacker)
+  if (victim) {
+    score += PIECE_VALUES[victim.type] * 10 - PIECE_VALUES[attacker.type];
+    score += 10000; // Cộng điểm thưởng cho nước đi ăn quân
+  }
+  
+  // 2. Chênh lệch điểm thưởng vị trí (PST) trước và sau khi đi
+  const oldPst = getPstScore(attacker.type, player, move.fromX, move.fromY);
+  const newPst = getPstScore(attacker.type, player, move.toX, move.toY);
+  score += (newPst - oldPst);
+  
+  // 3. Tấn công / Đẩy Tốt qua sông
+  if (attacker.type === 'S') {
+    const crossedRiver = player === 'red' ? (move.toY <= 4 && move.fromY > 4) : (move.toY >= 5 && move.fromY < 5);
+    if (crossedRiver) {
+      score += 500;
+    }
+  }
+  
+  return score;
+};
+
 const minimax = (
   board: Board,
   depth: number,
@@ -458,21 +562,19 @@ const minimax = (
   const currentPlayer = isMaximizing ? 'red' : 'black';
   const moves = getLegalMoves(board, currentPlayer);
 
-  // Sắp xếp nước đi ăn quân trước để nâng cao hiệu suất cắt tỉa Alpha-Beta
-  moves.sort((a, b) => {
-    const aDest = board[a.toY][a.toX];
-    const bDest = board[b.toY][b.toX];
-    if (aDest && !bDest) return -1;
-    if (!aDest && bDest) return 1;
-    return 0;
-  });
-
   if (moves.length === 0) {
     if (isUnderCheck(board, currentPlayer)) {
       return isMaximizing ? -200000 + (3 - depth) : 200000 - (3 - depth); // Checkmate
     }
     return 0; // Stalemate
   }
+
+  // Sắp xếp các nước đi tối ưu trước theo điểm số để kích hoạt việc cắt tỉa nhanh nhất
+  const moveScores = new Map<Move, number>();
+  for (const m of moves) {
+    moveScores.set(m, scoreMove(board, m, currentPlayer));
+  }
+  moves.sort((a, b) => (moveScores.get(b) || 0) - (moveScores.get(a) || 0));
 
   if (isMaximizing) {
     let maxEval = -Infinity;
@@ -522,17 +624,12 @@ const getBestMove = (board: Board, player: Player, depth: number): Move | null =
   let bestMove: Move | null = null;
   const isMaximizing = player === 'red';
 
-  // Trộn ngẫu nhiên để tránh các ván đấu lặp lại
-  moves.sort(() => Math.random() - 0.5);
-
-  // Sắp xếp nước đi ăn quân lên đầu
-  moves.sort((a, b) => {
-    const aDest = board[a.toY][a.toX];
-    const bDest = board[b.toY][b.toX];
-    if (aDest && !bDest) return -1;
-    if (!aDest && bDest) return 1;
-    return 0;
-  });
+  // Sắp xếp nước đi theo điểm số tối ưu trước
+  const moveScores = new Map<Move, number>();
+  for (const m of moves) {
+    moveScores.set(m, scoreMove(board, m, player));
+  }
+  moves.sort((a, b) => (moveScores.get(b) || 0) - (moveScores.get(a) || 0));
 
   if (isMaximizing) {
     let bestValue = -Infinity;
@@ -669,19 +766,9 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
       // 1. Thử lấy nước đi tốt nhất từ Thư viện Đám mây (ChessDB Book) trước
       let bestMove = await fetchCloudBestMove(fen);
 
-      // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Pikafish hoặc Minimax nội bộ
+      // 2. Nếu không tìm thấy trong thư viện đám mây, sử dụng Minimax nội bộ với độ sâu tương ứng
       if (!bestMove) {
-        if (aiDifficulty === 5) {
-          bestMove = await fetchPikafishBestMove(fen);
-          if (!bestMove) {
-            // Tự động chuyển về AI Cao thủ (Lv4) nếu không chạy được Pikafish
-            alert("⚠️ Không thể kết nối với động cơ Pikafish cục bộ. Hệ thống tự động chuyển sang chế độ AI Cao thủ (Lv4).");
-            setAiDifficulty(4);
-            bestMove = getBestMove(board, currentPlayer, 4);
-          }
-        } else {
-          bestMove = getBestMove(board, currentPlayer, aiDifficulty);
-        }
+        bestMove = getBestMove(board, currentPlayer, aiDifficulty);
       }
 
       if (bestMove) {
@@ -866,7 +953,7 @@ export default function ChineseChess({ onGoBack }: ChineseChessProps) {
                     { lv: 2, label: 'Tập sự (Lv2)' },
                     { lv: 3, label: 'Trung cấp (Lv3)' },
                     { lv: 4, label: 'Cao thủ (Lv4)' },
-                    { lv: 5, label: '⚡ Siêu cấp (Pikafish)' },
+                    { lv: 5, label: '⚡ Siêu cấp (Lv5)' },
                   ].map(item => (
                     <button
                       key={item.lv}
